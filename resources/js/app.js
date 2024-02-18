@@ -7,8 +7,8 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 
 import ElementPlus from 'element-plus';
-import es from 'element-plus/dist/locale/es.js';
 import 'element-plus/dist/index.css';
+import locale from 'element-plus/dist/locale/es.mjs';
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'E3D USA';
 
@@ -19,6 +19,7 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
+            .use(ElementPlus, { locale })   
             .mount(el);
     },
     progress: {

@@ -30,6 +30,6 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
+        return Inertia('Dashboard/Index');
     })->name('dashboard');
 });
