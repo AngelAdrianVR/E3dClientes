@@ -15,7 +15,7 @@ defineProps({
 });
 
 const form = useForm({
-    email: '',
+    id: null,
     password: '',
     remember: false,
 });
@@ -60,7 +60,7 @@ const togglePasswordVisibility = () => {
         </div>
 
         <form @submit.prevent="submit">
-            <div>
+            <!-- <div>
                 <TextInput
                     id="email"
                     v-model="form.email"
@@ -72,8 +72,8 @@ const togglePasswordVisibility = () => {
                     placeholder="ID de cliente"
                 />
                 <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-            <!-- <div>
+            </div> -->
+            <div>
                 <TextInput
                 id="id"
                 v-model="form.id"
@@ -84,7 +84,7 @@ const togglePasswordVisibility = () => {
                 placeholder="ID de usuario"
                 />
                 <InputError class="mt-2" :message="form.errors.id" />
-            </div> -->
+            </div>
 
             <div class="mt-4 relative">
                 <div class="flex justify-center items-center">

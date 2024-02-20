@@ -2,10 +2,10 @@
     <AppLayout title="Inicio">
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                 <figure class="flex items-center space-x-5">
-                    <img class="object-cover bg-no-repeat size-9 rounded-full mt-1" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name" />
+                 <!-- <figure class="flex items-center space-x-5"> -->
+                    <!-- <img class="object-cover bg-no-repeat size-9 rounded-full mt-1" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name" /> -->
                     <span class="text-sm font-bold">{{ $page.props.auth.user.name }}</span>
-                </figure>
+                <!-- </figure> -->
                 
                 <div class="mt-7 w-1/3 relative">
                     <input v-model="quoteSearch" class="input pr-9" type="text" placeholder="Buscar cotización">
@@ -17,10 +17,10 @@
                         <template #label>
                             <div class="flex items-center">
                                 <i class="fa-regular fa-square-check mr-1"></i>
-                                <span>Cotizaciones ({{ '3' }})</span>
+                                <span>Cotizaciones ({{ quotes.data.length }})</span>
                             </div>
                         </template>
-                        <Quotes />
+                        <Quotes :quotes="quotes.data" />
                     </el-tab-pane>
                     <el-tab-pane name="2">
                         <template #label>
@@ -39,7 +39,7 @@
 
 <script>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import Quotes from "./Tabs/Quotes.vue";
+import Quotes from "./Tabs/Quote/Quotes.vue";
 import Designs from "./Tabs/Designs.vue";
 
 export default {
@@ -55,7 +55,7 @@ export default {
         Quotes,
     },
     props:{
-
+        quotes: Object
     },
     methods:{
 

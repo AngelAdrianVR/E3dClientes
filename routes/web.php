@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\QuoteController;
+use App\Http\Resources\QuoteResource;
+use App\Models\Quote;
+use App\Models\Sale;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -30,6 +34,15 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return Inertia('Dashboard/Index');
+        $quotes = QuoteResource::collection(Quote::where('company_branch_id', auth()->id())->with(['user:id,name,email', 'catalogProducts'])->get());
+
+        return $quotes;
+        return Inertia('Dashboard/Index', compact('quotes'));
     })->name('dashboard');
 });
+
+// ------------- quote routes -----------------------------------
+// --------------------------------------------------------------
+Route::resource('quotes', QuoteController::class);
+Route::post('quotes/massive-delete', [QuoteController::class, 'massiveDelete'])->name('quotes.massive-delete');
+Route::put('quotes/authorize/{quote}', [QuoteController::class, 'authorizeQuote'])->name('quotes.authorize');
