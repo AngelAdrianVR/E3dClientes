@@ -17,10 +17,14 @@
                         <template #label>
                             <div class="flex items-center">
                                 <i class="fa-regular fa-square-check mr-1"></i>
-                                <span>Cotizaciones ({{ quotes.data.length }})</span>
+                                <span>Cotizaciones ({{ quotes?.length }})</span>
                             </div>
                         </template>
-                        <Quotes :quotes="quotes.data" />
+                        <!-- estado de carga -->
+                        <div v-if="loading" class="flex justify-center items-center py-10">
+                            <i class="fa-solid fa-spinner fa-spin text-4xl text-primary"></i>
+                        </div>
+                        <Quotes v-else :quotes="quotes" />
                     </el-tab-pane>
                     <el-tab-pane name="2">
                         <template #label>
@@ -41,12 +45,15 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Quotes from "./Tabs/Quote/Quotes.vue";
 import Designs from "./Tabs/Designs.vue";
+import axios from 'axios';
 
 export default {
     data() {
         return {
             activeTab: '1',
             quoteSearch: null,
+            quotes: null,
+            loading: false,
         }
     },
     components:{
@@ -54,11 +61,24 @@ export default {
         Designs,    
         Quotes,
     },
-    props:{
-        quotes: Object
-    },
+    props:{},
     methods:{
-
+        async fetchQuotes() {
+            try {
+                this.loading = true;
+                const response = await axios.get(route('quotes.fetch'));
+                if ( response.status === 200 ) {
+                    this.quotes = response.data.items;
+                }
+            } catch (error) {
+             console.log(error);   
+            } finally {
+                this.loading = false;
+            }
+        }
+    },
+    mounted() {
+        this.fetchQuotes(); 
     }
 }
 </script>

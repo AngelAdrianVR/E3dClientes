@@ -12,9 +12,9 @@
                     <img class="mx-auto w-5 object-contain" src="@/../../public/images/pdf.png" alt="">
                     <p class="font-bold">{{ quote.folio }}</p>
                 </div>
-                <div class="">{{ quote.created_at }}</div>
-                <div class="">{{ quote.created_at }}</div>
-                <div class="">{{ 'estatus' }}</div>
+                <div class="">{{ quote.authorized_at }}</div>
+                <div class="">{{ quote.responded_at ?? '--' }}</div>
+                <div :class="quote.status.color" class="flex items-center space-x-2"><p>{{ quote.status.label }}</p><span v-html="quote.status.icon"></span></div>
             </div>
         </div>
     </div>
