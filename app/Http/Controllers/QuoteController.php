@@ -26,6 +26,18 @@ class QuoteController extends Controller
         //
     }
 
+
+    public function storeSignature(Request $request, Quote $quote)
+    {
+        // Elimina la firma que ya esté reggistrada 
+        $quote->clearMediaCollection('signature');
+
+        // Guardar el archivo en la colección 'signature'
+        $quote->addMediaFromRequest('signature')->toMediaCollection('signature');
+
+        $this->markAsAcepted($quote);
+    }
+
     
     public function show(Quote $quote)
     {
@@ -59,5 +71,13 @@ class QuoteController extends Controller
         $quotes = QuoteResource::collection(Quote::where('company_branch_id', auth()->id())->whereNotNull('authorized_at')->with(['user:id,name,email', 'catalogProducts'])->get());
 
         return response()->json(['items' => $quotes]);
+    }
+
+    public function markAsAcepted(Quote $quote)
+    {
+        $quote->update([
+            'responded_at' => now(),
+            'quote_acepted' => true,
+        ]);
     }
 }

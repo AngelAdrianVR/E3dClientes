@@ -1,5 +1,5 @@
 <template>
-    <div class="flex">
+    <div class="lg:flex">
         <!-- seccion de cotizacione -->
         <section class="">
             <Head :title="quote.data.folio" />
@@ -69,17 +69,21 @@
                     </template>
                 </div>
 
-                <div class="flex justify-between items-center mx-10">
+                <div class="flex justify-between items-center mx-10 mt-9">
                     <!-- goodbyes -->
                     <p class="my-2 pb-2 text-gray-700">
                         Sin más por el momento y en espera de su preferencia,
                         quedo a sus órdenes para cualquier duda o comentario.
                         Folio de cotización: <span class="font-bold bg-yellow-100">{{ quote.data.folio }}</span>
                     </p>
-
+                    
+                    <!-- signature -->
                     <div @click="showSideOptions = true" class="mr-7 relative cursor-pointer">
                         <p class="text-gray-500">Firma de autorización:  _________________________________ </p>
-                        <div class="absolute right-0 -top-12 border border-dashed border-green-500 text-green-500 rounded-md py-5 px-7"> Agrega tu firma aquí </div>
+                        <figure class="w-32 absolute right-5 -top-[70px] border border-dashed border-green-500" v-if="quote.data.media?.length > 0">
+                            <img :src="quote.data.media[0].original_url" alt="">
+                        </figure>
+                        <div v-else class="absolute right-0 -top-12 border border-dashed border-green-500 text-green-500 rounded-md py-5 px-7"> Agrega tu firma aquí </div>
                     </div>
                 </div>
 
@@ -179,7 +183,7 @@
         </section>
 
         <!-- Seccion de firma -->
-        <section v-if="showSideOptions" class="w-[40%] h-screen py-7 px-2 border-l border-gray-500 bg-gray-100 relative">
+        <section v-if="showSideOptions" class="lg:w-[40%] h-screen py-7 px-2 border-l border-gray-500 bg-gray-100 relative">
             <i @click="showSideOptions = false;" class="fa-solid fa-xmark text-xs text-white bg-primary py-1 px-[7px] rounded-full absolute top-1 -left-[12px] cursor-pointer"></i>
             <p class="text-sm">Por favor, revisa el documento detenidamente. Si todo esta correcto, firme y envíe. De lo contrario, puede rechazar y especificar el motivo.</p>
 
@@ -192,9 +196,9 @@
 
                 <div v-if="responseOptions === 'Dibujar'" class="mt-4">
                     <p class="text-gray-400 text-xs ml-2 mb-1">Dibuja tu firma en el siguiente recuadro</p>
-                    <div class="rounded-md border border-[#9A9A9A] bg-white w-full h-40">
-
-                    </div>
+                    <CanvasDraw :quoteId="quote.data.id" />
+                    <!-- <canvas id="pizarra" class="rounded-md border border-[#9A9A9A] bg-white w-full h-40">
+                    </canvas> -->
                 </div>
             </div>
         </section>
@@ -203,6 +207,7 @@
 <script>
 
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+import CanvasDraw from '@/Components/MyComponents/CanvasDraw.vue';
 import axios from 'axios';
 import { Head } from '@inertiajs/vue3';
 
@@ -215,7 +220,8 @@ export default {
     },
     components: {
         ApplicationLogo,
-        Head,
+        CanvasDraw,
+        Head
     },
     props: {
         quote: Object
@@ -223,34 +229,34 @@ export default {
     methods:{
         async authorize() {
             if (!this.quote.data.authorized_at)  {
-                    try {
-                        const response = await axios.put(route('quotes.authorize', this.quote.data.id));
+                try {
+                    const response = await axios.put(route('quotes.authorize', this.quote.data.id));
 
-                    if (response.status == 200) {
-                        this.$notify({
-                            title: 'Éxito',
-                            message: response.data.message,
-                            type: 'success'
-                        });
-                    } else {
-                        this.$notify({
-                            title: 'Algo salió mal',
-                            message: response.data.message,
-                            type: 'error'
-                        });
-                    }
-                    } catch (err) {
-                        this.$notify({
-                            title: 'Algo salió mal',
-                            message: err.message,
-                            type: 'error'
-                        });
-                        console.log(err);
-                    } finally {
-                        this.$inertia.get(route('quotes.index'));
-                    }
+                if (response.status == 200) {
+                    this.$notify({
+                        title: 'Éxito',
+                        message: response.data.message,
+                        type: 'success'
+                    });
+                } else {
+                    this.$notify({
+                        title: 'Algo salió mal',
+                        message: response.data.message,
+                        type: 'error'
+                    });
                 }
+                } catch (err) {
+                    this.$notify({
+                        title: 'Algo salió mal',
+                        message: err.message,
+                        type: 'error'
+                    });
+                    console.log(err);
+                } finally {
+                    this.$inertia.get(route('quotes.index'));
+                }
+            }
         },
-    }
+    },
 }
 </script>

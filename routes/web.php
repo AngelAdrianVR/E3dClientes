@@ -34,7 +34,6 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-       
         return Inertia('Dashboard/Index');
     })->name('dashboard');
 });
@@ -43,4 +42,6 @@ Route::middleware([
 // --------------------------------------------------------------
 Route::resource('quotes', QuoteController::class);
 Route::get('quotes-fetch', [QuoteController::class, 'fetchQuotes'])->middleware('auth')->name('quotes.fetch');
+Route::post('quotes-store-signature/{quote}', [QuoteController::class, 'storeSignature'])->middleware('auth')->name('quotes.store-signature');
+Route::put('quotes-mar-as-acepted/{quote}', [QuoteController::class, 'markAsAcepted'])->middleware('auth')->name('quotes.acepted');
 // Route::put('quotes/authorize/{quote}', [QuoteController::class, 'authorizeQuote'])->name('quotes.authorize');
