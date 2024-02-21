@@ -193,69 +193,112 @@
                     <el-radio-button label="Firma guardada" />
                     <el-radio-button label="Rechazar" />
                 </el-radio-group>
-
+                
+                <!-- Dibujar -->
                 <div v-if="responseOptions === 'Dibujar'" class="mt-4">
                     <p class="text-gray-400 text-xs ml-2 mb-1">Dibuja tu firma en el siguiente recuadro</p>
                     <CanvasDraw :quoteId="quote.data.id" />
-                    <!-- <canvas id="pizarra" class="rounded-md border border-[#9A9A9A] bg-white w-full h-40">
-                    </canvas> -->
+                </div>
+
+                <!-- Firma guardada -->
+                <div v-if="responseOptions === 'Firma guardada'" class="mt-4">
+                    <InputSignature :quoteId="quote.data.id" />
+                </div>
+
+                <!-- Rechazar -->
+                <div v-if="responseOptions === 'Rechazar'" class="mt-4 text-center">
+                    <p class="text-gray-400 text-xs mb-3">Después de haber sido rechazada la cotización puedes reconsiderar y firmar para aceptarla si así lo deseas</p>
+                    <PrimaryButton @click="rejectQuoteModal = true" v-if="quote.data.status.label !== 'Rechazado'">Rechazar</PrimaryButton>
+                    <div v-else>
+                        <p class="text-primary text-center">Rechazado</p>
+                        <p class="text-center text-sm mt-4">Motivo de rechazo: <strong>{{ quote.data.rejected_razon }}</strong></p>
+                    </div>
                 </div>
             </div>
         </section>
     </div>
+
+    <!-- -------------- Modal starts----------------------- -->
+      <Modal :show="rejectQuoteModal" @close="rejectQuoteModal = false">
+        <div class="p-5 relative">
+            <h2 class="font-bold">Formulario de rechazo de la cotización</h2>
+            <i @click="rejectQuoteModal = false"
+            class="fa-solid fa-xmark cursor-pointer w-5 h-5 rounded-full border border-black flex items-center justify-center absolute right-3 top-3"></i>
+            <p class="text-sm text-gray-600">Ayúdanos a mejorar nuestro servicio proporcionándonos comentarios sobre por qué estás rechazando la cotización</p>
+
+          <form class="mt-5 mb-2" @submit.prevent="rejectQuote">
+            <div class="mt-3">
+              <InputLabel value="Motivo de rechazo*" class="ml-3 mb-1" />
+              <el-input v-model="rejected_razon" :autosize="{ minRows: 3, maxRows: 5 }" type="textarea" :maxlength="200"
+                show-word-limit clearable />
+            </div>
+
+            <div class="flex justify-end space-x-3 pt-5 pb-1 py-2">
+              <CancelButton class="!py-1" @click="rejectQuoteModal = false; form.reset()">Cancelar</CancelButton>
+              <PrimaryButton class="!py-1">Enviar</PrimaryButton>
+            </div>
+          </form>
+        </div>
+      </Modal>
+      <!-- --------------------------- Modal ends ------------------------------------ -->
 </template>
 <script>
 
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import CanvasDraw from '@/Components/MyComponents/CanvasDraw.vue';
+import InputSignature from '@/Components/MyComponents/InputSignature.vue';
+import CancelButton from "@/Components/MyComponents/CancelButton.vue";
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import InputLabel from "@/Components/InputLabel.vue";
+import InputError from "@/Components/InputError.vue";
+import Modal from "@/Components/Modal.vue";
 import axios from 'axios';
 import { Head } from '@inertiajs/vue3';
 
 export default {
     data() {
         return {
+            rejected_razon: null,
             showSideOptions: false,
+            rejectQuoteModal: false,
             responseOptions: 'Dibujar',
         };
     },
     components: {
         ApplicationLogo,
+        PrimaryButton,
+        InputSignature,
         CanvasDraw,
+        CancelButton,
+        InputLabel,
+        InputError,
+        Modal,
         Head
     },
     props: {
         quote: Object
     },
     methods:{
-        async authorize() {
-            if (!this.quote.data.authorized_at)  {
+        async rejectQuote() {
                 try {
-                    const response = await axios.put(route('quotes.authorize', this.quote.data.id));
+                    const response = await axios.put(route('quotes.reject', this.quote.data.id), {rejected_razon: this.rejected_razon});
 
                 if (response.status == 200) {
                     this.$notify({
                         title: 'Éxito',
-                        message: response.data.message,
+                        message: 'Se rechazó la cotización',
                         type: 'success'
                     });
-                } else {
-                    this.$notify({
-                        title: 'Algo salió mal',
-                        message: response.data.message,
-                        type: 'error'
-                    });
-                }
+                    location.reload();
+                } 
                 } catch (err) {
                     this.$notify({
                         title: 'Algo salió mal',
-                        message: err.message,
+                        message: 'El campo "motivo de rechazo" es obligatorio',
                         type: 'error'
                     });
                     console.log(err);
-                } finally {
-                    this.$inertia.get(route('quotes.index'));
                 }
-            }
         },
     },
 }

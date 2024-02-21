@@ -29,7 +29,7 @@ class QuoteController extends Controller
 
     public function storeSignature(Request $request, Quote $quote)
     {
-        // Elimina la firma que ya esté reggistrada 
+        // Elimina la firma que ya esté registrada 
         $quote->clearMediaCollection('signature');
 
         // Guardar el archivo en la colección 'signature'
@@ -76,8 +76,26 @@ class QuoteController extends Controller
     public function markAsAcepted(Quote $quote)
     {
         $quote->update([
+            'rejected_razon' => null, // limpia la razon de rechazo en caso de haber sido rechazada
             'responded_at' => now(),
             'quote_acepted' => true,
+        ]);
+    }
+
+
+    public function rejectQuote(Request $request, Quote $quote)
+    {   
+        $request->validate([
+            'rejected_razon' => 'required|string|min:5|max:255'
+        ]);
+
+        // Elimina la firma si ya está registrada 
+        $quote->clearMediaCollection('signature');
+
+        $quote->update([
+            'rejected_razon' => $request->rejected_razon,
+            'responded_at' => now(),
+            'quote_acepted' => false,
         ]);
     }
 }

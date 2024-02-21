@@ -17,16 +17,12 @@
 <script>
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { useForm } from "@inertiajs/vue3";
 
 export default {
   data() {
-        const form = useForm({
-            signature: null,
-        });
     return {
-        form,
         miCanvas: null,
+        signature: null,
         lineas: [],
         correccionX: 0,
         correccionY: 0,
@@ -52,7 +48,7 @@ export default {
       this.correccionX = this.miCanvas.getBoundingClientRect().x;
       this.correccionY = this.miCanvas.getBoundingClientRect().y;
 
-      this.miCanvas.width = 320;
+      this.miCanvas.width = 400;
       this.miCanvas.height = 200;
     },
     empezarDibujo() {
@@ -75,7 +71,7 @@ export default {
 
         if (event.changedTouches === undefined) {
           this.nuevaPosicionX = event.layerX - 7; // offset para dibujar en la coordenada correcta
-          this.nuevaPosicionY = event.layerY - 180; // offset para dibujar en la coordenada correcta
+          this.nuevaPosicionY = event.layerY - 160; // offset para dibujar en la coordenada correcta
         } else {
           this.nuevaPosicionX =
             event.changedTouches[0].pageX - this.correccionX;
@@ -114,7 +110,7 @@ export default {
       let canvas = this.miCanvas;
       canvas.toBlob(
         (blob) => {
-          this.form.signature = new File([blob], 'dibujo.png', { type: 'image/png' });
+          this.signature = new File([blob], 'dibujo.png', { type: 'image/png' });
           // mandar el objeto imagen al servidor
           this.enviarImagenAlServidor();
         },
@@ -123,7 +119,7 @@ export default {
     },
     enviarImagenAlServidor() {
       let formData = new FormData();
-      formData.append('signature', this.form.signature);
+      formData.append('signature', this.signature);
 
       axios.post(`/quotes-store-signature/${this.quoteId}`, formData, {
         headers: {
@@ -162,7 +158,7 @@ export default {
 
 <style scoped>
 canvas {
-  width: 320px;
+  width: 400px;
   height: 200px;
   background-color: #fff;
   border: 1px solid #9a9a9a;

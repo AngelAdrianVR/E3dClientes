@@ -27,6 +27,7 @@ class Quote extends Model implements HasMedia
         'authorized_at',
         'quote_acepted',
         'responded_at',
+        'rejected_razon',
         'is_spanish_template',
         'company_branch_id',
         'user_id',

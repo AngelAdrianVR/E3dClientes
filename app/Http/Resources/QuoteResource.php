@@ -24,13 +24,13 @@ class QuoteResource extends JsonResource
             'icon' => '<i class="fa-regular fa-clock"></i>',
         ];
 
-        if ($this->quote_acepted === true) {
+        if ($this->quote_acepted === 1) {
             $status = [
                 'label' => 'Autorizado',
                 'color' => 'text-green-500',
                 'icon' => '<i class="fa-solid fa-check"></i>',
             ];
-        } else if ($this->quote_acepted === false) {
+        } else if ($this->quote_acepted === 0) {
             $status = [
                 'label' => 'Rechazado',
                 'color' => 'text-red-500',
@@ -54,6 +54,7 @@ class QuoteResource extends JsonResource
             'authorized_user_name' => $this->authorized_user_name ?? 'No autorizado',
             'authorized_at' => $this->authorized_at?->isoFormat('DD MMM, YYYY h:mm A'),
             'quote_acepted' => $this->quote_acepted,
+            'rejected_razon' => $this->rejected_razon,
             'responded_at' => $this->responded_at?->isoFormat('DD MMM, YYYY h:mm A'),
             'media' => $this->getMedia('signature')->all(),
             'is_spanish_template' => boolval($this->is_spanish_template),
