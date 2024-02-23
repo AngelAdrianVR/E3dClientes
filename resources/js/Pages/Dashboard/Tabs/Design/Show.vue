@@ -58,7 +58,7 @@
         </section>
 
         <!-- Seccion de firma -->
-        <section v-if="showSideOptions" class="w-[25%] h-screen py-7 px-2 border-l border-gray-500 bg-gray-100 relative">
+        <section v-if="showSideOptions" class="lg:w-[25%] h-screen py-7 px-2 border-l border-gray-500 bg-gray-100 relative">
             <i @click="showSideOptions = false;" class="fa-solid fa-xmark text-xs text-white bg-primary py-1 px-[7px] rounded-full absolute top-1 -left-[12px] cursor-pointer"></i>
             <p class="text-sm">Por favor, revisa el documento detenidamente. Si todo esta correcto, firme y envíe. De lo contrario, puede rechazar y especificar el motivo.</p>
 
@@ -77,7 +77,7 @@
 
                 <!-- Firma guardada -->
                 <div v-if="responseOptions === 'Firma guardada'" class="mt-4">
-                    <InputSignature :quoteId="design.data.id" />
+                    <InputSignature :saveSignatureUrl="'designs-store-signature'" :itemId="design.data.id" />
                 </div>
 
                 <!-- Rechazar -->
@@ -90,6 +90,7 @@
                     </div>
                 </div> -->
             </div>
+            <p class="absolute bottom-5 text-sm text-gray-400">Puedes ocultar las opciones de firma haciendo clic en la "X" de la esquina superior derecha del documento. Una vez ocultas, simplemente presiona Ctrl + P para imprimir el documento.</p>
         </section>
     </div>
 

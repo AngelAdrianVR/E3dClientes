@@ -56,3 +56,4 @@ Route::put('quotes-reject/{quote}', [QuoteController::class, 'rejectQuote'])->mi
 Route::resource('designs', DesignController::class);
 Route::get('designs-fetch', [DesignController::class, 'fetchDesigns'])->middleware('auth')->name('designs.fetch');
 Route::post('designs-store-signature/{design}', [DesignController::class, 'storeSignature'])->middleware('auth')->name('designs.store-signature');
+Route::put('designs-mark-as-acepted/{design}', [DesignController::class, 'markAsAcepted'])->middleware('auth')->name('designs.acepted');

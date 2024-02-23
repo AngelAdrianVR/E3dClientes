@@ -71,4 +71,14 @@ class DesignController extends Controller
 
         return response()->json(['items' => $designs]);
     }
+
+
+    public function markAsAcepted(Design $design)
+    {
+        $design->update([
+            'rejected_razon' => null, // limpia la razon de rechazo en caso de haber sido rechazada
+            'responded_at' => now(),
+            'design_acepted' => true,
+        ]);
+    }
 }

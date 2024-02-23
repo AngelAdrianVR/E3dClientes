@@ -183,7 +183,7 @@
         </section>
 
         <!-- Seccion de firma -->
-        <section v-if="showSideOptions" class="lg:w-[40%] h-screen py-7 px-2 border-l border-gray-500 bg-gray-100 relative">
+        <section v-if="showSideOptions" class="lg:w-[25%] h-screen py-7 px-2 border-l border-gray-500 bg-gray-100 relative">
             <i @click="showSideOptions = false;" class="fa-solid fa-xmark text-xs text-white bg-primary py-1 px-[7px] rounded-full absolute top-1 -left-[12px] cursor-pointer"></i>
             <p class="text-sm">Por favor, revisa el documento detenidamente. Si todo esta correcto, firme y envíe. De lo contrario, puede rechazar y especificar el motivo.</p>
 
@@ -197,16 +197,16 @@
                 <!-- Dibujar -->
                 <div v-if="responseOptions === 'Dibujar'" class="mt-4">
                     <p class="text-gray-400 text-xs ml-2 mb-1">Dibuja tu firma en el siguiente recuadro</p>
-                    <CanvasDraw :saveDrawUrl="'quotes-store-signature'" :offsetX="7" :offsetY="160" :itemId="quote.data.id" />
+                    <CanvasDraw :saveDrawUrl="'quotes-store-signature'" :width="350" :height="200" :offsetX="7" :offsetY="180" :itemId="quote.data.id" />
                 </div>
 
                 <!-- Firma guardada -->
                 <div v-if="responseOptions === 'Firma guardada'" class="mt-4">
-                    <InputSignature :quoteId="quote.data.id" />
+                    <InputSignature :saveSignatureUrl="'quotes-store-signature'" :itemId="quote.data.id" />
                 </div>
 
                 <!-- Rechazar -->
-                <div v-if="responseOptions === 'Rechazar'" class="mt-4 text-center">
+                <div v-if="responseOptions === 'Rechazar'" class="mt-4 text-center w-[350px]">
                     <p class="text-gray-400 text-xs mb-3">Después de haber sido rechazada la cotización puedes reconsiderar y firmar para aceptarla si así lo deseas</p>
                     <PrimaryButton @click="rejectQuoteModal = true" v-if="quote.data.status.label !== 'Rechazado'">Rechazar</PrimaryButton>
                     <div v-else>
@@ -214,7 +214,9 @@
                         <p class="text-center text-sm mt-4">Motivo de rechazo: <strong>{{ quote.data.rejected_razon }}</strong></p>
                     </div>
                 </div>
+
             </div>
+                <p class="absolute bottom-5 text-sm text-gray-400">Puedes ocultar las opciones de firma haciendo clic en la "X" de la esquina superior derecha del documento. Una vez ocultas, simplemente presiona Ctrl + P para imprimir el documento.</p>
         </section>
     </div>
 
