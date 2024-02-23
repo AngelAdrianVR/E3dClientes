@@ -80,7 +80,7 @@
                     <!-- signature -->
                     <div @click="showSideOptions = true" class="mr-7 relative cursor-pointer">
                         <p class="text-gray-500">Firma de autorización:  _________________________________ </p>
-                        <figure class="w-32 absolute right-5 -top-[70px] border border-dashed border-green-500" v-if="quote.data.media?.length > 0">
+                        <figure class="w-32 absolute right-5 -top-[55px] border border-dashed border-green-500" v-if="quote.data.media?.length > 0">
                             <img :src="quote.data.media[0].original_url" alt="">
                         </figure>
                         <div v-else class="absolute right-0 -top-12 border border-dashed border-green-500 text-green-500 rounded-md py-5 px-7"> Agrega tu firma aquí </div>
@@ -197,7 +197,7 @@
                 <!-- Dibujar -->
                 <div v-if="responseOptions === 'Dibujar'" class="mt-4">
                     <p class="text-gray-400 text-xs ml-2 mb-1">Dibuja tu firma en el siguiente recuadro</p>
-                    <CanvasDraw :quoteId="quote.data.id" />
+                    <CanvasDraw :saveDrawUrl="'quotes-store-signature'" :offsetX="7" :offsetY="160" :itemId="quote.data.id" />
                 </div>
 
                 <!-- Firma guardada -->

@@ -30,10 +30,14 @@
                         <template #label>
                             <div class="flex items-center">
                                 <i class="fa-solid fa-pen-ruler mr-1"></i>
-                                <span>Diseños ({{ '3' }})</span>
+                                <span>Diseños ({{ designs?.length }})</span>
                             </div>
                         </template>
-                        <Designs />
+                        <!-- estado de carga -->
+                        <div v-if="loading" class="flex justify-center items-center py-10">
+                            <i class="fa-solid fa-spinner fa-spin text-4xl text-primary"></i>
+                        </div>
+                        <Designs v-else :designs="designs" />
                     </el-tab-pane>
                 </el-tabs>
             </div>
@@ -44,7 +48,7 @@
 <script>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Quotes from "./Tabs/Quote/Quotes.vue";
-import Designs from "./Tabs/Designs.vue";
+import Designs from "./Tabs/Design/Designs.vue";
 import axios from 'axios';
 
 export default {
@@ -53,6 +57,7 @@ export default {
             activeTab: '1',
             quoteSearch: null,
             quotes: null,
+            designs: null,
             loading: false,
         }
     },
@@ -75,10 +80,24 @@ export default {
             } finally {
                 this.loading = false;
             }
-        }
+        },
+        async fetchDesigns() {
+            try {
+                this.loading = true;
+                const response = await axios.get(route('designs.fetch'));
+                if ( response.status === 200 ) {
+                    this.designs = response.data.items;
+                }
+            } catch (error) {
+             console.log(error);   
+            } finally {
+                this.loading = false;
+            }
+        },
     },
     mounted() {
         this.fetchQuotes(); 
+        this.fetchDesigns(); 
     }
 }
 </script>

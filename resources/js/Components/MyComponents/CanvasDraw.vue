@@ -1,5 +1,5 @@
 <template>
-  <canvas ref="canvas"></canvas>
+  <canvas :class="'w-' + width + ' h-' + height" ref="canvas"></canvas>
   <div class="flex justify-between mt-3">
     <button class="text-secondary text-sm" @click="limpiarCanvas"><i class="fa-solid fa-broom mr-1 ml-2"></i>Limpiar</button>
     <div class="flex space-x-1">
@@ -36,7 +36,27 @@ export default {
     SecondaryButton
   },
   props:{
-    quoteId: Number
+    itemId: Number,
+    offsetX: {
+      type: Number,
+      default: 0 
+    },
+    offsetY: {
+      type: Number,
+      default: 0 
+    },
+    width: {
+      type: Number,
+      default: 400 
+    },
+    height: {
+      type: Number,
+      default: 200 
+    },
+    saveDrawUrl: {
+      type: String,
+      default: null 
+    },
   },
   mounted() {
     this.inicializarCanvas();
@@ -48,8 +68,8 @@ export default {
       this.correccionX = this.miCanvas.getBoundingClientRect().x;
       this.correccionY = this.miCanvas.getBoundingClientRect().y;
 
-      this.miCanvas.width = 400;
-      this.miCanvas.height = 200;
+      this.miCanvas.width = this.width;
+      this.miCanvas.height = this.height;
     },
     empezarDibujo() {
       this.pintarLinea = true;
@@ -70,8 +90,8 @@ export default {
         ctx.strokeStyle = '#000';
 
         if (event.changedTouches === undefined) {
-          this.nuevaPosicionX = event.layerX - 7; // offset para dibujar en la coordenada correcta
-          this.nuevaPosicionY = event.layerY - 160; // offset para dibujar en la coordenada correcta
+          this.nuevaPosicionX = event.layerX - this.offsetX; // 7 offset para dibujar en la coordenada correcta
+          this.nuevaPosicionY = event.layerY - this.offsetY; // 160 offset para dibujar en la coordenada correcta
         } else {
           this.nuevaPosicionX =
             event.changedTouches[0].pageX - this.correccionX;
@@ -121,7 +141,7 @@ export default {
       let formData = new FormData();
       formData.append('signature', this.signature);
 
-      axios.post(`/quotes-store-signature/${this.quoteId}`, formData, {
+      axios.post(`/${this.saveDrawUrl}/${this.itemId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -158,8 +178,6 @@ export default {
 
 <style scoped>
 canvas {
-  width: 400px;
-  height: 200px;
   background-color: #fff;
   border: 1px solid #9a9a9a;
   border-radius: 10px;
