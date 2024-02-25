@@ -1,7 +1,7 @@
 <template>
   <div class="inline">
     <figure @click="triggerImageInput"
-      class="flex flex-col items-center justify-center rounded-lg border border-[#9A9A9A] w-[400px] h-52 cursor-pointer relative bg-white">
+      class="flex flex-col items-center justify-center rounded-lg border border-[#9A9A9A] w-[350px] h-52 cursor-pointer relative bg-white">
       <i v-if="signature && canDelete" @click.stop="clearImage" class="fa-solid fa-xmark absolute p-1 top-1 right-1 z-10 text-sm"></i>
       <div class="flex items-center">
         <p v-if="!signature" class="text-xs text-secondary">Sube una imagen</p>
@@ -50,7 +50,11 @@ export default {
       type: String,
       default: null,
     },
-    quoteId: Number
+    saveSignatureUrl: {
+      type: String,
+      default: null 
+    },
+    itemId: Number
   },
   watch: {
     imageUrl: {
@@ -85,7 +89,7 @@ export default {
     saveImageAsSignature() {
       const formData = new FormData();
       formData.append('signature', this.formData.file);
-      axios.post(`/quotes-store-signature/${this.quoteId}`, formData, {
+      axios.post(`/${this.saveSignatureUrl}/${this.itemId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

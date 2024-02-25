@@ -80,8 +80,8 @@
                     <!-- signature -->
                     <div @click="showSideOptions = true" class="mr-7 relative cursor-pointer">
                         <p class="text-gray-500">Firma de autorización:  _________________________________ </p>
-                        <figure class="w-32 absolute right-5 -top-[70px] border border-dashed border-green-500" v-if="quote.data.media?.length > 0">
-                            <img :src="quote.data.media[0].original_url" alt="">
+                        <figure class="w-32 absolute right-5 -top-[63px] border border-dashed border-green-500" v-if="quote.data.signature_media?.length > 0">
+                            <img :src="quote.data.signature_media[0].original_url" alt="">
                         </figure>
                         <div v-else class="absolute right-0 -top-12 border border-dashed border-green-500 text-green-500 rounded-md py-5 px-7"> Agrega tu firma aquí </div>
                     </div>
@@ -183,7 +183,7 @@
         </section>
 
         <!-- Seccion de firma -->
-        <section v-if="showSideOptions" class="lg:w-[40%] h-screen py-7 px-2 border-l border-gray-500 bg-gray-100 relative">
+        <section v-if="showSideOptions" class="lg:w-[25%] h-screen py-7 px-2 border-l border-gray-500 bg-gray-100 relative">
             <i @click="showSideOptions = false;" class="fa-solid fa-xmark text-xs text-white bg-primary py-1 px-[7px] rounded-full absolute top-1 -left-[12px] cursor-pointer"></i>
             <p class="text-sm">Por favor, revisa el documento detenidamente. Si todo esta correcto, firme y envíe. De lo contrario, puede rechazar y especificar el motivo.</p>
 
@@ -197,16 +197,16 @@
                 <!-- Dibujar -->
                 <div v-if="responseOptions === 'Dibujar'" class="mt-4">
                     <p class="text-gray-400 text-xs ml-2 mb-1">Dibuja tu firma en el siguiente recuadro</p>
-                    <CanvasDraw :quoteId="quote.data.id" />
+                    <CanvasDraw :saveDrawUrl="'quotes-store-signature'" :width="350" :height="200" :offsetX="7" :offsetY="180" :itemId="quote.data.id" />
                 </div>
 
                 <!-- Firma guardada -->
                 <div v-if="responseOptions === 'Firma guardada'" class="mt-4">
-                    <InputSignature :quoteId="quote.data.id" />
+                    <InputSignature :saveSignatureUrl="'quotes-store-signature'" :itemId="quote.data.id" />
                 </div>
 
                 <!-- Rechazar -->
-                <div v-if="responseOptions === 'Rechazar'" class="mt-4 text-center">
+                <div v-if="responseOptions === 'Rechazar'" class="mt-4 text-center w-[350px]">
                     <p class="text-gray-400 text-xs mb-3">Después de haber sido rechazada la cotización puedes reconsiderar y firmar para aceptarla si así lo deseas</p>
                     <PrimaryButton @click="rejectQuoteModal = true" v-if="quote.data.status.label !== 'Rechazado'">Rechazar</PrimaryButton>
                     <div v-else>
@@ -214,7 +214,9 @@
                         <p class="text-center text-sm mt-4">Motivo de rechazo: <strong>{{ quote.data.rejected_razon }}</strong></p>
                     </div>
                 </div>
+
             </div>
+                <p class="absolute bottom-5 text-sm text-gray-400">Puedes ocultar las opciones de firma haciendo clic en la "X" de la esquina superior derecha del documento. Una vez ocultas, simplemente presiona Ctrl + P para imprimir el documento.</p>
         </section>
     </div>
 
@@ -234,7 +236,7 @@
             </div>
 
             <div class="flex justify-end space-x-3 pt-5 pb-1 py-2">
-              <CancelButton class="!py-1" @click="rejectQuoteModal = false; form.reset()">Cancelar</CancelButton>
+              <CancelButton class="!py-1" @click="rejectQuoteModal = false; rejected_razon = null">Cancelar</CancelButton>
               <PrimaryButton class="!py-1">Enviar</PrimaryButton>
             </div>
           </form>
