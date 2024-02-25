@@ -7,7 +7,7 @@
             <div class="font-bold pb-3 text-left">Estado</div>
         </div>
         <div class="overflow-auto h-[300]">
-            <div @click="$inertia.get(route('designs.show', design.id))" v-for="(design, index) in designs" :key="index" class="mb-2 grid grid-cols-4 border rounded-full items-center relative py-2 cursor-pointer hover:border-primary">
+            <div @click="$inertia.get(route('design-authorizations.show', design.id))" v-for="(design, index) in designs" :key="index" class="mb-2 grid grid-cols-4 border rounded-full items-center relative py-2 cursor-pointer hover:border-primary">
                 <div class="grid grid-cols-2 items-center">
                     <img class="mx-auto w-5 object-contain" src="@/../../public/images/pdf.png" alt="">
                     <p class="font-bold">{{ design.name }}</p>

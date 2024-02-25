@@ -1,7 +1,7 @@
 <template>
     <div class="lg:flex">
         <!-- seccion de cotizacione -->
-            <Head :title="design.data.name" />
+            <Head :title="design_authorization.data.name" />
         <section class="w-full">
             <!-- logo -->
             <div class="w-full flex justify-between items-center p-5 border-b-2">
@@ -17,44 +17,55 @@
             <!-- content -->
             <div class="text-xs grid grid-cols-2 gap-x-7 mt-10 px-7">   
                 <!-- imagen -->
-                <figure class="w-full h-[600px] border border-[#D9D9D9] rounded-lg">
-                    <img :src="design.data.media?.find(file => file.collection_name === 'results')?.original_url" alt="">
+                <figure v-if="design_authorization.data.product_media?.length > 0" class="w-full flex items-center justify-center h-[600px] border border-[#D9D9D9] rounded-lg">
+                    <img class="object-cover" :src="design_authorization.data.product_media[0].original_url" alt="">
                 </figure>
                 
                 <!-- información del diseño -->
                 <div class="grid grid-cols-2 gap-x-2 text-sm self-start">
                     <p class="text-[#9A9A9A] my-2">Nombre del producto:</p>
-                    <p>{{ design.data.name }}</p>
+                    <p class="my-2">{{ design_authorization.data.name }}</p>
                     <p class="text-[#9A9A9A] my-2">Color:</p>
-                    <p>{{ 'metal' }}</p>
+                    <p class="my-2">{{ design_authorization.data.color }}</p>
                     <p class="text-[#9A9A9A] my-2">Material:</p>
-                    <p>{{ 'solidchrome' }}</p>
+                    <p class="my-2">{{ design_authorization.data.material ?? '--' }}</p>
                     <p class="text-[#9A9A9A] my-2">Técnica de impresión:</p>
-                    <p>{{ '-' }}</p>
+                    <p class="my-2">{{ design_authorization.data.engrave_method }}</p>
                     <p class="text-[#9A9A9A] my-2">Vendedor:</p>
-                    <p>{{ design.data.user.name }}</p>
-                    <p class="text-[#9A9A9A] my-2">Fecha de autorización:</p>
-                    <p>{{ design.data.authorized_at }}</p>
+                    <p class="my-2">{{ design_authorization.data.seller?.name }}</p>
                     <p class="text-[#9A9A9A] my-2">Logística:</p>
-                    <p>{{ '-' }}</p>
+                    <p class="my-2">{{ design_authorization.data.logistic ?? '--' }}</p>
 
-                    <p class="text-[#9A9A9A] my-2 mt-7 col-span-full">Datos del cliente:</p>
-                    <p class="text-[#9A9A9A] my-2">Nombre de contacto:</p>
-                    <p>{{ design.data.contact_name }}</p>
+                    <p class="text-[#9A9A9A] my-2 mt-7 col-span-full">Datos del cliente</p>
+                    <p class="text-[#9A9A9A] my-2">Sucursal:</p>
+                    <p class="my-2">{{ design_authorization.data.company_branch?.name }}</p>
+                    <p class="text-[#9A9A9A] my-2">Contacto:</p>
+                    <p class="my-2">{{ contact?.name }}</p>
                     <p class="text-[#9A9A9A] my-2">Puesto:</p>
-                    <p>{{ 'puesto' }}</p>
-                    <p class="text-[#9A9A9A] my-2">Empresa:</p>
-                    <p>{{ 'Empresa' }}</p>
+                    <p class="my-2">{{ contact?.charge }}</p>
+                    <p class="text-[#9A9A9A] my-2">correo:</p>
+                    <p class="my-2">{{ contact?.email }}</p>
+                    <p class="text-[#9A9A9A] my-2">Teléfono:</p>
+                    <p class="my-2">{{ contact?.phone }}</p>
+                    <p class="text-[#9A9A9A] my-2">Fecha de aceptación de diseño:</p>
+                    <p class="my-2">{{ contact?.responded_at ?? '--' }}</p>
 
                     <div class="w-96 relative">
-                        <p class="text-[#9A9A9A] mt-16">Firma de autorización: _________________________________</p>
-                        <figure @click="showSideOptions = true" class="w-32 absolute right-4 -top-[70px] border border-dashed border-green-500" v-if="design.data.media?.find(file => file.collection_name === 'signarute')">
-                            <img :src="quote.data.media[0].original_url" alt="">
+                        <p class="text-[#9A9A9A] mt-16">Firma de autorización: _______________________________</p>
+                        <figure @click="showSideOptions = true" class="w-32 absolute right-20 top-0 border border-dashed border-green-500 cursor-pointer" v-if="design_authorization.data.signature_media?.length > 0">
+                            <img :src="design_authorization.data.signature_media[0].original_url" alt="">
                         </figure>
                         <div @click="showSideOptions = true" v-else class="absolute right-12 top-3 border border-dashed border-green-500 text-green-500 rounded-md py-5 px-7 cursor-pointer"> Agrega tu firma aquí </div>
                     </div>
                 </div>
             </div>  
+
+            <footer class="lg:p-7 border-b border-[#9A9A9A]">
+                <h1 class="text-primary text-lg font-bold">Importante</h1>
+                <p class="font-bold">Se solicita una revisión cuidadosa del diseño, los colores y el texto. Una vez autorizado, cualquier omisión será responsabilidad de la persona que lo firme</p>
+                <p class="text-sm text-gray-500">*Los logotipos y marcas mostrados en este formato tienen un propósito exclusivamente ilustrativo, ya que los tonos de los grabados e impresiones pueden variar dependiendo del producto o lote.</p>
+                <p class="text-sm text-gray-500">*Los colores de la pantalla puede variar dependiendo del dispositivo en que se visualicen. </p>
+            </footer>
         </section>
 
         <!-- Seccion de firma -->
@@ -72,23 +83,23 @@
                 <!-- Dibujar -->
                 <div v-if="responseOptions === 'Dibujar'" class="mt-4">
                     <p class="text-gray-400 text-xs ml-2 mb-1">Dibuja tu firma en el siguiente recuadro</p>
-                    <CanvasDraw :saveDrawUrl="'designs-store-signature'" :width="350" :offsetX="7" :offsetY="184" :itemId="design.data.id" />
+                    <CanvasDraw :saveDrawUrl="'design-authorizations-store-signature'" :width="350" :offsetX="7" :offsetY="184" :itemId="design_authorization.data.id" />
                 </div>
 
                 <!-- Firma guardada -->
                 <div v-if="responseOptions === 'Firma guardada'" class="mt-4">
-                    <InputSignature :saveSignatureUrl="'designs-store-signature'" :itemId="design.data.id" />
+                    <InputSignature :saveSignatureUrl="'authorizations-store-signature'" :itemId="design_authorization.data.id" />
                 </div>
 
                 <!-- Rechazar -->
-                <!-- <div v-if="responseOptions === 'Rechazar'" class="mt-4 text-center">
+                <div v-if="responseOptions === 'Rechazar'" class="mt-4 text-center">
                     <p class="text-gray-400 text-xs mb-3">Después de haber sido rechazada la cotización puedes reconsiderar y firmar para aceptarla si así lo deseas</p>
-                    <PrimaryButton @click="rejectDesignModal = true" v-if="design.data.status.label !== 'Rechazado'">Rechazar</PrimaryButton>
+                    <PrimaryButton @click="rejectDesignModal = true" v-if="design_authorization.data.status.label !== 'Rechazado'">Rechazar</PrimaryButton>
                     <div v-else>
                         <p class="text-primary text-center">Rechazado</p>
-                        <p class="text-center text-sm mt-4">Motivo de rechazo: <strong>{{ design.data.rejected_razon }}</strong></p>
+                        <p class="text-center text-sm mt-4">Motivo de rechazo: <strong>{{ design_authorization.data.rejected_razon }}</strong></p>
                     </div>
-                </div> -->
+                </div>
             </div>
             <p class="absolute bottom-5 text-sm text-gray-400">Puedes ocultar las opciones de firma haciendo clic en la "X" de la esquina superior derecha del documento. Una vez ocultas, simplemente presiona Ctrl + P para imprimir el documento.</p>
         </section>
@@ -110,7 +121,7 @@
             </div>
 
             <div class="flex justify-end space-x-3 pt-5 pb-1 py-2">
-              <CancelButton class="!py-1" @click="rejectDesignModal = false; form.reset()">Cancelar</CancelButton>
+              <CancelButton class="!py-1" @click="rejectDesignModal = false; rejected_razon = null">Cancelar</CancelButton>
               <PrimaryButton class="!py-1">Enviar</PrimaryButton>
             </div>
           </form>
@@ -134,6 +145,7 @@ import { Head } from '@inertiajs/vue3';
 export default {
     data() {
         return {
+            contact: null,
             rejected_razon: null,
             showSideOptions: false,
             rejectDesignModal: false,
@@ -152,12 +164,12 @@ export default {
         Head
     },
     props: {
-        design: Object
+        design_authorization: Object
     },
     methods:{
         async rejectDesign() {
                 try {
-                    const response = await axios.put(route('designs.reject', this.design.data.id), {rejected_razon: this.rejected_razon});
+                    const response = await axios.put(route('design-authorizations.reject', this.design_authorization.data.id), {rejected_razon: this.rejected_razon});
 
                 if (response.status == 200) {
                     this.$notify({
@@ -177,5 +189,9 @@ export default {
                 }
         },
     },
+    mounted() {
+    //Guardar la informacion del contacto
+    this.contact = this.design_authorization.data.company_branch.contacts.find(contact => contact.id === this.design_authorization.data.contact_id);
+}
 }
 </script>

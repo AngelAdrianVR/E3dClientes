@@ -1,9 +1,7 @@
 <?php
 
-use App\Http\Controllers\DesignController;
+use App\Http\Controllers\DesignAuthorizationController;
 use App\Http\Controllers\QuoteController;
-use App\Http\Resources\DesignResource;
-use App\Models\Design;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -51,9 +49,10 @@ Route::put('quotes-mark-as-acepted/{quote}', [QuoteController::class, 'markAsAce
 Route::put('quotes-reject/{quote}', [QuoteController::class, 'rejectQuote'])->middleware('auth')->name('quotes.reject');
 
 
-// ------------- designs routes -----------------------------------
+// ------------- design-authorizations routes -----------------------------------
 // ----------------------------------------------------------------
-Route::resource('designs', DesignController::class);
-Route::get('designs-fetch', [DesignController::class, 'fetchDesigns'])->middleware('auth')->name('designs.fetch');
-Route::post('designs-store-signature/{design}', [DesignController::class, 'storeSignature'])->middleware('auth')->name('designs.store-signature');
-Route::put('designs-mark-as-acepted/{design}', [DesignController::class, 'markAsAcepted'])->middleware('auth')->name('designs.acepted');
+Route::resource('design-authorizations', DesignAuthorizationController::class);
+Route::get('design-authorizations-fetch', [DesignAuthorizationController::class, 'fetchDesigns'])->middleware('auth')->name('design-authorizations.fetch');
+Route::post('design-authorizations-store-signature/{design_authorization}', [DesignAuthorizationController::class, 'storeSignature'])->middleware('auth')->name('design-authorizations.store-signature');
+Route::put('design-authorizations-mark-as-acepted/{design_authorization}', [DesignAuthorizationController::class, 'markAsAcepted'])->middleware('auth')->name('design-authorizations.acepted');
+Route::put('design-authorizations-reject/{design_authorization}', [DesignAuthorizationController::class, 'rejectDesign'])->middleware('auth')->name('design-authorizations.reject');

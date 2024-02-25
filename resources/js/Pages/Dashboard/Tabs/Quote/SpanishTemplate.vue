@@ -80,8 +80,8 @@
                     <!-- signature -->
                     <div @click="showSideOptions = true" class="mr-7 relative cursor-pointer">
                         <p class="text-gray-500">Firma de autorización:  _________________________________ </p>
-                        <figure class="w-32 absolute right-5 -top-[55px] border border-dashed border-green-500" v-if="quote.data.media?.length > 0">
-                            <img :src="quote.data.media[0].original_url" alt="">
+                        <figure class="w-32 absolute right-5 -top-[63px] border border-dashed border-green-500" v-if="quote.data.signature_media?.length > 0">
+                            <img :src="quote.data.signature_media[0].original_url" alt="">
                         </figure>
                         <div v-else class="absolute right-0 -top-12 border border-dashed border-green-500 text-green-500 rounded-md py-5 px-7"> Agrega tu firma aquí </div>
                     </div>
@@ -236,7 +236,7 @@
             </div>
 
             <div class="flex justify-end space-x-3 pt-5 pb-1 py-2">
-              <CancelButton class="!py-1" @click="rejectQuoteModal = false; form.reset()">Cancelar</CancelButton>
+              <CancelButton class="!py-1" @click="rejectQuoteModal = false; rejected_razon = null">Cancelar</CancelButton>
               <PrimaryButton class="!py-1">Enviar</PrimaryButton>
             </div>
           </form>

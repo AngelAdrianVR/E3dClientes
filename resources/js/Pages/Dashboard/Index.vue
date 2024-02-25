@@ -7,10 +7,10 @@
                     <span class="text-sm font-bold">{{ $page.props.auth.user.name }}</span>
                 <!-- </figure> -->
                 
-                <div class="mt-7 w-1/3 relative">
+                <!-- <div class="mt-7 w-1/3 relative">
                     <input v-model="quoteSearch" class="input pr-9" type="text" placeholder="Buscar cotización">
                     <i class="fa-solid fa-magnifying-glass text-[#9A9A9A] text-xs absolute right-4 top-2"></i>
-                </div>
+                </div> -->
 
                 <el-tabs v-model="activeTab" class="mt-10">
                     <el-tab-pane name="1">
@@ -84,7 +84,7 @@ export default {
         async fetchDesigns() {
             try {
                 this.loading = true;
-                const response = await axios.get(route('designs.fetch'));
+                const response = await axios.get(route('design-authorizations.fetch'));
                 if ( response.status === 200 ) {
                     this.designs = response.data.items;
                 }
