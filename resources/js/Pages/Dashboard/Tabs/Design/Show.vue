@@ -191,8 +191,8 @@ export default {
         // Método para procesar la URL de la imagen
         procesarUrlImagen(originalUrl) {
             // Reemplaza la parte inicial de la URL
-            const nuevaUrl = originalUrl.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
-            // const nuevaUrl = originalUrl.replace('http://localhost:8000', 'http://www.intranetemblems3d.dtw.com.mx'); para hacer pruebas en local
+            // const nuevaUrl = originalUrl.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
+            const nuevaUrl = originalUrl.replace('http://localhost:8000', 'http://www.intranetemblems3d.dtw.com.mx'); //para hacer pruebas en local
             return nuevaUrl;
         },
     },
