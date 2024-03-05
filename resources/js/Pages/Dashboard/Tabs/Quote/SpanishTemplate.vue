@@ -82,7 +82,7 @@
                     <!-- <div class="mr-7 flex space-x-4 w-1/3">
                         <p class="text-gray-500">Firma de autorización: </p>
                         <figure class="w-32" v-if="quote.data.signature_media?.length > 0">
-                            <img class="border-b border-gray-600 pb-3" :src="procesarUrlImagen(quote.data.signature_media[0].original_url)" alt="">
+                            <img class="border-b border-gray-600 pb-3" :src="quote.data.signature_media[0].original_url" alt="">
                         </figure>
                     </div> -->
                     
@@ -90,7 +90,7 @@
                     <div @click="showSideOptions = true" class="mr-7 relative cursor-pointer">
                         <p class="text-gray-500">Firma de autorización:  _________________________________ </p>
                         <figure class="w-32 absolute right-5 -top-[63px] border border-dashed border-green-500" v-if="quote.data.signature_media?.length > 0">
-                            <img :src="quote.data.signature_media[0].original_url" alt="">
+                            <img :src="procesarUrlImagenLocal(quote.data.signature_media[0].original_url)" alt="">
                         </figure>
                         <div v-else class="absolute right-0 -top-12 border border-dashed border-green-500 text-green-500 rounded-md py-5 px-7"> Agrega tu firma aquí </div>
                     </div>
@@ -317,6 +317,12 @@ export default {
             // Reemplaza la parte inicial de la URL
            // const nuevaUrl = originalUrl.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
             const nuevaUrl = originalUrl.replace('http://localhost:8000', 'http://www.intranetemblems3d.dtw.com.mx'); // para hacer pruebas en local
+            return nuevaUrl;
+        },
+        procesarUrlImagenLocal(originalUrl) {
+            // Reemplaza la parte inicial de la URL
+           // const nuevaUrl = originalUrl.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
+            const nuevaUrl = originalUrl.replace('http://localhost:8000', 'https://clientes-emblems3d.dtw.com.mx'); // para hacer pruebas en local
             return nuevaUrl;
         },
     },
