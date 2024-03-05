@@ -33,9 +33,6 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', function () {
         
-        // $designs = DesignResource::collection(Design::where('company_branch_name', auth()->user()->name)->whereNotNull('authorized_at')->get());
-
-        // return $designs;
         return Inertia('Dashboard/Index');
     })->name('dashboard');
 });

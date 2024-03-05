@@ -63,7 +63,8 @@
                 <div class="w-11/12 mx-auto my-3 grid grid-cols-3 gap-4 ">
                     <template v-for="item in quote.data.products" :key="item.id">
                         <div v-if="item.pivot.show_image" class="bg-gray-200 rounded-t-xl rounded-b-md border" style="font-size: 8px;">
-                            <img class="rounded-t-xl max-h-52 mx-auto" :src="item.media[0]?.original_url">
+                            <!-- <img class="rounded-t-xl max-h-52 mx-auto" :src="item.media[0]?.original_url"> -->
+                            <img class="rounded-t-xl max-h-52 mx-auto" :src="procesarUrlImagen(item.media[0]?.original_url)">
                             <p class="py-px px-1 uppercase text-gray-600">{{ item?.name }}</p>
                         </div>
                     </template>
@@ -76,6 +77,14 @@
                         quedo a sus órdenes para cualquier duda o comentario.
                         Folio de cotización: <span class="font-bold bg-yellow-100">{{ quote.data.folio }}</span>
                     </p>
+
+                    <!-- signature -->
+                    <!-- <div class="mr-7 flex space-x-4 w-1/3">
+                        <p class="text-gray-500">Firma de autorización: </p>
+                        <figure class="w-32" v-if="quote.data.signature_media?.length > 0">
+                            <img class="border-b border-gray-600 pb-3" :src="procesarUrlImagen(quote.data.signature_media[0].original_url)" alt="">
+                        </figure>
+                    </div> -->
                     
                     <!-- signature -->
                     <div @click="showSideOptions = true" class="mr-7 relative cursor-pointer">
@@ -264,6 +273,7 @@ export default {
             showSideOptions: false,
             rejectQuoteModal: false,
             responseOptions: 'Dibujar',
+            imagesUrl: [],
         };
     },
     components: {
@@ -301,6 +311,13 @@ export default {
                     });
                     console.log(err);
                 }
+        },
+        // Método para procesar la URL de la imagen
+        procesarUrlImagen(originalUrl) {
+            // Reemplaza la parte inicial de la URL
+            const nuevaUrl = originalUrl.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
+            // const nuevaUrl = originalUrl.replace('http://localhost:8000', 'http://www.intranetemblems3d.dtw.com.mx'); para hacer pruebas en local
+            return nuevaUrl;
         },
     },
 }
