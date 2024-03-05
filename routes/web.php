@@ -3,6 +3,7 @@
 use App\Http\Controllers\DesignAuthorizationController;
 use App\Http\Controllers\QuoteController;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -53,3 +54,15 @@ Route::get('design-authorizations-fetch', [DesignAuthorizationController::class,
 Route::post('design-authorizations-store-signature/{design_authorization}', [DesignAuthorizationController::class, 'storeSignature'])->middleware('auth')->name('design-authorizations.store-signature');
 Route::put('design-authorizations-mark-as-acepted/{design_authorization}', [DesignAuthorizationController::class, 'markAsAcepted'])->middleware('auth')->name('design-authorizations.acepted');
 Route::put('design-authorizations-reject/{design_authorization}', [DesignAuthorizationController::class, 'rejectDesign'])->middleware('auth')->name('design-authorizations.reject');
+
+
+Route::get('/ejecutar-comando-storage-link', function () {
+    try {
+        // Ejecuta el comando de enlace de almacenamiento
+        Artisan::call('storage:link');
+
+        return '¡Comando ejecutado con éxito!';
+    } catch (\Exception $e) {
+        return 'Error al ejecutar el comando: ' . $e->getMessage();
+    }
+});
