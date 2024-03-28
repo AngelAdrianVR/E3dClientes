@@ -69,7 +69,7 @@
                     </template> -->
                     <template v-for="(item, productIndex) in quote.data.products" :key="item.id">
                         <div v-if="item.pivot.show_image" class="bg-gray-200 rounded-t-xl rounded-b-md border" style="font-size: 8px;">
-                            <img class="rounded-t-xl max-h-52 mx-auto" :src="item.media[currentImages[productIndex]]?.original_url">
+                            <img class="rounded-t-xl max-h-52 mx-auto" :src="procesarUrlImagen(item.media[currentImages[productIndex]]?.original_url)">
                             <!-- selector de imagen cuando son varias -->
                             <div v-if="item.media?.length > 1" class="my-3 flex items-center justify-center space-x-3">
                                 <i @click="currentImages[productIndex] = index" v-for="(image, index) in item.media?.length" :key="index" 
@@ -337,10 +337,10 @@ export default {
             const nuevaUrl = originalUrl?.replace('http://localhost:8000', 'https://clientes-emblems3d.dtw.com.mx'); // para hacer pruebas en local
             return nuevaUrl;
         },
-        created() {
-        // Initialize currentImages array with default values for each product
-        this.currentImages = this.quote.data.products.map(() => 0);
-        },
+    },
+    mounted() {
+    // Initialize currentImages array with default values for each product
+    this.currentImages = this.quote.data.products.map(() => 0);
     },
 }
 </script>
