@@ -20,6 +20,7 @@
                 <figure v-if="design_authorization.data.product_media?.length > 0" class="w-full flex items-center justify-center h-[600px] border border-[#D9D9D9] rounded-lg">
                     <img class="object-cover" :src="procesarUrlImagen(design_authorization.data.product_media[0].original_url)" alt="">
                 </figure>
+                <button @click="viewTest(design_authorization.data.product_media[0].original_url)">ver imagen</button>
                 
                 <!-- información del diseño -->
                 <div class="grid grid-cols-2 gap-x-2 text-sm self-start">
@@ -191,8 +192,9 @@ export default {
         // Método para procesar la URL de la imagen
         procesarUrlImagen(originalUrl) {
             // Reemplaza la parte inicial de la URL
-            // const nuevaUrl = originalUrl.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
-            const nuevaUrl = originalUrl.replace('http://localhost:8000', 'http://www.intranetemblems3d.dtw.com.mx'); //para hacer pruebas en local
+            const nuevaUrl = originalUrl.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
+            // const nuevaUrl = originalUrl.replace('http://localhost:8000', 'http://www.intranetemblems3d.dtw.com.mx'); //para hacer pruebas en local
+            console.log('url de imagen:', nuevaUrl);
             return nuevaUrl;
         },
         procesarUrlImagenLocal(originalUrl) {
