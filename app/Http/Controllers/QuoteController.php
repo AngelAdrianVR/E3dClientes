@@ -68,7 +68,8 @@ class QuoteController extends Controller
 
     public function fetchQuotes()
     {
-        $quotes = QuoteResource::collection(Quote::where('company_branch_id', auth()->id())->whereNotNull('authorized_at')->with(['user:id,name,email', 'catalogProducts'])->get());
+        $quotes = QuoteResource::collection(Quote::where('company_branch_id', auth()->id())->whereNotNull('authorized_at')
+            ->with(['user:id,name,email', 'catalogProducts'])->get()->take(20));
 
         return response()->json(['items' => $quotes]);
     }
@@ -97,5 +98,18 @@ class QuoteController extends Controller
             'responded_at' => now(),
             'quote_acepted' => false,
         ]);
+    }
+
+    public function getItemsByPage($currentPage)
+    {
+        $offset = $currentPage * 20;
+
+        // obtener todas las cotizaciones
+        $all_quotes = QuoteResource::collection(Quote::where('company_branch_id', auth()->id())->whereNotNull('authorized_at')
+            ->with(['user:id,name,email', 'catalogProducts'])->get());
+
+        $quotes = $all_quotes->splice($offset)->take(20);
+
+        return response()->json(['items' => $quotes]);
     }
 }
