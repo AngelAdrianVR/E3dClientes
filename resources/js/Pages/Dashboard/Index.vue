@@ -1,7 +1,7 @@
 <template>
     <AppLayout title="Inicio">
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="lg:max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <span class="text-sm font-bold">{{ $page.props.auth.user.name }}</span>
                 
                 <!-- <div class="mt-7 w-1/3 relative">
