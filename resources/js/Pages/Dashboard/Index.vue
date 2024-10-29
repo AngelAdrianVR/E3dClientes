@@ -2,10 +2,7 @@
     <AppLayout title="Inicio">
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                 <!-- <figure class="flex items-center space-x-5"> -->
-                    <!-- <img class="object-cover bg-no-repeat size-9 rounded-full mt-1" :src="$page.props.auth.user.profile_photo_url" :alt="$page.props.auth.user.name" /> -->
-                    <span class="text-sm font-bold">{{ $page.props.auth.user.name }}</span>
-                <!-- </figure> -->
+                <span class="text-sm font-bold">{{ $page.props.auth.user.name }}</span>
                 
                 <!-- <div class="mt-7 w-1/3 relative">
                     <input v-model="quoteSearch" class="input pr-9" type="text" placeholder="Buscar cotización">
@@ -24,7 +21,21 @@
                         <div v-if="loading" class="flex justify-center items-center py-10">
                             <i class="fa-solid fa-spinner fa-spin text-4xl text-primary"></i>
                         </div>
-                        <Quotes v-else :quotes="quotes" />
+                        <div v-else>
+                            <p v-if="quotes?.length" class="text-gray66 text-[11px]">{{ quotes?.length }} de {{
+                                totalQuotes }} elementos
+                            </p>
+                            <Quotes :quotes="quotes" />
+                            <p v-if="quotes?.length" class="text-gray66 text-[11px]">{{ quotes?.length }} de {{
+                                totalQuotes }} elementos
+                            </p>
+                            <p v-if="loadingItems" class="text-xs my-4 text-center">
+                                Cargando <i class="fa-sharp fa-solid fa-circle-notch fa-spin ml-2 text-primary"></i>
+                            </p>
+                            <button v-else-if="totalQuotes > 30 && quotes?.length < totalQuotes && quotes?.length"
+                                @click="fetchQuotesByPage" class="w-full text-primary my-4 text-xs mx-auto underline ml-6">Cargar más
+                                elementos</button>
+                        </div>
                     </el-tab-pane>
                     <el-tab-pane name="2">
                         <template #label>
@@ -59,6 +70,8 @@ export default {
             quotes: null,
             designs: null,
             loading: false,
+            loadingItems: false,
+            currentPage: 1,
         }
     },
     components:{
@@ -66,7 +79,9 @@ export default {
         Designs,    
         Quotes,
     },
-    props:{},
+    props:{
+        totalQuotes: Number
+    },
     methods:{
         async fetchQuotes() {
             try {
@@ -92,6 +107,21 @@ export default {
              console.log(error);   
             } finally {
                 this.loading = false;
+            }
+        },
+        async fetchQuotesByPage() {
+            try {
+                this.loadingItems = true;
+                const response = await axios.get(route('quotes.get-by-page', this.currentPage));
+
+                if (response.status === 200) {
+                    this.quotes = [...this.quotes, ...response.data.items];
+                    this.currentPage++;
+                }
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.loadingItems = false;
             }
         },
     },
