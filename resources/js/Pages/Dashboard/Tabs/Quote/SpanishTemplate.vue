@@ -61,10 +61,22 @@
 
                 <!-- Images -->
                 <div class="w-11/12 mx-auto my-3 grid grid-cols-3 gap-4 ">
-                    <template v-for="item in quote.data.products" :key="item.id">
+                    <!-- <template v-for="item in quote.data.products" :key="item.id">
                         <div v-if="item.pivot.show_image" class="bg-gray-200 rounded-t-xl rounded-b-md border" style="font-size: 8px;">
-                            <img class="rounded-t-xl max-h-52 mx-auto" :src="item.media[0]?.original_url">
+                            <img class="rounded-t-xl max-h-52 mx-auto" :src="procesarUrlImagen(item.media[0]?.original_url)">
                             <p class="py-px px-1 uppercase text-gray-600">{{ item?.name }}</p>
+                        </div>
+                    </template> -->
+                    <template v-for="(item, productIndex) in quote.data.products" :key="item.id">
+                        <div v-if="item.pivot.show_image" class="bg-gray-200 rounded-t-xl rounded-b-md border" style="font-size: 8px;">
+                            <img class="rounded-t-xl max-h-52 mx-auto" :src="procesarUrlImagen(item.media[currentImages[productIndex]]?.original_url)">
+                            <!-- selector de imagen cuando son varias -->
+                            <div v-if="item.media?.length > 1" class="my-3 flex items-center justify-center space-x-3">
+                                <i @click="currentImages[productIndex] = index" v-for="(image, index) in item.media?.length" :key="index" 
+                                :class="index == currentImages[productIndex] ? 'text-black' : 'text-white'" 
+                                class="fa-solid fa-circle text-[7px] cursor-pointer"></i>
+                            </div>
+                            <p class="py-px px-1 uppercase text-gray-600">{{ item.name }}</p>
                         </div>
                     </template>
                 </div>
@@ -76,12 +88,20 @@
                         quedo a sus órdenes para cualquier duda o comentario.
                         Folio de cotización: <span class="font-bold bg-yellow-100">{{ quote.data.folio }}</span>
                     </p>
+
+                    <!-- signature -->
+                    <!-- <div class="mr-7 flex space-x-4 w-1/3">
+                        <p class="text-gray-500">Firma de autorización: </p>
+                        <figure class="w-32" v-if="quote.data.signature_media?.length > 0">
+                            <img class="border-b border-gray-600 pb-3" :src="quote.data.signature_media[0].original_url" alt="">
+                        </figure>
+                    </div> -->
                     
                     <!-- signature -->
                     <div @click="showSideOptions = true" class="mr-7 relative cursor-pointer">
                         <p class="text-gray-500">Firma de autorización:  _________________________________ </p>
                         <figure class="w-32 absolute right-5 -top-[63px] border border-dashed border-green-500" v-if="quote.data.signature_media?.length > 0">
-                            <img :src="quote.data.signature_media[0].original_url" alt="">
+                            <img :src="procesarUrlImagenLocal(quote.data.signature_media[0].original_url)" alt="">
                         </figure>
                         <div v-else class="absolute right-0 -top-12 border border-dashed border-green-500 text-green-500 rounded-md py-5 px-7"> Agrega tu firma aquí </div>
                     </div>
@@ -260,10 +280,12 @@ import { Head } from '@inertiajs/vue3';
 export default {
     data() {
         return {
+            currentImages: [], // Array to store current image index for each product
             rejected_razon: null,
             showSideOptions: false,
             rejectQuoteModal: false,
             responseOptions: 'Dibujar',
+            imagesUrl: [],
         };
     },
     components: {
@@ -302,6 +324,23 @@ export default {
                     console.log(err);
                 }
         },
+        // Método para procesar la URL de la imagen
+        procesarUrlImagen(originalUrl) {
+            // Reemplaza la parte inicial de la URL
+           const nuevaUrl = originalUrl?.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
+            // const nuevaUrl = originalUrl?.replace('http://localhost:8000', 'http://www.intranetemblems3d.dtw.com.mx'); // para hacer pruebas en local
+            return nuevaUrl;
+        },
+        procesarUrlImagenLocal(originalUrl) {
+            // Reemplaza la parte inicial de la URL
+           // const nuevaUrl = originalUrl.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
+            const nuevaUrl = originalUrl?.replace('http://localhost:8000', 'https://clientes-emblems3d.dtw.com.mx'); // para hacer pruebas en local
+            return nuevaUrl;
+        },
+    },
+    mounted() {
+    // Initialize currentImages array with default values for each product
+    this.currentImages = this.quote.data.products.map(() => 0);
     },
 }
 </script>

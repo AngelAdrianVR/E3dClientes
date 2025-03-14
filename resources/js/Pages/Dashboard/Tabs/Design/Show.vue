@@ -18,8 +18,9 @@
             <div class="text-xs grid grid-cols-2 gap-x-7 mt-10 px-7">   
                 <!-- imagen -->
                 <figure v-if="design_authorization.data.product_media?.length > 0" class="w-full flex items-center justify-center h-[600px] border border-[#D9D9D9] rounded-lg">
-                    <img class="object-cover" :src="design_authorization.data.product_media[0].original_url" alt="">
+                    <img class="object-cover" :src="procesarUrlImagen(design_authorization.data.product_media[0].original_url)" alt="">
                 </figure>
+                <button @click="viewTest(design_authorization.data.product_media[0].original_url)">ver imagen</button>
                 
                 <!-- información del diseño -->
                 <div class="grid grid-cols-2 gap-x-2 text-sm self-start">
@@ -53,7 +54,7 @@
                     <div class="w-96 relative">
                         <p class="text-[#9A9A9A] mt-16">Firma de autorización: _______________________________</p>
                         <figure @click="showSideOptions = true" class="w-32 absolute right-20 top-0 border border-dashed border-green-500 cursor-pointer" v-if="design_authorization.data.signature_media?.length > 0">
-                            <img :src="design_authorization.data.signature_media[0].original_url" alt="">
+                            <img :src="procesarUrlImagenLocal(design_authorization.data.signature_media[0].original_url)" alt="">
                         </figure>
                         <div @click="showSideOptions = true" v-else class="absolute right-12 top-3 border border-dashed border-green-500 text-green-500 rounded-md py-5 px-7 cursor-pointer"> Agrega tu firma aquí </div>
                     </div>
@@ -187,6 +188,20 @@ export default {
                     });
                     console.log(err);
                 }
+        },
+        // Método para procesar la URL de la imagen
+        procesarUrlImagen(originalUrl) {
+            // Reemplaza la parte inicial de la URL
+            const nuevaUrl = originalUrl.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
+            // const nuevaUrl = originalUrl.replace('http://localhost:8000', 'http://www.intranetemblems3d.dtw.com.mx'); //para hacer pruebas en local
+            console.log('url de imagen:', nuevaUrl);
+            return nuevaUrl;
+        },
+        procesarUrlImagenLocal(originalUrl) {
+            // Reemplaza la parte inicial de la URL
+            // const nuevaUrl = originalUrl.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
+            const nuevaUrl = originalUrl.replace('http://localhost:8000', 'https://clientes-emblems3d.dtw.com.mx'); //para hacer pruebas en local
+            return nuevaUrl;
         },
     },
     mounted() {

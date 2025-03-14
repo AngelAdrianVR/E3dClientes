@@ -1,5 +1,5 @@
 <template>
-    <div v-if="true" class="w-full mx-auto text-sm mt-7">
+    <div v-if="designs?.length" class="w-full mx-auto text-sm mt-7">
         <div class="text-center text-base grid grid-cols-4 mb-3">
             <div class="font-bold pb-3 pl-2 text-left">Nombre</div>
             <div class="font-bold pb-3 text-left">Fecha de envío</div>
@@ -18,7 +18,8 @@
             </div>
         </div>
     </div>
-    <p class="text-center text-gray-500 text-sm mt-14" v-if="false">No hay Diseños registrados registradas</p>
+    
+    <el-empty v-else :image-size="200" description="No hay formatos de autorización de diseño registrados" />
 </template>
 
 <script>
