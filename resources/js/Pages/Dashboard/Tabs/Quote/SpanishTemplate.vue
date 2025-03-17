@@ -98,7 +98,7 @@
                     </div> -->
                     
                     <!-- signature -->
-                    <div @click="showSideOptions = true" class="mr-7 relative cursor-pointer">
+                    <div @click="scrollToOptions" class="mr-7 relative cursor-pointer">
                         <p class="text-gray-500">Firma de autorización:  _________________________________ </p>
                         <figure class="w-32 absolute right-5 -top-[63px] border border-dashed border-green-500" v-if="quote.data.signature_media?.length > 0">
                             <img :src="procesarUrlImagenLocal(quote.data.signature_media[0].original_url)" alt="">
@@ -203,8 +203,8 @@
         </section>
 
         <!-- Seccion de firma -->
-        <section v-if="showSideOptions" class="lg:w-[25%] h-screen py-7 px-2 border-l border-gray-500 bg-gray-100 relative">
-            <i @click="showSideOptions = false;" class="fa-solid fa-xmark text-xs text-white bg-primary py-1 px-[7px] rounded-full absolute top-1 -left-[12px] cursor-pointer"></i>
+        <section ref="sideOptions" v-if="showSideOptions" class="lg:w-[25%] h-screen py-7 px-2 border-l border-gray-500 bg-gray-100 relative">
+            <i @click="showSideOptions = false;" class="fa-solid fa-xmark text-xs text-white bg-primary py-1 px-[7px] rounded-full absolute top-1 left-1 lg:top-1 lg:-left-[12px] cursor-pointer"></i>
             <p class="text-sm">Por favor, revisa el documento detenidamente. Si todo esta correcto, firme y envíe. De lo contrario, puede rechazar y especificar el motivo.</p>
 
             <div class="mt-7">
@@ -323,6 +323,12 @@ export default {
                     });
                     console.log(err);
                 }
+        },
+        scrollToOptions() {
+            this.showSideOptions = true;
+            this.$nextTick(() => {
+            this.$refs.sideOptions.scrollIntoView({ behavior: 'smooth' });
+            });
         },
         // Método para procesar la URL de la imagen
         procesarUrlImagen(originalUrl) {
