@@ -58,8 +58,8 @@
 
 <script>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import Quotes from "./Tabs/Quote/Quotes.vue";
-import Designs from "./Tabs/Design/Designs.vue";
+import Quotes from "../Quote/Index.vue";
+import Designs from "../Design/Index.vue";
 import axios from 'axios';
 
 export default {
