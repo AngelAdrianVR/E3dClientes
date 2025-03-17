@@ -19,6 +19,8 @@ use Inertia\Inertia;
 |
 */
 
+Route::redirect('/', 'login');
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
