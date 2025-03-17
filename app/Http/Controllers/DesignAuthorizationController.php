@@ -44,7 +44,7 @@ class DesignAuthorizationController extends Controller
         $design_authorization = DesignAuthorizationResource::make(DesignAuthorization::with('seller:id,name', 'companyBranch.contacts')->findOrFail($design_authorization->id));
 
         // return $design_authorization;
-        return inertia('Dashboard/Tabs/Design/Show', compact('design_authorization'));
+        return inertia('Design/Show', compact('design_authorization'));
     }
 
     
