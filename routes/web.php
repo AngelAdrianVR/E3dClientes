@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CatalogProductCompanyController;
 use App\Http\Controllers\DesignAuthorizationController;
 use App\Http\Controllers\QuoteController;
 use App\Models\Quote;
@@ -41,6 +42,12 @@ Route::middleware([
         return Inertia('Dashboard/Index', compact('totalQuotes'));
     })->name('dashboard');
 });
+
+
+// ------------- catalog-product-company routes -----------------------------------
+// ---------------------------------------------------------------
+Route::resource('catalog-product-company', CatalogProductCompanyController::class)->except(['create', 'store', 'edit', 'update', 'destroy']);
+
 
 // ------------- quotes routes -----------------------------------
 // ---------------------------------------------------------------
