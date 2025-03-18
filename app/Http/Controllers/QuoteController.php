@@ -11,7 +11,10 @@ class QuoteController extends Controller
    
     public function index()
     {
-        //
+        $quotes = Quote::where('company_branch_id', auth()->id())->whereNotNull('authorized_at')
+            ->with(['user:id,name,email', 'catalogProducts'])->get();
+
+        return inertia('Quote/Index', compact('quotes'));
     }
 
     

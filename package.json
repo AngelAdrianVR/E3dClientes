@@ -19,6 +19,6 @@
         "vue": "^3.2.31"
     },
     "dependencies": {
-        "element-plus": "^2.5.5"
+        "element-plus": "^2.9.6"
     }
 }
