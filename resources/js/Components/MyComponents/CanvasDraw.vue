@@ -1,15 +1,17 @@
 <template>
   <canvas :class="'w-' + width + ' h-' + height" ref="canvas"></canvas>
   <div class="flex justify-between mt-3">
-    <button class="text-secondary text-sm" @click="limpiarCanvas"><i class="fa-solid fa-broom mr-1 ml-2"></i>Limpiar</button>
+    <button class="text-secondary text-sm" @click="limpiarCanvas"><i
+        class="fa-solid fa-broom mr-1 ml-2"></i>Limpiar</button>
     <div class="flex space-x-1">
-        <SecondaryButton :disabled="!lineas.length > 0" @click="guardarComoImagen">Guardar</SecondaryButton>
-        <el-popconfirm confirm-button-text="Si" cancel-button-text="No" icon-color="#C30303" title="¿Continuar?"
-            @confirm="guardarComoObjetoImagen">
-            <template #reference>
-                <PrimaryButton :disabled="!lineas.length > 0">Agregar</PrimaryButton>
-            </template>
-        </el-popconfirm>
+      <SecondaryButton :disabled="!lineas.length > 0" @click="guardarComoImagen">Guardar</SecondaryButton>
+      <el-popconfirm confirm-button-text="Si" cancel-button-text="No" icon-color="#C30303"
+        title="Al agregar la firma se mandará la aprobación de los productos seleccionados ¿Continuar?"
+        @confirm="guardarComoObjetoImagen">
+        <template #reference>
+          <PrimaryButton :disabled="!lineas.length > 0">Agregar</PrimaryButton>
+        </template>
+      </el-popconfirm>
     </div>
   </div>
 </template>
@@ -21,41 +23,45 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 export default {
   data() {
     return {
-        miCanvas: null,
-        signature: null,
-        lineas: [],
-        correccionX: 0,
-        correccionY: 0,
-        pintarLinea: false,
-        nuevaPosicionX: 0,
-        nuevaPosicionY: 0,
+      miCanvas: null,
+      signature: null,
+      lineas: [],
+      correccionX: 0,
+      correccionY: 0,
+      pintarLinea: false,
+      nuevaPosicionX: 0,
+      nuevaPosicionY: 0,
     };
   },
-  components:{
+  components: {
     PrimaryButton,
     SecondaryButton
   },
-  props:{
+  props: {
     itemId: Number,
     offsetX: {
       type: Number,
-      default: 0 
+      default: 0
     },
     offsetY: {
       type: Number,
-      default: 0 
+      default: 0
     },
     width: {
       type: Number,
-      default: 400 
+      default: 400
     },
     height: {
       type: Number,
-      default: 200 
+      default: 200
     },
     saveDrawUrl: {
       type: String,
-      default: null 
+      default: null
+    },
+    approvedProducts: {
+      type: Array,
+      default: []
     },
   },
   mounted() {
@@ -140,29 +146,30 @@ export default {
     enviarImagenAlServidor() {
       let formData = new FormData();
       formData.append('signature', this.signature);
+      formData.append('approvedProducts', this.approvedProducts);
 
       axios.post(`/${this.saveDrawUrl}/${this.itemId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
-      .then((response) => {
-        console.log(response.data);
-        this.$notify({
-          title: 'Éxito',
-          message: 'Se ha agregado tu firma',
-          type: 'success',
+        .then((response) => {
+          console.log(response.data);
+          this.$notify({
+            title: 'Éxito',
+            message: 'Se ha agregado tu firma',
+            type: 'success',
+          });
+          location.reload();
+        })
+        .catch((error) => {
+          console.error(error);
+          this.$notify({
+            title: 'Error',
+            message: 'No se pudo guardar tu firma. Refresca la página e intenta de nuevo',
+            type: 'error',
+          });
         });
-        location.reload();
-      })
-      .catch((error) => {
-        console.error(error);
-        this.$notify({
-          title: 'Error',
-          message: 'No se pudo guardar tu firma. Refresca la página e intenta de nuevo',
-          type: 'error',
-        });
-      });
     },
     agregarEventos() {
       this.miCanvas.addEventListener('mousedown', this.empezarDibujo, false);

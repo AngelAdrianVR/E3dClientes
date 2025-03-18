@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class QuoteController extends Controller
 {
-   
+
     public function index()
     {
         $quotes = Quote::where('company_branch_id', auth()->id())->whereNotNull('authorized_at')
@@ -17,13 +17,13 @@ class QuoteController extends Controller
         return inertia('Quote/Index', compact('quotes'));
     }
 
-    
+
     public function create()
     {
         //
     }
 
-    
+
     public function store(Request $request)
     {
         //
@@ -38,10 +38,10 @@ class QuoteController extends Controller
         // Guardar el archivo en la colección 'signature'
         $quote->addMediaFromRequest('signature')->toMediaCollection('signature');
 
-        $this->markAsAcepted($quote);
+        $this->markAsAcepted($quote, $request->approvedProducts);
     }
 
-    
+
     public function show(Quote $quote)
     {
         $quote = QuoteResource::make(Quote::with('catalogProducts')->findOrFail($quote->id));
@@ -50,13 +50,13 @@ class QuoteController extends Controller
         return inertia('Quote/SpanishTemplate', compact('quote'));
     }
 
-   
+
     public function edit(Quote $quote)
     {
         //
     }
 
-    
+
     public function update(Request $request, Quote $quote)
     {
         //
@@ -77,18 +77,20 @@ class QuoteController extends Controller
         return response()->json(['items' => $quotes]);
     }
 
-    public function markAsAcepted(Quote $quote)
+    public function markAsAcepted(Quote $quote, $approved_products)
     {
+        $approved_products_array = array_map('intval', explode(',', $approved_products));
+
         $quote->update([
             'rejected_razon' => null, // limpia la razon de rechazo en caso de haber sido rechazada
             'responded_at' => now(),
             'quote_acepted' => true,
+            'approved_products' => $approved_products_array,
         ]);
     }
 
-
     public function rejectQuote(Request $request, Quote $quote)
-    {   
+    {
         $request->validate([
             'rejected_razon' => 'required|string|min:5|max:255'
         ]);

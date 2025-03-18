@@ -41,13 +41,12 @@ Route::resource('catalog-product-company', CatalogProductCompanyController::clas
 
 // ------------- quotes routes -----------------------------------
 // ---------------------------------------------------------------
-Route::resource('quotes', QuoteController::class);
+Route::resource('quotes', QuoteController::class)->middleware('auth');
 Route::get('quotes-fetch', [QuoteController::class, 'fetchQuotes'])->middleware('auth')->name('quotes.fetch');
 Route::post('quotes-store-signature/{quote}', [QuoteController::class, 'storeSignature'])->middleware('auth')->name('quotes.store-signature');
 Route::put('quotes-mark-as-acepted/{quote}', [QuoteController::class, 'markAsAcepted'])->middleware('auth')->name('quotes.acepted');
 Route::put('quotes-reject/{quote}', [QuoteController::class, 'rejectQuote'])->middleware('auth')->name('quotes.reject');
 Route::get('quotes-get-by-page/{currentPage}', [QuoteController::class, 'getItemsByPage'])->name('quotes.get-by-page')->middleware('auth');
-
 
 
 // ------------- design-authorizations routes -----------------------------------

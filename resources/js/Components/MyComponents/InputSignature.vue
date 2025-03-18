@@ -12,7 +12,7 @@
       <input ref="fileInput" type="file" @change="handleImageUpload" class="hidden" />
     </figure>
     <div class="flex justify-end mt-2 space-x-1">
-        <el-popconfirm confirm-button-text="Si" cancel-button-text="No" icon-color="#C30303" title="¿Continuar?"
+        <el-popconfirm confirm-button-text="Si" cancel-button-text="No" icon-color="#C30303" title="Al agregar la firma se mandará la aprobación de los productos seleccionados ¿Continuar?"
             @confirm="saveImageAsSignature">
             <template #reference>
                 <PrimaryButton :disabled="!signature">Agregar</PrimaryButton>
@@ -54,6 +54,10 @@ export default {
       type: String,
       default: null 
     },
+    approvedProducts: {
+      type: Array,
+      default: [] 
+    },
     itemId: Number
   },
   watch: {
@@ -89,6 +93,8 @@ export default {
     saveImageAsSignature() {
       const formData = new FormData();
       formData.append('signature', this.formData.file);
+      formData.append('approvedProducts', this.approvedProducts);
+      
       axios.post(`/${this.saveSignatureUrl}/${this.itemId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
