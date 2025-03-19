@@ -45,8 +45,8 @@
                         <tr v-for="(item, index) in quote.data.products" :key="index" class="text-gray-700 uppercase"
                             :class="approvedProducts.includes(item.id) ? 'bg-green-200' : 'bg-gray-200'">
                             <td class="px-2 py-px">
-                                <input type="checkbox" :value="item.id" v-model="approvedProducts"
-                                    class="size-4 text-green-600 bg-gray-100 border-gray-400 rounded-sm focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <input type="checkbox" :value="item.id" v-model="approvedProducts" :disabled="quote.data.quote_acepted"
+                                    class="size-4 text-green-600 bg-gray-100 border-gray-400 rounded-sm focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-75">
                             </td>
                             <td class="px-2 py-px">{{ item?.name }}</td>
                             <td class="px-2 py-px">{{ item?.pivot.notes ?? '--' }}</td>
@@ -257,7 +257,7 @@
         </section>
 
         <!-- Seccion de firma -->
-        <section ref="sideOptions" v-if="showSideOptions"
+        <section ref="sideOptions" v-if="showSideOptions && quote.data.quote_acepted"
             class="lg:w-[25%] h-screen py-7 px-2 border-l border-gray-500 bg-gray-100 relative">
             <i @click="showSideOptions = false;"
                 class="fa-solid fa-xmark text-xs text-white bg-primary py-1 px-[7px] rounded-full absolute top-1 left-1 lg:top-1 lg:-left-[12px] cursor-pointer"></i>
@@ -419,8 +419,8 @@ export default {
         },
         procesarUrlImagenLocal(originalUrl) {
             // Reemplaza la parte inicial de la URL
-            const nuevaUrl = originalUrl.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
-            // const nuevaUrl = originalUrl?.replace('http://localhost:8000', 'https://clientes-emblems3d.dtw.com.mx'); // para hacer pruebas en local
+            // const nuevaUrl = originalUrl.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx'); // para hacer pruebas en local
+            const nuevaUrl = originalUrl?.replace('http://localhost:8000', 'https://clientes-emblems3d.dtw.com.mx'); 
             return nuevaUrl;
         },
     },

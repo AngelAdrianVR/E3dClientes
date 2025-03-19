@@ -9,7 +9,10 @@
         title="Al agregar la firma se mandará la aprobación de los productos seleccionados ¿Continuar?"
         @confirm="guardarComoObjetoImagen">
         <template #reference>
-          <PrimaryButton :disabled="!lineas.length > 0">Agregar</PrimaryButton>
+          <PrimaryButton :disabled="!lineas.length > 0 || loading">
+            <i v-if="loading" class="fa-solid fa-circle-notch fa-spin mr-2"></i>
+            Agregar
+          </PrimaryButton>
         </template>
       </el-popconfirm>
     </div>
@@ -31,6 +34,7 @@ export default {
       pintarLinea: false,
       nuevaPosicionX: 0,
       nuevaPosicionY: 0,
+      loading: false,
     };
   },
   components: {
@@ -144,6 +148,7 @@ export default {
       );
     },
     enviarImagenAlServidor() {
+      this.loading = true;
       let formData = new FormData();
       formData.append('signature', this.signature);
       formData.append('approvedProducts', this.approvedProducts);

@@ -15,7 +15,10 @@
         <el-popconfirm confirm-button-text="Si" cancel-button-text="No" icon-color="#C30303" title="Al agregar la firma se mandará la aprobación de los productos seleccionados ¿Continuar?"
             @confirm="saveImageAsSignature">
             <template #reference>
-                <PrimaryButton :disabled="!signature">Agregar</PrimaryButton>
+                <PrimaryButton :disabled="!signature || loading">
+                  <i v-if="loading" class="fa-solid fa-circle-notch fa-spin mr-2"></i>
+                  Agregar
+                </PrimaryButton>
             </template>
         </el-popconfirm>
     </div>
@@ -32,6 +35,7 @@ export default {
       formData: {
         file: null,
       },
+      loading: false,
     };
   },
   components:{
@@ -91,6 +95,7 @@ export default {
       this.$emit("cleared");
     },
     saveImageAsSignature() {
+      this.loading = true;
       const formData = new FormData();
       formData.append('signature', this.formData.file);
       formData.append('approvedProducts', this.approvedProducts);
