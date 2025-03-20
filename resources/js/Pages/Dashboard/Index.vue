@@ -9,7 +9,7 @@
                     <i class="fa-solid fa-magnifying-glass text-[#9A9A9A] text-xs absolute right-4 top-2"></i>
                 </div> -->
 
-                <el-tabs v-model="activeTab" class="mt-10">
+                <!-- <el-tabs v-model="activeTab" class="mt-10">
                     <el-tab-pane name="1">
                         <template #label>
                             <div class="flex items-center">
@@ -17,7 +17,6 @@
                                 <span>Cotizaciones ({{ quotes?.length }})</span>
                             </div>
                         </template>
-                        <!-- estado de carga -->
                         <div v-if="loading" class="flex justify-center items-center py-10">
                             <i class="fa-solid fa-spinner fa-spin text-4xl text-primary"></i>
                         </div>
@@ -44,13 +43,12 @@
                                 <span>Diseños ({{ designs?.length }})</span>
                             </div>
                         </template>
-                        <!-- estado de carga -->
                         <div v-if="loading" class="flex justify-center items-center py-10">
                             <i class="fa-solid fa-spinner fa-spin text-4xl text-primary"></i>
                         </div>
                         <Designs v-else :designs="designs" />
                     </el-tab-pane>
-                </el-tabs>
+                </el-tabs> -->
             </div>
         </div>
     </AppLayout>

@@ -31,12 +31,14 @@ class Quote extends Model implements HasMedia
         'is_spanish_template',
         'company_branch_id',
         'user_id',
-        'sale_id'
+        'sale_id',
+        'approved_products',
     ];
 
     protected $casts = [
         'authorized_at' => 'datetime',
         'responded_at' => 'datetime',
+        'approved_products' => 'array',
     ];
 
     //relationships
