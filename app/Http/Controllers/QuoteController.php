@@ -6,6 +6,7 @@ use App\Http\Resources\QuoteResource;
 use App\Models\Quote;
 use App\Models\User;
 use App\Notifications\BasicNotification;
+use App\Notifications\RejectNotification;
 use Illuminate\Http\Request;
 
 class QuoteController extends Controller
@@ -100,10 +101,9 @@ class QuoteController extends Controller
         } else {
             $url = 'http://localhost:8000/quotes';
         }
-        // $quote->companyBranch->company->saller->notify(new BasicNotification($subject, $concept, $folio, $module, $url));
-        // $direction = User::whereIn('id', [2,3])->get();
-        $direction = User::whereIn('id', [35])->get();
-        
+
+        $quote->companyBranch->company->seller?->notify(new BasicNotification($subject, $concept, $folio, $module, $url));
+        $direction = User::whereIn('id', [2,3])->get();
         foreach ($direction as $user) {
             $user->notify(new BasicNotification($subject, $concept, $folio, $module, $url));
         }
@@ -123,6 +123,23 @@ class QuoteController extends Controller
             'responded_at' => now(),
             'quote_acepted' => false,
         ]);
+
+        //notificar a vendedor y a dirección
+        $subject = 'Cotización rechazada por cliente';
+        $concept = 'Cotización';
+        $folio = 'COT-' . str_pad($quote->id, 4, "0", STR_PAD_LEFT);
+        $module = 'quotes';
+        if (app()->environment() === 'production') {
+            $url = 'https://intranetemblems3d.dtw.com.mx/quotes';
+        } else {
+            $url = 'http://localhost:8000/quotes';
+        }
+        $quote->companyBranch->company->seller?->notify(new BasicNotification($subject, $concept, $folio, $module, $url));
+        $direction = User::whereIn('id', [2,3])->get();
+
+        foreach ($direction as $user) {
+            $user->notify(new RejectNotification($subject, $concept, $folio, $module, $url));
+        }
     }
 
     public function getItemsByPage($currentPage)

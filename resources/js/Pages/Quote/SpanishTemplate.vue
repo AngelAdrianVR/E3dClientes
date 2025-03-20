@@ -141,14 +141,14 @@
                     </div> -->
 
                     <!-- signature -->
-                    <div @click="scrollToOptions" class="mr-7 relative cursor-pointer">
+                    <div class="mr-7 relative">
                         <p class="text-gray-500">Firma de autorización: _________________________________ </p>
-                        <figure class="w-32 absolute right-5 -top-[63px] border border-dashed border-green-500"
-                            v-if="quote.data.signature_media?.length > 0">
+                        <figure class="w-32 absolute right-5 -top-[63px] bg-gray-100 rounded-lg"
+                            v-if="quote.data.signature_media?.length > 0 && quote.data.quote_acepted">
                             <img :src="procesarUrlImagenLocal(quote.data.signature_media[0].original_url)" alt="">
                         </figure>
-                        <div v-else
-                            class="absolute right-0 -top-12 border border-dashed border-green-500 text-green-500 rounded-md py-5 px-7">
+                        <div v-else-if="approvedProducts.length" @click="scrollToOptions"
+                            class="absolute right-0 -top-12 border border-dashed cursor-pointer border-green-500 text-green-500 rounded-md py-5 px-7">
                             Agrega tu firma aquí </div>
                     </div>
                 </div>
@@ -257,7 +257,7 @@
         </section>
 
         <!-- Seccion de firma -->
-        <section ref="sideOptions" v-if="showSideOptions && quote.data.quote_acepted"
+        <section ref="sideOptions" v-if="showSideOptions && !quote.data.quote_acepted"
             class="lg:w-[25%] h-screen py-7 px-2 border-l border-gray-500 bg-gray-100 relative">
             <i @click="showSideOptions = false;"
                 class="fa-solid fa-xmark text-xs text-white bg-primary py-1 px-[7px] rounded-full absolute top-1 left-1 lg:top-1 lg:-left-[12px] cursor-pointer"></i>
@@ -288,7 +288,7 @@
                     <p class="text-gray-400 text-xs mb-3">Después de haber sido rechazada la cotización puedes
                         reconsiderar y
                         firmar para aceptarla si así lo deseas</p>
-                    <PrimaryButton @click="rejectQuoteModal = true" v-if="quote.data.status.label !== 'Rechazado'">
+                    <PrimaryButton @click="rejectQuoteModal = true" v-if="!quote.data.rejected_razon">
                         Rechazar
                     </PrimaryButton>
                     <div v-else>
@@ -321,14 +321,17 @@
                 <div class="mt-3">
                     <InputLabel value="Motivo de rechazo*" class="ml-3 mb-1" />
                     <el-input v-model="rejected_razon" :autosize="{ minRows: 3, maxRows: 5 }" type="textarea"
-                        :maxlength="200" show-word-limit clearable />
+                        :maxlength="300" show-word-limit clearable />
                 </div>
 
                 <div class="flex justify-end space-x-3 pt-5 pb-1 py-2">
                     <CancelButton class="!py-1" @click="rejectQuoteModal = false; rejected_razon = null">
                         Cancelar
                     </CancelButton>
-                    <PrimaryButton class="!py-1">Enviar</PrimaryButton>
+                    <PrimaryButton class="!py-1" :disabled="loading">
+                        <i v-if="loading" class="fa-solid fa-circle-notch fa-spin mr-2"></i>
+                        Enviar
+                    </PrimaryButton>
                 </div>
             </form>
         </div>
@@ -354,6 +357,7 @@ export default {
             rejected_razon: null,
             showSideOptions: false,
             rejectQuoteModal: false,
+            loading: false,
             responseOptions: 'Dibujar',
             imagesUrl: [],
             approvedProducts: !!this.quote.data.quote_acepted ? this.quote.data.approved_products : this.quote.data.products.map(p => p.id),
@@ -375,9 +379,10 @@ export default {
     },
     methods: {
         async rejectQuote() {
+            this.loading = true;
             try {
                 const response = await axios.put(route('quotes.reject', this.quote.data.id), { rejected_razon: this.rejected_razon });
-
+                
                 if (response.status == 200) {
                     this.$notify({
                         title: 'Éxito',
@@ -392,6 +397,7 @@ export default {
                     message: 'El campo "motivo de rechazo" es obligatorio',
                     type: 'error'
                 });
+                this.loading = false;
                 console.log(err);
             }
         },
@@ -419,8 +425,8 @@ export default {
         },
         procesarUrlImagenLocal(originalUrl) {
             // Reemplaza la parte inicial de la URL
-            // const nuevaUrl = originalUrl.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx'); // para hacer pruebas en local
-            const nuevaUrl = originalUrl?.replace('http://localhost:8000', 'https://clientes-emblems3d.dtw.com.mx'); 
+            const nuevaUrl = originalUrl.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
+            // const nuevaUrl = originalUrl?.replace('http://localhost:8000', 'https://clientes-emblems3d.dtw.com.mx');  // para hacer pruebas en local
             return nuevaUrl;
         },
     },
