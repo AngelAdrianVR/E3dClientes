@@ -95,7 +95,7 @@ class QuoteController extends Controller
         $subject = 'Cotización aprobada por cliente';
         $concept = 'Cotización';
         $folio = 'COT-' . str_pad($quote->id, 4, "0", STR_PAD_LEFT);
-        $module = 'quotes';
+        $module = 'quote';
         if (app()->environment() === 'production') {
             $url = 'https://intranetemblems3d.dtw.com.mx/quotes';
         } else {
@@ -128,7 +128,7 @@ class QuoteController extends Controller
         $subject = 'Cotización rechazada por cliente';
         $concept = 'Cotización';
         $folio = 'COT-' . str_pad($quote->id, 4, "0", STR_PAD_LEFT);
-        $module = 'quotes';
+        $module = 'quote';
         if (app()->environment() === 'production') {
             $url = 'https://intranetemblems3d.dtw.com.mx/quotes';
         } else {
