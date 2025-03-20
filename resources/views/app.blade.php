@@ -20,5 +20,8 @@
     </head>
     <body class="font-sans antialiased">
         @inertia
+
+        {{-- Componentes tailwind flyonUI --}}
+        <script src="../node_modules/flyonui/flyonui.js"></script>
     </body>
 </html>
