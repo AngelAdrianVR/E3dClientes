@@ -31,7 +31,7 @@ class BasicNotification extends Notification
             ->subject($this->subject)
             ->markdown('emails.default-email-template', [
                 'greeting' => '¡Hola!',
-                'intro' => "$this->concept con folio/ID $this->folio se ha aprobado. Por favor, dar seguimiento oportuno y terminar a tiempo.",
+                'intro' => "$this->concept con folio/ID '$this->folio' se ha aprobado. Por favor, dar seguimiento oportuno y terminar a tiempo.",
                 'url' => $this->url,
                 'salutation' => 'Saludos,',
             ]);
@@ -40,7 +40,7 @@ class BasicNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'description' => "$this->concept con folio/ID $this->folio se ha aprobado. Por favor, dar seguimiento oportuno y terminar a tiempo.",
+            'description' => "$this->concept con folio/ID '$this->folio' se ha aprobado. Por favor, dar seguimiento oportuno y terminar a tiempo.",
             'additional_info' => "",
             'module' => "$this->module",
         ];

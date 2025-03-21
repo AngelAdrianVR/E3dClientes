@@ -45,7 +45,8 @@
                         <tr v-for="(item, index) in quote.data.products" :key="index" class="text-gray-700 uppercase"
                             :class="approvedProducts.includes(item.id) ? 'bg-green-200' : 'bg-gray-200'">
                             <td class="px-2 py-px">
-                                <input type="checkbox" :value="item.id" v-model="approvedProducts" :disabled="quote.data.quote_acepted"
+                                <input type="checkbox" :value="item.id" v-model="approvedProducts"
+                                    :disabled="quote.data.quote_acepted"
                                     class="size-4 text-green-600 bg-gray-100 border-gray-400 rounded-sm focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 disabled:cursor-not-allowed disabled:opacity-75">
                             </td>
                             <td class="px-2 py-px">{{ item?.name }}</td>
@@ -259,11 +260,13 @@
         <!-- Seccion de firma -->
         <section ref="sideOptions" v-if="showSideOptions && !quote.data.quote_acepted"
             class="lg:w-[25%] h-screen py-7 px-2 border-l border-gray-500 bg-gray-100 relative">
-            <i @click="showSideOptions = false;"
-                class="fa-solid fa-xmark text-xs text-white bg-primary py-1 px-[7px] rounded-full absolute top-1 left-1 lg:top-1 lg:-left-[12px] cursor-pointer"></i>
-            <p class="text-sm">Por favor, revisa el documento detenidamente. Si todo esta correcto, firme y envíe. De lo
-                contrario, puede rechazar y especificar el motivo.</p>
-
+            <button @click="showSideOptions = false;"
+                class="text-xs text-white bg-primary size-5 rounded-full absolute top-1 -left-[12px]">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <p class="text-sm">Por favor, revisa el documento detenidamente. Si todo esta correcto, firma y da click en
+                'agregar'.
+                De lo contrario, puede rechazar y especificar el motivo.</p>
             <div class="mt-7">
                 <el-radio-group v-model="responseOptions">
                     <el-radio-button label="Dibujar" />
@@ -382,7 +385,7 @@ export default {
             this.loading = true;
             try {
                 const response = await axios.put(route('quotes.reject', this.quote.data.id), { rejected_razon: this.rejected_razon });
-                
+
                 if (response.status == 200) {
                     this.$notify({
                         title: 'Éxito',
