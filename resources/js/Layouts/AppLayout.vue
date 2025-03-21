@@ -34,16 +34,16 @@ const logout = () => {
 
         <Banner />
 
-        <div class="min-h-screen bg-white overflow-hidden md:flex">
+        <div class="min-h-screen bg-white overflow-hidden lg:flex w-full selection:bg-blue-100 selection:text-black">
             <!-- sidenav -->
-            <aside class="w-auto">
+            <aside class="hidden lg:block w-auto">
                 <SideNav />
             </aside>
-            <main class="w-full">
+            <main class="lg:w-[92%]">
                 <nav class="bg-white border-b border-gray-200">
                     <!-- Primary Navigation Menu -->
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div class="flex justify-between h-16">
+                        <div class="flex justify-between h-10">
                             <span></span>
                             <div class="hidden sm:flex sm:items-center sm:ms-6">
                                 <div class="ms-3 relative">
@@ -152,7 +152,12 @@ const logout = () => {
 
                             <!-- Hamburger -->
                             <div class="-me-2 flex items-center sm:hidden">
-                                <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out" @click="showingNavigationDropdown = ! showingNavigationDropdown">
+                                <label @click="showingNavigationDropdown = !showingNavigationDropdown" class="btn btn-circle swap swap-rotate">
+                                    <span :class="{'icon-[tabler--menu-2] swap-off': !showingNavigationDropdown}"></span>
+                                    <span :class="{'icon-[tabler--x] swap-on': showingNavigationDropdown}"></span>
+                                </label>
+
+                                <!-- <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out" @click="showingNavigationDropdown = ! showingNavigationDropdown">
                                     <svg
                                         class="h-6 w-6"
                                         stroke="currentColor"
@@ -174,7 +179,7 @@ const logout = () => {
                                             d="M6 18L18 6M6 6l12 12"
                                         />
                                     </svg>
-                                </button>
+                                </button> -->
                             </div>
                         </div>
                     </div>
@@ -265,11 +270,6 @@ const logout = () => {
                 </nav>
                 <slot />
             </main>
-
-            <!-- Page Content -->
-            <!-- <main>
-                <slot />
-            </main> -->
         </div>
     </div>
 </template>
