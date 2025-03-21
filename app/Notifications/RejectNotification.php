@@ -31,7 +31,7 @@ class RejectNotification extends Notification
             ->subject($this->subject)
             ->markdown('emails.default-email-template', [
                 'greeting' => 'Hola',
-                'intro' => "$this->concept con folio/ID $this->folio se ha rechazado. Por favor, dar seguimiento oportuno con el cliente.",
+                'intro' => "$this->concept con folio/ID '$this->folio' se ha rechazado. Por favor, dar seguimiento oportuno con el cliente.",
                 'url' => $this->url,
                 'salutation' => 'Saludos,',
             ]);
@@ -40,7 +40,7 @@ class RejectNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'description' => "$this->concept con folio/ID $this->folio se ha rechazado. Por favor, dar seguimiento oportuno con el cliente.",
+            'description' => "$this->concept con folio/ID '$this->folio' se ha rechazado. Por favor, dar seguimiento oportuno con el cliente.",
             'additional_info' => "",
             'module' => "$this->module",
         ];

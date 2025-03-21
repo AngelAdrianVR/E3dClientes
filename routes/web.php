@@ -12,14 +12,14 @@ use Inertia\Inertia;
 
 Route::redirect('/', 'login');
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+// Route::get('/', function () {
+//     return Inertia::render('Welcome', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// });
 
 Route::middleware([
     'auth:sanctum',
@@ -49,13 +49,13 @@ Route::put('quotes-reject/{quote}', [QuoteController::class, 'rejectQuote'])->mi
 Route::get('quotes-get-by-page/{currentPage}', [QuoteController::class, 'getItemsByPage'])->name('quotes.get-by-page')->middleware('auth');
 
 
-// ------------- design-authorizations routes -----------------------------------
+// ------------- designs routes -----------------------------------
 // ----------------------------------------------------------------
-Route::resource('design-authorizations', DesignAuthorizationController::class);
-Route::get('design-authorizations-fetch', [DesignAuthorizationController::class, 'fetchDesigns'])->middleware('auth')->name('design-authorizations.fetch');
-Route::post('design-authorizations-store-signature/{design_authorization}', [DesignAuthorizationController::class, 'storeSignature'])->middleware('auth')->name('design-authorizations.store-signature');
-Route::put('design-authorizations-mark-as-acepted/{design_authorization}', [DesignAuthorizationController::class, 'markAsAcepted'])->middleware('auth')->name('design-authorizations.acepted');
-Route::put('design-authorizations-reject/{design_authorization}', [DesignAuthorizationController::class, 'rejectDesign'])->middleware('auth')->name('design-authorizations.reject');
+Route::resource('designs', DesignAuthorizationController::class)->middleware('auth');
+Route::get('designs-fetch', [DesignAuthorizationController::class, 'fetchDesigns'])->middleware('auth')->name('designs.fetch');
+Route::post('designs-store-signature/{design_authorization}', [DesignAuthorizationController::class, 'storeSignature'])->middleware('auth')->name('designs.store-signature');
+Route::put('designs-mark-as-acepted/{design_authorization}', [DesignAuthorizationController::class, 'markAsAcepted'])->middleware('auth')->name('designs.acepted');
+Route::put('designs-reject/{design_authorization}', [DesignAuthorizationController::class, 'rejectDesign'])->middleware('auth')->name('designs.reject');
 
 
 Route::get('/ejecutar-comando-storage-link', function () {

@@ -1,41 +1,77 @@
 <template>
-    <div v-if="designs?.length" class="w-full mx-auto text-sm mt-7">
-        <div class="text-center text-base grid grid-cols-4 mb-3">
-            <div class="font-bold pb-3 pl-2 text-left">Nombre</div>
-            <div class="font-bold pb-3 text-left">Fecha de envío</div>
-            <div class="font-bold pb-3 text-left">Fecha de respuesta</div>
-            <div class="font-bold pb-3 text-left">Estado</div>
-        </div>
-        <div class="overflow-auto h-[300]">
-            <div @click="$inertia.get(route('design-authorizations.show', design.id))" v-for="(design, index) in designs" :key="index" class="mb-2 grid grid-cols-4 border rounded-full items-center relative py-2 cursor-pointer hover:border-primary">
-                <div class="grid grid-cols-2 items-center">
-                    <img class="mx-auto w-5 object-contain" src="@/../../public/images/pdf.png" alt="">
-                    <p class="font-bold">{{ design.name }}</p>
-                </div>
-                <div class="">{{ design.authorized_at }}</div>
-                <div class="">{{ design.responded_at ?? '--' }}</div>
-                <div :class="design.status.color" class="flex items-center space-x-2"><p>{{ design.status.label }}</p><span v-html="design.status.icon"></span></div>
-            </div>
-        </div>
-    </div>
-    
-    <el-empty v-else :image-size="200" description="No hay formatos de autorización de diseño registrados" />
+    <AppLayout title="Lista de diseños">
+        <el-table :data="designs" @row-click="handleRowClick" max-height="670" style="width: 90%"
+            :row-class-name="tableRowClassName" class="mx-auto mt-10">
+            <el-table-column prop="name" label="Nombre" />
+            <el-table-column prop="authorized_at" label="Fecha de creación">
+                <template #default="scope">
+                    <span>{{ formatDate(scope.row.authorized_at) }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="responded_at" label="Fecha de respuesta">
+                <template #default="scope">
+                    <span>{{ formatDate(scope.row.responded_at) ?? 'No has dado respuesta' }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="Estatus">
+                <template #default="scope">
+                    <span :class="getStatus(scope.row).color" v-html="getStatus(scope.row).icon"></span>
+                    <span :class="getStatus(scope.row).color">{{ getStatus(scope.row).label }}</span>
+                </template>
+            </el-table-column>
+        </el-table>
+    </AppLayout>
 </template>
 
 <script>
+import AppLayout from '@/Layouts/AppLayout.vue';
+import { format } from 'date-fns';
 
 export default {
     data() {
         return {
+
         }
     },
-    components:{
+    components: {
+        AppLayout,
     },
-    props:{
-        designs: Object
+    props: {
+        designs: Array,
     },
-    methods:{
+    methods: {
+        formatDate(date) {
+            return date ? format(new Date(date), 'dd MMM, yyyy') : null;
+        },
+        handleRowClick(row) {
+            this.$inertia.visit(this.route('designs.show', row));
+        },
+        tableRowClassName({ row, rowIndex }) {
+            return 'cursor-pointer text-xs';
+        },
+        getStatus(row) {
+            let status = {
+                label: 'Pendiente',
+                color: 'text-amber-500',
+                icon: '<i class="fa-regular fa-clock mr-1"></i>',
+            };
 
+            if (row.design_accepted === 1) {
+                status = {
+                    label: 'Autorizado',
+                    color: 'text-green-500',
+                    icon: '<i class="fa-solid fa-check mr-1"></i>',
+                };
+            } else if (row.design_accepted === 0) {
+                status = {
+                    label: 'Rechazado',
+                    color: 'text-red-500',
+                    icon: '<i class="fa-solid fa-xmark mr-1"></i>',
+                };
+            }
+
+            return status;
+        },
     }
 }
 </script>
