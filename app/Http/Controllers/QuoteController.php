@@ -49,7 +49,6 @@ class QuoteController extends Controller
     {
         $quote = QuoteResource::make(Quote::with('catalogProducts')->findOrFail($quote->id));
 
-        // return $quote;
         return inertia('Quote/SpanishTemplate', compact('quote'));
     }
 
