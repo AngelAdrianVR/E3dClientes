@@ -45,14 +45,14 @@ const togglePasswordVisibility = () => {
             <!-- <AuthenticationCardLogo /> -->
         </template>
 
-        <figure class="mb-10">
-            <img class="w-[40%] mx-auto" src="@/../../public/images/logo.png" alt="Logo">
+        <figure class="pb-4 pt-12 motion-preset-bounce motion-delay-[800ms]">
+            <img class="w-[50%] mx-auto" src="@/../../public/images/logo.png" alt="Logo">
         </figure>
 
-        <p class="text-primary font-bold text-center">Exclusivo clientes</p>
+        <p class="text-secondary font-bold text-center">Exclusivo clientes</p>
 
-        <div class="border-b border-gray-300 mb-12 mt-9 text-center w-[80%] mx-auto">
-            <span class="inline-block border-b-2 border-[#D90537] px-3 text-gray-600">Iniciar sesión</span>
+        <div class="mb-4 mt-9 text-left w-full mx-auto">
+            <span class="inline-block px-3 text-gray-600 font-bold">Iniciar sesión</span>
         </div>
 
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
@@ -73,15 +73,16 @@ const togglePasswordVisibility = () => {
                 />
                 <InputError class="mt-2" :message="form.errors.email" />
             </div> -->
-            <div>
+            <div class="relative">
+                <i class="fa-solid fa-user absolute top-3 left-4 text-[#838083]"></i>
                 <TextInput
                 id="id"
                 v-model="form.id"
                 type="number"
-                class="mt-1 block w-full bg-transparent placeholder:text-[#9A9A9A]"
+                class="mt-1 block w-full placeholder:text-[#9A9A9A] bg-[#F0F0F0] pl-11"
                 required
                 autofocus
-                placeholder="ID de usuario"
+                placeholder="ID de cliente"
                 />
                 <InputError class="mt-2" :message="form.errors.id" />
             </div>
@@ -92,7 +93,7 @@ const togglePasswordVisibility = () => {
                     id="password"
                     v-model="form.password"
                     :type="showPassword ? 'text' : 'password'"
-                    class="mt-1 block w-full bg-transparent placeholder:text-[#9A9A9A]"
+                    class="mt-1 block w-full placeholder:text-[#9A9A9A] bg-[#F0F0F0] pl-11"
                     required
                     autocomplete="current-password"
                     placeholder="Contraseña"
@@ -102,6 +103,7 @@ const togglePasswordVisibility = () => {
                     class="text-gray-400 ml-2 cursor-pointer absolute right-3 top-4"
                     @click="togglePasswordVisibility"
                 ></i>
+                <i class="fa-solid fa-lock absolute top-4 left-4 text-[#838083]"></i>
                 </div>
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
@@ -114,18 +116,18 @@ const togglePasswordVisibility = () => {
             </div>
             <div class="flex flex-col items-center justify-center mt-4 space-y-4">
                 <Link
-                v-if="canResetPassword"
-                :href="route('password.request')"
-                class="underline text-sm text-[#9A9A9A] hover:text-gray-900 rounded-md"
-                >
-                Olvidé mi contraseña
-                </Link>
+                    v-if="canResetPassword"
+                    :href="route('password.request')"
+                    class="underline text-sm text-[#9A9A9A] hover:text-gray-900 rounded-md"
+                    >
+                    Olvidé mi contraseña
+                    </Link>
 
-                <PrimaryButton
-                :class="{ 'opacity-25': form.processing }"
-                :disabled="form.processing"
-                >
-                Iniciar sesión <i class="fa-solid fa-arrow-right ml-2"></i>
+                <PrimaryButton class="bg-gradient-to-r from-[#D90537] to-[#A00429] !rounded-lg px-24"
+                    :class="{ 'opacity-25': form.processing }"
+                    :disabled="form.processing"
+                    >
+                    Iniciar sesión <i class="fa-solid fa-arrow-right ml-2"></i>
                 </PrimaryButton>
             </div>
         </form>

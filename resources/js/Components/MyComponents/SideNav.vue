@@ -1,6 +1,6 @@
 <template>
     <!-- sidebar -->
-    <div class="h-full hidden md:block shadow-lg relative bg-[#101010]">
+    <div class="h-full hidden md:block shadow-lg relative bg-[#101010]" :class="{'w-40': !small, 'w-20': small}">
         <i @click="updateSideNavSize(false)" v-if="small"
             class="fa-solid fa-angle-right text-center text-xs pt-[2px] text-white rounded-full size-5 bg-primary absolute top-8 -right-3 cursor-pointer hover:scale-125 transition-transform ease-linear duration-150"></i>
         <i @click="updateSideNavSize(true)" v-else

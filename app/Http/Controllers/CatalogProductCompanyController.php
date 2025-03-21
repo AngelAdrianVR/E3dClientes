@@ -18,8 +18,10 @@ class CatalogProductCompanyController extends Controller
         return inertia('CatalogProductCompany/Index', compact('catalog_products_company'));
     }
 
-    public function show(CatalogProductCompany $catalogProductCompany)
+    public function show(CatalogProductCompany $catalog_product_company)
     {
-        //
+        $catalog_product_company->load('catalogProduct.media');
+        
+        return inertia('CatalogProductCompany/Show', compact('catalog_product_company'));
     }
 }

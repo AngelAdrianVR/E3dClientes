@@ -33,6 +33,7 @@ export default {
         forms, 
         typography, 
         require("flyonui"),
-        require("flyonui/plugin")
+        require("flyonui/plugin"),
+        require('tailwindcss-motion')
     ],
 };
