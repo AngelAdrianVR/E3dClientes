@@ -6,6 +6,7 @@ use App\Http\Resources\QuoteResource;
 use App\Models\Quote;
 use App\Models\User;
 use App\Notifications\BasicNotification;
+use App\Notifications\QuoteRequestNotification;
 use App\Notifications\RejectNotification;
 use Illuminate\Http\Request;
 
@@ -29,7 +30,48 @@ class QuoteController extends Controller
 
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'notes' => 'nullable|string|max:500',
+            'selectedProducts' => 'required|array|min:1',
+            'selectedProducts.*.id' => 'required',
+            'selectedProducts.*.quantity' => 'required|integer|min:1',
+        ]);
+
+        $quote = Quote::create([
+            'notes' => $validated['notes'],
+            'company_branch_id' => auth()->id(),
+        ]);
+
+        // Adjuntar productos a la relación con datos adicionales en la tabla pivot
+        $productsData = [];
+        foreach ($validated['selectedProducts'] as $product) {
+            $productsData[$product['id']] = [
+                'quantity' => $product['quantity'],
+                'price' => $product['price'] ?? 1,
+                'show_image' => $product['show_image'] ?? true,
+                'notes' => $product['notes'] ?? null,
+            ];
+        }
+
+        $quote->catalogProducts()->attach($productsData);
+
+        //notificar a vendedor y a dirección
+        $subject = 'Cotización solicitada por cliente';
+        $concept = 'Cotización';
+        $folio = 'COT-' . str_pad($quote->id, 4, "0", STR_PAD_LEFT);
+        $module = 'quote';
+        if (app()->environment() === 'production') {
+            $url = 'https://intranetemblems3d.dtw.com.mx/quotes';
+        } else {
+            $url = 'http://localhost:8000/quotes';
+        }
+
+        $direction = User::whereIn('id', [2,3,35])->get();
+        foreach ($direction as $user) {
+            $user->notify(new QuoteRequestNotification($subject, $concept, $folio, $module, $url));
+        }
+
+        return to_route('catalog-product-company.index');
     }
 
 

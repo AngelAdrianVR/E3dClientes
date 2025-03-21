@@ -13,7 +13,9 @@
                 <h1 class="font-bold md:text-2xl motion-preset-blur-left motion-delay-[600ms] bg-gradient-to-r from-secondary to-error bg-clip-text text-transparent w-fit">RECOMENDACIONES</h1>
                 <span class="motion-preset-focus motion-delay-[1200ms]">Productos que podrían interesarte</span>
                 <Loading v-if="loadingSuggestedProducts" />
-                <Carousel :data="suggestedProducts" class="mt-5" />
+                <div class="mx-auto w-[90%]" v-else>
+                    <Carousel :data="suggestedProducts" class="mt-5" />
+                </div>
             </section>
         </main>
     </AppLayout>
