@@ -39,7 +39,7 @@ const logout = () => {
             <aside class="hidden lg:block w-auto">
                 <SideNav />
             </aside>
-            <main class="lg:w-[92%]">
+            <main class="lg:w-full">
                 <nav class="bg-white border-b border-gray-200">
                     <!-- Primary Navigation Menu -->
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
