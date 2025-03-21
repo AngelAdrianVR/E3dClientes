@@ -45,7 +45,7 @@ const logout = () => {
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div class="flex justify-between h-16">
                             <span></span>
-                            <div class="hidden sm:flex sm:items-center sm:ms-6">
+                            <div class="hidden lg:flex sm:items-center sm:ms-6">
                                 <div class="ms-3 relative">
                                     <!-- Teams Dropdown -->
                                     <Dropdown v-if="$page.props.jetstream.hasTeamFeatures" align="right" width="60">
@@ -151,7 +151,7 @@ const logout = () => {
                             </div>
 
                             <!-- Hamburger -->
-                            <div class="-me-2 flex items-center sm:hidden">
+                            <div class="-me-2 flex items-center lg:hidden">
                                 <label @click="showingNavigationDropdown = !showingNavigationDropdown" class="btn btn-circle swap swap-rotate">
                                     <span :class="{'icon-[tabler--menu-2] swap-off': !showingNavigationDropdown}"></span>
                                     <span :class="{'icon-[tabler--x] swap-on': showingNavigationDropdown}"></span>
@@ -185,7 +185,7 @@ const logout = () => {
                     </div>
 
                     <!-- Responsive Navigation Menu -->
-                    <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
+                    <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="lg:hidden">
                         <div class="pt-2 pb-3 space-y-1">
                             <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                 Inicio

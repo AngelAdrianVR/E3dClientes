@@ -1,7 +1,7 @@
 <template>
     <div
         id="centered"
-        data-carousel='{ "loadingClasses": "opacity-0", "isCentered": false, "isInfiniteLoop": true, "isAutoPlay": true, "slidesQty": { "xs": 1,  "lg": 5 } }'
+        data-carousel='{ "loadingClasses": "opacity-0", "isCentered": false, "isInfiniteLoop": true, "isAutoPlay": true, "slidesQty": { "xs": 1, "lg": 4, "xl": 5 } }'
         class="relative w-full"
     >
         <div class="carousel h-80">
