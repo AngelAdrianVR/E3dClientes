@@ -1,10 +1,10 @@
 <template>
     <AppLayout :title="catalog_product_company?.catalog_product.name">
         <main class="p-2 md:p-10">
-            <head class="flex items-center justify-start space-x-1">
+            <header class="flex items-center justify-start space-x-1">
                 <Back />
                 <span>Detalles del producto</span>
-            </head>
+            </header>
 
             <body class="my-9 lg:w-[85%] mx-auto md:grid grid-cols-2 gap-7">
                 <figure class="rounded-xl bg-[#F2F2F2] p-2 h-72 flex justify-center items-center relative group">

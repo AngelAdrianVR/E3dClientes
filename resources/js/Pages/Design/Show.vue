@@ -3,7 +3,10 @@
         <div class="lg:flex">
             <section class="w-full">
                 <div class="w-full flex justify-between items-center px-10 mt-5">
-                    <h1 class="text-lg font-bold">AUTORIZACIÓN DE DISEÑO</h1>
+                    <div class="flex items-center justify-start space-x-1">
+                        <Back />
+                        <h1 class="text-lg font-bold">AUTORIZACIÓN DE DISEÑO</h1>
+                    </div>
                     <div class="flex items-center">
                         <p class="font-bold mr-3">Versión {{ design_authorization.data.version }}</p>
                     </div>
@@ -51,7 +54,8 @@
                             <figure @click="showSideOptions = false"
                                 class="w-32 absolute right-20 top-1 bg-gray-100 rounded-md"
                                 v-if="design_authorization.data.signature_media?.length > 0 && design_authorization.data.design_accepted">
-                                <img :src="procesarUrlImagenLocal(design_authorization.data.signature_media[0].original_url)">
+                                <img
+                                    :src="procesarUrlImagenLocal(design_authorization.data.signature_media[0].original_url)">
                             </figure>
                             <div @click="showSideOptions = true" v-else
                                 class="absolute right-12 top-3 border border-dashed border-green-500 text-green-500 rounded-md py-5 px-7 cursor-pointer">
@@ -155,6 +159,7 @@ import InputError from "@/Components/InputError.vue";
 import Modal from "@/Components/Modal.vue";
 import axios from 'axios';
 import AppLayout from '@/Layouts/AppLayout.vue';
+import Back from '@/Components/MyComponents/Back.vue';
 
 export default {
     data() {
@@ -176,6 +181,7 @@ export default {
         InputError,
         Modal,
         AppLayout,
+        Back,
     },
     props: {
         design_authorization: Object

@@ -1,5 +1,8 @@
 <template>
     <AppLayout title="Lista de diseños">
+        <h1 class="font-bold lg:text-lg mx-2 lg:mx-20 mt-5  motion-preset-blur-left motion-delay-[100ms]">
+            Lista de diseños
+        </h1>
         <el-table :data="designs" @row-click="handleRowClick" max-height="670" style="width: 90%"
             :row-class-name="tableRowClassName" class="mx-auto mt-10">
             <el-table-column prop="name" label="Nombre" />
