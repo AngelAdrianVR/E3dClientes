@@ -15,30 +15,31 @@ class Quote extends Model implements HasMedia
 
     protected $fillable = [
         'receiver',
+        'freight_cost_charged_in_product',
         'department',
         'tooling_cost',
         'tooling_currency',
         'tooling_cost_stroked',
         'freight_cost',
+        'freight_option',
         'first_production_days',
         'notes',
         'currency',
         'authorized_user_name',
         'authorized_at',
-        'quote_acepted',
         'responded_at',
-        'rejected_razon',
         'is_spanish_template',
         'company_branch_id',
+        'prospect_id',
         'user_id',
         'sale_id',
-        'approved_products',
+        'show_breakdown',
     ];
 
     protected $casts = [
         'authorized_at' => 'datetime',
         'responded_at' => 'datetime',
-        'approved_products' => 'array',
+        // 'approved_products' => 'array',
     ];
 
     //relationships

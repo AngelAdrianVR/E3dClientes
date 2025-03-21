@@ -24,28 +24,26 @@
     <Modal :show="showQuoteModal" @close="showQuoteModal = false">
         <div class="p-5 relative">
             <h2 class="font-bold">Solicitar cotización</h2>
-            <i @click="showQuoteModal = false"
-                class="fa-solid fa-xmark w-5 h-5 hover:text-red-600 rounded-full flex items-center justify-center absolute right-3 top-3"></i>
+            <i @click="showQuoteModal = false" class="fa-solid fa-xmark w-5 h-5 hover:text-red-600 rounded-full flex items-center justify-center absolute right-3 top-3"></i>
             <p class="text-sm text-gray-600">Indica la cantidad deseada y envía tu solicitud. Nos pondremos en contacto contigo pronto.</p>
 
             <form class="mt-5 mb-2" @submit.prevent="StoreQuoteRequest">
-                <div class="mt-3 overflow-auto h-96">
-                    <CheckboxImage :data="suggestedProducts" />
-                </div>
-                <div class="mt-3">
-                    <InputLabel value="Notas adicionales" class="ml-3 mb-1" />
-                    <el-input v-model="notes" :autosize="{ minRows: 3, maxRows: 5 }" type="textarea"
-                        :maxlength="200" show-word-limit clearable />
-                </div>
+            <div class="mt-3 overflow-auto h-96">
+                <CheckboxImage :data="suggestedProducts" @update:selectedProducts="form.selectedProducts = $event" />
+            </div>
+            <div class="mt-3">
+                <InputLabel value="Notas adicionales" class="ml-3 mb-1" />
+                <el-input v-model="form.notes" :autosize="{ minRows: 3, maxRows: 5 }" type="textarea" :maxlength="200" show-word-limit clearable />
+            </div>
 
-                <div class="flex justify-end space-x-3 pt-5 pb-1 py-2">
-                    <CancelButton class="!py-1" @click="showQuoteModal = false; notes = null">Cancelar
-                    </CancelButton>
-                    <PrimaryButton class="!py-1">Enviar solicitud</PrimaryButton>
-                </div>
+            <div class="flex justify-end space-x-3 pt-5 pb-1 py-2">
+                <CancelButton class="!py-1" @click="showQuoteModal = false; form.notes = null; form.selectedProducts = [];">Cancelar</CancelButton>
+                <PrimaryButton :disabled="form.selectedProducts.length === 0" class="!py-1">Enviar solicitud</PrimaryButton>
+            </div>
             </form>
         </div>
     </Modal>
+
 </template>
 
 <script>
@@ -59,8 +57,9 @@ import { useForm } from "@inertiajs/vue3";
 export default {
 data() {
 
-    const form = useForm({
+     const form = useForm({
       notes: null,
+      selectedProducts: [] // Aquí se guardarán los productos con cantidad seleccionada
     });
 
     return {
@@ -80,6 +79,18 @@ catalogProduct: Object,
 suggestedProducts: Array,
 },
 methods:{
+    StoreQuoteRequest() {
+        this.form.post(route("quotes.store"), {
+            preserveScroll: true,
+            onSuccess: () => {
+                this.showQuoteModal = false;
+                this.form.reset();
+            },
+            onError: (errors) => {
+                console.error("Error al enviar la cotización:", errors);
+            },
+        });
+    },
     // Método para procesar la URL de la imagen y se muestre correctamente
     procesarUrlImagen(originalUrl) {
         // Reemplaza la parte inicial de la URL
