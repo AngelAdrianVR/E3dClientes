@@ -13,7 +13,8 @@ class Company extends Model
     use HasFactory;
 
     protected $fillable = [
-        'business_name',
+        'business_name', 
+        'suggested_products', 
         'phone',
         'rfc',
         'post_code',
@@ -22,6 +23,11 @@ class Company extends Model
         'seller_id',
         'branches_number',
     ];
+
+    protected $casts = [
+        'suggested_products' => 'array'
+    ];
+
 
     //relationships
     public function companyBranches(): HasMany

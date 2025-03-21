@@ -1,0 +1,98 @@
+<template>
+    <main @click="$inertia.get(route('catalog-products.show', catalogProduct.id))" class="border border-[#D9D9D9] rounded-2xl h-72 p-2 transition-all ease-linear duration-200 hover:shadow-2xl shadow-gray-600/50">
+        <figure class="bg-[#F2F2F2] p-2 rounded-2xl h-44 flex justify-center items-center">
+            <img v-if="catalogProduct.media?.length" 
+                :src="procesarUrlImagen(catalogProduct.media[0]?.original_url)" 
+                :alt="catalogProduct.name" class="object-contain h-full">
+
+            <div v-else class="flex flex-col items-center text-gray-300">
+                <i class="fa-solid fa-image text-4xl"></i>
+                <small class="font-bold">Sin imagen</small>
+            </div>
+        </figure>
+
+        <!-- Información del producto -->
+        <section class="py-2 flex flex-col justify-between h-24 mx-5">
+            <h1 class="font-bold text-center text-sm truncate w-full px-4">{{ catalogProduct.name }}</h1>
+
+            <div class="flex items-center justify-center">
+                <PrimaryButton @click.stop="showQuoteModal = true">Solicitar cotización</PrimaryButton>
+            </div>
+        </section>
+    </main>
+
+    <Modal :show="showQuoteModal" @close="showQuoteModal = false">
+        <div class="p-5 relative">
+            <h2 class="font-bold">Solicitar cotización</h2>
+            <i @click="showQuoteModal = false"
+                class="fa-solid fa-xmark w-5 h-5 hover:text-red-600 rounded-full flex items-center justify-center absolute right-3 top-3"></i>
+            <p class="text-sm text-gray-600">Indica la cantidad deseada y envía tu solicitud. Nos pondremos en contacto contigo pronto.</p>
+
+            <form class="mt-5 mb-2" @submit.prevent="StoreQuoteRequest">
+                <div class="mt-3 overflow-auto h-96">
+                    <CheckboxImage :data="suggestedProducts" />
+                </div>
+                <div class="mt-3">
+                    <InputLabel value="Notas adicionales" class="ml-3 mb-1" />
+                    <el-input v-model="notes" :autosize="{ minRows: 3, maxRows: 5 }" type="textarea"
+                        :maxlength="200" show-word-limit clearable />
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-5 pb-1 py-2">
+                    <CancelButton class="!py-1" @click="showQuoteModal = false; notes = null">Cancelar
+                    </CancelButton>
+                    <PrimaryButton class="!py-1">Enviar solicitud</PrimaryButton>
+                </div>
+            </form>
+        </div>
+    </Modal>
+</template>
+
+<script>
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import CancelButton from "@/Components/MyComponents/CancelButton.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import CheckboxImage from "@/Components/MyComponents/FlyonUI/CheckboxImage.vue";
+import Modal from "@/Components/Modal.vue";
+import { useForm } from "@inertiajs/vue3";
+
+export default {
+data() {
+
+    const form = useForm({
+      notes: null,
+    });
+
+    return {
+        form,
+        showQuoteModal: false
+    }
+},
+components:{
+PrimaryButton,
+CheckboxImage,
+CancelButton,
+InputLabel,
+Modal
+},
+props:{
+catalogProduct: Object,
+suggestedProducts: Array,
+},
+methods:{
+    // Método para procesar la URL de la imagen y se muestre correctamente
+    procesarUrlImagen(originalUrl) {
+        // Reemplaza la parte inicial de la URL
+        const nuevaUrl = originalUrl?.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
+        // const nuevaUrl = originalUrl?.replace('http://localhost:8000', 'http://www.intranetemblems3d.dtw.com.mx'); // para hacer pruebas en local
+        return nuevaUrl;
+    },
+    procesarUrlImagenLocal(originalUrl) {
+        // Reemplaza la parte inicial de la URL
+        // const nuevaUrl = originalUrl.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
+        const nuevaUrl = originalUrl?.replace('http://localhost:8000', 'https://clientes-emblems3d.dtw.com.mx'); // para hacer pruebas en local
+        return nuevaUrl;
+    },
+}
+}
+</script>

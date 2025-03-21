@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CatalogProduct;
 use App\Models\CatalogProductCompany;
+use App\Models\CompanyBranch;
 use Illuminate\Http\Request;
 
 class CatalogProductCompanyController extends Controller
@@ -23,5 +25,14 @@ class CatalogProductCompanyController extends Controller
         $catalog_product_company->load('catalogProduct.media');
         
         return inertia('CatalogProductCompany/Show', compact('catalog_product_company'));
+    }
+
+    public function getSuggested()
+    {
+        $branch = CompanyBranch::find(auth()->id());
+        $suggested_array = $branch->company['suggested_products'];
+        $suggested_products = CatalogProduct::with('media')->whereIn('id', $suggested_array)->get();
+
+        return response()->json(compact('suggested_products'));
     }
 }

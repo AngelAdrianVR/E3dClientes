@@ -7,58 +7,37 @@ use Illuminate\Http\Request;
 
 class CatalogProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(CatalogProduct $catalogProduct)
+    public function show(CatalogProduct $catalog_product)
+    {
+        return inertia('SuggestedProduct/Show', compact('catalog_product'));
+    }
+
+    public function edit(CatalogProduct $catalog_product)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(CatalogProduct $catalogProduct)
+    public function update(Request $request, CatalogProduct $catalog_product)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, CatalogProduct $catalogProduct)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(CatalogProduct $catalogProduct)
+    public function destroy(CatalogProduct $catalog_product)
     {
         //
     }
