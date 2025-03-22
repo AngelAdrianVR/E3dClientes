@@ -83,10 +83,12 @@ methods:{
         this.form.post(route("quotes.store"), {
             preserveScroll: true,
             onSuccess: () => {
+                // this.$notyf.success('Solicitud enviada correctamente'); configurar toasts de FlyoinUI
                 this.showQuoteModal = false;
                 this.form.reset();
             },
             onError: (errors) => {
+                // this.$notyf.error('Algo salió mal'); configurar toasts de FlyoinUI
                 console.error("Error al enviar la cotización:", errors);
             },
         });
