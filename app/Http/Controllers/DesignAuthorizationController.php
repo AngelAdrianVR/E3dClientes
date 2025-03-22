@@ -4,28 +4,30 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\DesignAuthorizationResource;
 use App\Models\DesignAuthorization;
+use App\Models\User;
+use App\Notifications\BasicNotification;
+use App\Notifications\RejectNotification;
 use Illuminate\Http\Request;
 
 class DesignAuthorizationController extends Controller
 {
-    
+
     public function index()
     {
-        //
+        $designs = DesignAuthorization::where('company_branch_id', auth()->id())->whereNotNull('authorized_at')->get();
+
+        return inertia('Design/Index', compact('designs'));
     }
 
-    
     public function create()
     {
         //
     }
 
-    
     public function store(Request $request)
     {
         //
     }
-
 
     public function storeSignature(Request $request, DesignAuthorization $design_authorization)
     {
@@ -38,28 +40,28 @@ class DesignAuthorizationController extends Controller
         $this->markAsAcepted($design_authorization);
     }
 
-    
-    public function show(DesignAuthorization $design_authorization)
+
+    public function show($design_authorization)
     {
-        $design_authorization = DesignAuthorizationResource::make(DesignAuthorization::with('seller:id,name', 'companyBranch.contacts')->findOrFail($design_authorization->id));
+        $design_authorization = DesignAuthorizationResource::make(DesignAuthorization::with('seller:id,name', 'companyBranch.contacts')->findOrFail($design_authorization));
 
         // return $design_authorization;
-        return inertia('Dashboard/Tabs/Design/Show', compact('design_authorization'));
+        return inertia('Design/Show', compact('design_authorization'));
     }
 
-    
+
     public function edit(DesignAuthorization $design_authorization)
     {
         //
     }
 
-    
+
     public function update(Request $request, DesignAuthorization $design_authorization)
     {
         //
     }
 
-    
+
     public function destroy(DesignAuthorization $design_authorization)
     {
         //
@@ -74,7 +76,7 @@ class DesignAuthorizationController extends Controller
     }
 
     public function rejectDesign(Request $request, DesignAuthorization $design_authorization)
-    {   
+    {
         $request->validate([
             'rejected_razon' => 'required|string|min:5|max:255'
         ]);
@@ -87,8 +89,23 @@ class DesignAuthorizationController extends Controller
             'responded_at' => now(),
             'design_accepted' => false,
         ]);
-    }
 
+        //notificar a dirección
+        $subject = 'Diseño rechazado por cliente';
+        $concept = 'Diseño';
+        $folio = $design_authorization->name;
+        $module = 'design-authorization';
+        if (app()->environment() === 'production') {
+            $url = 'https://intranetemblems3d.dtw.com.mx/design-authorizations';
+        } else {
+            $url = 'http://localhost:8000/design-authorizations';
+        }
+        $direction = User::whereIn('id', [2, 3])->get();
+
+        foreach ($direction as $user) {
+            $user->notify(new RejectNotification($subject, $concept, $folio, $module, $url));
+        }
+    }
 
     public function markAsAcepted(DesignAuthorization $design_authorization)
     {
@@ -97,5 +114,21 @@ class DesignAuthorizationController extends Controller
             'responded_at' => now(),
             'design_accepted' => true,
         ]);
+
+        //notificar a dirección
+        $subject = 'Diseño aprobado por cliente';
+        $concept = 'Diseño';
+        $folio = $design_authorization->name;
+        $module = 'design-authorization';
+        if (app()->environment() === 'production') {
+            $url = 'https://intranetemblems3d.dtw.com.mx/design-authorizations';
+        } else {
+            $url = 'http://localhost:8000/design-authorizations';
+        }
+
+        $direction = User::whereIn('id', [2, 3])->get();
+        foreach ($direction as $user) {
+            $user->notify(new BasicNotification($subject, $concept, $folio, $module, $url));
+        }
     }
 }

@@ -1,15 +1,18 @@
 <template>
     <AppLayout title="Inicio">
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <span class="text-sm font-bold">{{ $page.props.auth.user.name }}</span>
+            <div class="lg:max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <span class="text-sm font-bold">
+                    Bienvenid@
+                    {{ $page.props.auth.user.name }}
+                </span>
                 
                 <!-- <div class="mt-7 w-1/3 relative">
                     <input v-model="quoteSearch" class="input pr-9" type="text" placeholder="Buscar cotización">
                     <i class="fa-solid fa-magnifying-glass text-[#9A9A9A] text-xs absolute right-4 top-2"></i>
                 </div> -->
 
-                <el-tabs v-model="activeTab" class="mt-10">
+                <!-- <el-tabs v-model="activeTab" class="mt-10">
                     <el-tab-pane name="1">
                         <template #label>
                             <div class="flex items-center">
@@ -17,7 +20,6 @@
                                 <span>Cotizaciones ({{ quotes?.length }})</span>
                             </div>
                         </template>
-                        <!-- estado de carga -->
                         <div v-if="loading" class="flex justify-center items-center py-10">
                             <i class="fa-solid fa-spinner fa-spin text-4xl text-primary"></i>
                         </div>
@@ -44,13 +46,12 @@
                                 <span>Diseños ({{ designs?.length }})</span>
                             </div>
                         </template>
-                        <!-- estado de carga -->
                         <div v-if="loading" class="flex justify-center items-center py-10">
                             <i class="fa-solid fa-spinner fa-spin text-4xl text-primary"></i>
                         </div>
                         <Designs v-else :designs="designs" />
                     </el-tab-pane>
-                </el-tabs>
+                </el-tabs> -->
             </div>
         </div>
     </AppLayout>
@@ -58,8 +59,8 @@
 
 <script>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import Quotes from "./Tabs/Quote/Quotes.vue";
-import Designs from "./Tabs/Design/Designs.vue";
+import Quotes from "../Quote/Index.vue";
+import Designs from "../Design/Index.vue";
 import axios from 'axios';
 
 export default {
@@ -99,7 +100,7 @@ export default {
         async fetchDesigns() {
             try {
                 this.loading = true;
-                const response = await axios.get(route('design-authorizations.fetch'));
+                const response = await axios.get(route('designs.fetch'));
                 if ( response.status === 200 ) {
                     this.designs = response.data.items;
                 }
