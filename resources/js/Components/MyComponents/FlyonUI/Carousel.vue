@@ -1,14 +1,14 @@
 <template>
     <div
         id="centered"
-        data-carousel='{ "loadingClasses": "opacity-0", "isCentered": false, "isInfiniteLoop": true, "isAutoPlay": true, "slidesQty": { "xs": 1,  "lg": 5 } }'
+        data-carousel='{ "loadingClasses": "opacity-0", "isCentered": false, "isInfiniteLoop": true, "isAutoPlay": true, "slidesQty": { "xs": 1, "lg": 4, "xl": 5 } }'
         class="relative w-full"
     >
         <div class="carousel h-80">
             <div class="carousel-body h-full opacity-0">
                 <!-- Slide 1 -->
                 <div v-for="item in data" :key="item.id" class="carousel-slide px-1 w-80">
-                    <CatalogProductCard :isSugestedProduct="true" :catalogProductCompany="item" />
+                    <SuggestedProductCard :catalogProduct="item" :suggestedProducts="data" />
                 </div>
             </div>
         </div>
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import CatalogProductCard from '@/Components/MyComponents/CatalogProductCard.vue';
+import SuggestedProductCard from '@/Components/MyComponents/SuggestedProductCard.vue';
 
 export default {
 data() {
@@ -40,10 +40,10 @@ data() {
     }
 },
 components:{
-CatalogProductCard
+SuggestedProductCard
 },
 props:{
     data: Array
-}
+},
 }
 </script>

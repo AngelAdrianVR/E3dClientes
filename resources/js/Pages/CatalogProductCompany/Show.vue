@@ -7,7 +7,7 @@
             </header>
 
             <body class="my-9 lg:w-[85%] mx-auto md:grid grid-cols-2 gap-7">
-                <figure class="rounded-xl bg-[#F2F2F2] p-2 h-72 flex justify-center items-center relative group">
+                <figure class="rounded-2xl bg-[#F2F2F2] p-4 h-72 flex justify-center items-center relative group">
                     <img v-if="catalog_product_company.catalog_product.media?.length" 
                         :src="procesarUrlImagen(catalog_product_company.catalog_product.media[0]?.original_url)" 
                         :alt="catalog_product_company.catalog_product.name" class="object-contain h-full">
@@ -33,7 +33,7 @@
                         <span class="text-sm">{{ catalog_product_company.new_currency === '$MXN' ? 'MX' : 'USD' }}</span>
                         <span class="text-xs ml-5">(Precio unitario)</span>
                     </p>
-                    <div class="grid grid-cols-3 gap-1 text-sm">
+                    <div class="grid grid-cols-3 gap-1 text-sm text-[#575757]">
                         <span>Número de parte</span>
                         <span class="col-span-2">{{ catalog_product_company.catalog_product.part_number }}</span>
                         <span>Descripción</span>

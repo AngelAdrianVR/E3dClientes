@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CatalogProductCompanyController;
+use App\Http\Controllers\CatalogProductController;
 use App\Http\Controllers\DesignAuthorizationController;
 use App\Http\Controllers\QuoteController;
 use App\Models\Quote;
@@ -37,6 +38,12 @@ Route::middleware([
 // ------------- catalog-product-company routes -----------------------------------
 // ---------------------------------------------------------------
 Route::resource('catalog-product-company', CatalogProductCompanyController::class)->except(['create', 'store', 'edit', 'update', 'destroy']);
+Route::get('catalog-product-company-get-suggested', [CatalogProductCompanyController::class, 'getSuggested'])->middleware('auth')->name('catalog-product-company.get-suggested');
+
+
+// ------------- catalog-product routes -----------------------------------
+// ---------------------------------------------------------------
+Route::resource('catalog-products', CatalogProductController::class)->except(['create', 'store', 'edit', 'update', 'destroy']);
 
 
 // ------------- quotes routes -----------------------------------
