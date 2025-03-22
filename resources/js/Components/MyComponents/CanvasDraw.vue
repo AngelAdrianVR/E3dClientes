@@ -1,10 +1,12 @@
 <template>
   <canvas :class="'w-' + width + ' h-' + height" ref="canvas"></canvas>
-  <div class="flex justify-between mt-3">
-    <button class="text-secondary text-sm" @click="limpiarCanvas"><i
-        class="fa-solid fa-broom mr-1 ml-2"></i>Limpiar</button>
+  <button class="text-secondary text-sm" @click="limpiarCanvas"><i
+      class="fa-solid fa-broom mr-1 ml-2"></i>Limpiar</button>
+  <!-- <div class="flex justify-between mt-3">
     <div class="flex space-x-1">
-      <SecondaryButton :disabled="!lineas.length > 0" @click="guardarComoImagen">Guardar</SecondaryButton>
+      <SecondaryButton :disabled="!lineas.length > 0" @click="guardarComoImagen">
+        Descargar como imagen
+      </SecondaryButton>
       <el-popconfirm confirm-button-text="Si" cancel-button-text="No" icon-color="#C30303"
         title="Al agregar la firma se mandará la aprobación de los productos seleccionados ¿Continuar?"
         @confirm="guardarComoObjetoImagen">
@@ -14,9 +16,9 @@
             Agregar
           </PrimaryButton>
         </template>
-      </el-popconfirm>
-    </div>
-  </div>
+</el-popconfirm>
+</div>
+</div> -->
 </template>
 
 <script>

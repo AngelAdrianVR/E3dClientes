@@ -1,13 +1,13 @@
 <template>
   <div class="inline">
     <figure @click="triggerImageInput"
-      class="flex flex-col items-center justify-center rounded-lg border border-[#9A9A9A] w-[350px] h-52 cursor-pointer relative bg-white">
+      class="flex flex-col items-center justify-center rounded-lg border border-[#9A9A9A] w-[328px] h-52 cursor-pointer relative bg-white">
       <i v-if="signature && canDelete" @click.stop="clearImage" class="fa-solid fa-xmark absolute p-1 top-1 right-1 z-10 text-sm"></i>
       <div class="flex items-center">
-        <p v-if="!signature" class="text-xs text-secondary">Sube una imagen</p>
-        <i v-if="!signature" class="fa-solid fa-cloud-arrow-up text-xs text-secondary ml-2"></i>
+        <p v-if="!signature" class="text-xs text-gray-400">Sube una imagen</p>
+        <i v-if="!signature" class="fa-solid fa-cloud-arrow-up text-xs text-gray-400 ml-2"></i>
       </div>
-      <p v-if="!signature" class="text-xs text-gray-400 text-center mt-3">Esta se guardará y la podrás utilizar para firmar próximos documentos</p>
+      <!-- <p v-if="!signature" class="text-xs text-gray-400 text-center mt-3">Esta se guardará y la podrás utilizar para firmar próximos documentos</p> -->
       <img v-if="signature" :src="signature" :alt="alt" class="w-full h-full object-contain bg-no-repeat rounded-md opacity-50" />
       <input ref="fileInput" type="file" @change="handleImageUpload" class="hidden" />
     </figure>
