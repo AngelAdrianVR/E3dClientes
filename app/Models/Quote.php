@@ -34,12 +34,13 @@ class Quote extends Model implements HasMedia
         'user_id',
         'sale_id',
         'show_breakdown',
+        'approved_products',
     ];
 
     protected $casts = [
         'authorized_at' => 'datetime',
         'responded_at' => 'datetime',
-        // 'approved_products' => 'array',
+        'approved_products' => 'array',
     ];
 
     //relationships

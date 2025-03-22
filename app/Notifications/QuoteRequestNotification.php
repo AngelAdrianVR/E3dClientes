@@ -56,7 +56,7 @@ class QuoteRequestNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'description' => "$this->concept con folio/ID '$this->folio' se ha creado pero es necesario llenar campos faltantes y corregir precio de productos. Por favor, dar seguimiento oportuno y terminar a tiempo.",
+            'description' => "$this->concept con folio '$this->folio' se ha creado pero es necesario llenar campos faltantes y corregir precio de productos. Por favor, dar seguimiento oportuno y terminar a tiempo.",
             'additional_info' => "",
             'module' => "$this->module",
         ];
