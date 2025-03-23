@@ -137,7 +137,7 @@
                         <p class="text-gray-500">Firma de autorización: _________________________________ </p>
                         <figure class="w-32 absolute right-5 -top-[66px] bg-gray-100 rounded-lg"
                             v-if="quote.data.signature_media?.length && quote.data.quote_acepted">
-                            <img :src="procesarUrlImagenLocal(quote.data.signature_media[0].original_url)">
+                            <img :src="procesarUrlImagenLocal(quote.data.signature_media[0].original_url)" :draggable="false" class="select-none">
                         </figure>
                         <button type="button" v-else-if="approvedProducts.length"
                             class="absolute right-0 -top-12 border border-dashed cursor-pointer border-green-500 text-green-500 rounded-md py-5 px-7"
