@@ -18,6 +18,13 @@ const toggleSelection = (product) => {
   }
 };
 
+const procesarUrlImagen = (originalUrl) => {
+    // Reemplaza la parte inicial de la URL
+    const nuevaUrl = originalUrl?.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
+    // const nuevaUrl = originalUrl?.replace('http://localhost:8000', 'http://www.intranetemblems3d.dtw.com.mx'); // para hacer pruebas en local
+    return nuevaUrl;
+};
+
 const updateQuantity = (product, quantity) => {
   const selected = selectedProducts.value.find((p) => p.id === product.id);
   if (selected) {
@@ -34,8 +41,8 @@ watch(selectedProducts, (newValue) => {
 <template>
   <div class="flex flex-col items-start gap-4">
     <label v-for="item in data" :key="item.id" class="custom-option grid grid-cols-3 gap-3 items-center relative p-0">
-      <span class="w-full h-24">
-        <img :src="item.media[0]?.original_url" class="bg-contain" alt="checkbox image" />
+      <span class="w-full h-36">
+        <img :src="procesarUrlImagen(item.media[0]?.original_url)" class="bg-contain h-full" alt="checkbox image" />
       </span>
 
       <!-- Checkbox de selección -->
