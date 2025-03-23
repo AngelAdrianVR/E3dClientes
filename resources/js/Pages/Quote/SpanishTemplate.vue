@@ -125,35 +125,26 @@
                     </template>
                 </div>
 
-                <div class="flex justify-between items-center mx-10 mt-9">
+                <div class="flex justify-between items-center mx-10 mt-16">
                     <!-- goodbyes -->
                     <p class="my-2 pb-2 text-gray-700">
                         Sin más por el momento y en espera de su preferencia,
                         quedo a sus órdenes para cualquier duda o comentario.
                         Folio de cotización: <span class="font-bold bg-yellow-100">{{ quote.data.folio }}</span>
                     </p>
-
-                    <!-- signature -->
-                    <!-- <div class="mr-7 flex space-x-4 w-1/3">
-                        <p class="text-gray-500">Firma de autorización: </p>
-                        <figure class="w-32" v-if="quote.data.signature_media?.length > 0">
-                            <img class="border-b border-gray-600 pb-3" :src="quote.data.signature_media[0].original_url" alt="">
-                        </figure>
-                    </div> -->
-
                     <!-- signature -->
                     <div class="mr-7 relative">
                         <p class="text-gray-500">Firma de autorización: _________________________________ </p>
-                        <figure class="w-32 absolute right-5 -top-[63px] bg-gray-100 rounded-lg"
-                            v-if="quote.data.signature_media?.length > 0 && quote.data.quote_acepted">
-                            <img :src="procesarUrlImagenLocal(quote.data.signature_media[0].original_url)" alt="">
+                        <figure class="w-32 absolute right-5 -top-[66px] bg-gray-100 rounded-lg"
+                            v-if="quote.data.signature_media?.length && quote.data.quote_acepted">
+                            <img :src="procesarUrlImagenLocal(quote.data.signature_media[0].original_url)">
                         </figure>
-                        <div v-else-if="approvedProducts.length" @click="scrollToOptions"
-                            class="absolute right-0 -top-12 border border-dashed cursor-pointer border-green-500 text-green-500 rounded-md py-5 px-7">
-                            Agrega tu firma aquí </div>
+                        <button type="button" v-else-if="approvedProducts.length"
+                            class="absolute right-0 -top-12 border border-dashed cursor-pointer border-green-500 text-green-500 rounded-md py-5 px-7"
+                            aria-haspopup="dialog" aria-expanded="false" aria-controls="overlay-end-example"
+                            data-overlay="#overlay-end-example">Agrega tu firma aquí</button>
                     </div>
                 </div>
-
                 <!-- Notes -->
                 <div class="w-11/12 mx-auto border border-gray-500 px-3 pb-1 mt-1 rounded-xl text-gray-500 leading-normal uppercase"
                     style="font-size: 10.5px;">
@@ -183,7 +174,6 @@
                     NO SE ACEPTAN PAGOS EN EFECTIVO, TODOS LOS CHEQUES DEBEN USAR NOMBRE DE: EMBLEMS 3D USA
                     SA DE CV. Y SELLO PARA ABONO EN CUENTA DEL BENEFICIARIO
                 </div>
-
                 <!-- banks -->
                 <div class="grid grid-cols-2 gap-0 text-xs mt-1 font-semibold" style="font-size: 10px;">
                     <div class="bg-sky-600 text-white p-1 flex justify-between rounded-l-xl">
@@ -197,7 +187,6 @@
                         <span>CLABE: 072 320 011811038560</span>
                     </div>
                 </div>
-
                 <!-- Author -->
                 <div class="mt-1 text-gray-700 flex justify-around" style="font-size: 11px;">
                     <div>
@@ -220,7 +209,6 @@
 
                     </div>
                 </div>
-
                 <!-- footer -->
                 <footer class="text-gray-400 w-11/12 mx-auto mt-3" style="font-size: 11px;">
                     <div class="grid grid-cols-3 gap-x-4">
@@ -256,62 +244,67 @@
                 </footer>
             </div>
         </section>
-
         <!-- Seccion de firma -->
-        <section ref="sideOptions" v-if="showSideOptions && !quote.data.quote_acepted"
-            class="lg:w-[25%] h-screen py-7 px-2 border-l border-gray-500 bg-gray-100 relative">
-            <button @click="showSideOptions = false;"
-                class="text-xs text-white bg-primary size-5 rounded-full absolute top-1 -left-[12px]">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <p class="text-sm">Por favor, revisa el documento detenidamente. Si todo esta correcto, firma y da click en
-                'agregar'.
-                De lo contrario, puede rechazar y especificar el motivo.</p>
-            <div class="mt-7">
-                <el-radio-group v-model="responseOptions">
-                    <el-radio-button label="Dibujar" />
-                    <el-radio-button label="Firma guardada" />
-                    <el-radio-button label="Rechazar" />
-                </el-radio-group>
-
-                <!-- Dibujar -->
-                <div v-if="responseOptions === 'Dibujar'" class="mt-4">
-                    <p class="text-gray-400 text-xs ml-2 mb-1">Dibuja tu firma en el siguiente recuadro</p>
-                    <CanvasDraw :saveDrawUrl="'quotes-store-signature'" :width="350" :height="200" :offsetX="7"
-                        :offsetY="180" :itemId="quote.data.id" :approvedProducts="approvedProducts" />
-                </div>
-
-                <!-- Firma guardada -->
-                <div v-if="responseOptions === 'Firma guardada'" class="mt-4">
-                    <InputSignature :saveSignatureUrl="'quotes-store-signature'" :itemId="quote.data.id"
-                        :approvedProducts="approvedProducts" />
-                </div>
-                <!-- Rechazar -->
-                <div v-if="responseOptions === 'Rechazar'" class="mt-4 text-center w-[350px]">
-                    <p class="text-gray-400 text-xs mb-3">Después de haber sido rechazada la cotización puedes
-                        reconsiderar y
-                        firmar para aceptarla si así lo deseas</p>
-                    <PrimaryButton @click="rejectQuoteModal = true" v-if="!quote.data.rejected_razon">
-                        Rechazar
-                    </PrimaryButton>
-                    <div v-else>
-                        <p class="text-primary text-center">Rechazado</p>
-                        <p class="text-center text-sm mt-4">Motivo de rechazo: <strong>{{ quote.data.rejected_razon
-                                }}</strong>
-                        </p>
-                    </div>
-                </div>
-
+        <div id="overlay-end-example" class="overlay overlay-open:translate-x-0 drawer drawer-end hidden" role="dialog"
+            tabindex="-1">
+            <div class="drawer-header">
+                <h3 class="drawer-title">Firma de aprobación</h3>
+                <button type="button" class="btn btn-text btn-circle btn-sm absolute end-3 top-3" aria-label="Close"
+                    data-overlay="#overlay-end-example">
+                    <span class="icon-[tabler--x] size-5"></span>
+                </button>
             </div>
-            <p class="absolute bottom-5 text-sm text-gray-400">Puedes ocultar las opciones de firma haciendo clic en la
-                "X" de
-                la esquina superior derecha del documento. Una vez ocultas, simplemente presiona Ctrl + P para imprimir
-                el
-                documento.</p>
-        </section>
+            <div class="drawer-body">
+                <p class="text-sm">
+                    Por favor, revisa la cotización detenidamente y selecciona el/los productos
+                    que deseas y si todo esta correcto, aprueba.
+                    De lo contrario, puedes rechazar y especificar el motivo.
+                </p>
+                <el-radio-group v-model="responseOptions" class="mt-10">
+                    <el-radio-button label="Dibujar firma" />
+                    <el-radio-button label="Subir imagen" />
+                </el-radio-group>
+                <!-- Dibujar -->
+                <div v-show="responseOptions === 'Dibujar firma'" class="mt-4">
+                    <CanvasDraw :saveDrawUrl="'quotes-store-signature'" :width="328" :height="200" :offsetX="23"
+                        ref="canvasDraw" :offsetY="241" :itemId="quote.data.id" :approvedProducts="approvedProducts" />
+                </div>
+                <!-- Firma guardada -->
+                <div v-show="responseOptions === 'Subir imagen'" class="mt-4">
+                    <InputSignature :saveSignatureUrl="'quotes-store-signature'" :itemId="quote.data.id"
+                        :approvedProducts="approvedProducts" ref="InputSignature" />
+                </div>
+                <div v-if="quote.data.rejected_razon" class="mt-3">
+                    <p class="text-primary text-center bg-red-100 rounded-md">Rechazado</p>
+                    <p class="text-sm mt-2">
+                        <b>Motivo: &nbsp;</b>
+                        <span> {{ quote.data.rejected_razon }} </span>
+                    </p>
+                </div>
+            </div>
+            <div class="drawer-footer">
+                <button v-if="!quote.data.rejected_razon" @click="rejectQuoteModal = true" type="button"
+                    data-overlay="#overlay-end-example" class="btn btn-soft bg-primary text-white hover:bg-primary">
+                    Rechazar
+                </button>
+                <div class="tooltip">
+                    <button @click="sendApproval" type="button"
+                        class="btn btn-soft bg-green-700 text-white hover:bg-green-700"
+                        :disabled="$refs.canvasDraw?.loading || $refs.InputSignature?.loading || (!$refs.canvasDraw?.lineas.length > 0 && !$refs.InputSignature?.signature)">
+                        <span v-if="$refs.canvasDraw?.loading || $refs.InputSignature?.loading" class="loading loading-spinner"></span>
+                        Aprobar
+                    </button>
+                    <span class="tooltip-content tooltip-shown:opacity-100 tooltip-shown:visible" role="tooltip">
+                        <span class="tooltip-body py-2">
+                            Al hacer clic, se usará la firma registrada para aprobar la cotización.
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <Modal :show="rejectQuoteModal" @close="rejectQuoteModal = false">
+    <Modal :show="rejectQuoteModal" @close="rejectQuoteModal = false" max-width="lg">
         <div class="p-5 relative">
             <h2 class="font-bold">Formulario de rechazo de la cotización</h2>
             <i @click="rejectQuoteModal = false"
@@ -319,22 +312,22 @@
             <p class="text-sm text-gray-600">Ayúdanos a mejorar nuestro servicio proporcionándonos comentarios sobre por
                 qué
                 estás rechazando la cotización</p>
-
             <form class="mt-5 mb-2" @submit.prevent="rejectQuote">
                 <div class="mt-3">
                     <InputLabel value="Motivo de rechazo*" class="ml-3 mb-1" />
                     <el-input v-model="rejected_razon" :autosize="{ minRows: 3, maxRows: 5 }" type="textarea"
                         :maxlength="300" show-word-limit clearable />
                 </div>
-
-                <div class="flex justify-end space-x-3 pt-5 pb-1 py-2">
-                    <CancelButton class="!py-1" @click="rejectQuoteModal = false; rejected_razon = null">
+                <div class="flex justify-end space-x-2 mt-3">
+                    <button @click="rejectQuoteModal = false; rejected_razon = null" type="button"
+                        class="btn btn-soft btn-secondary" :disabled="loading">
                         Cancelar
-                    </CancelButton>
-                    <PrimaryButton class="!py-1" :disabled="loading">
-                        <i v-if="loading" class="fa-solid fa-circle-notch fa-spin mr-2"></i>
+                    </button>
+                    <button class="btn btn-soft bg-primary text-white hover:bg-primary"
+                        :disabled="loading">
+                        <span v-if="loading" class="loading loading-spinner"></span>
                         Enviar
-                    </PrimaryButton>
+                    </button>
                 </div>
             </form>
         </div>
@@ -361,7 +354,7 @@ export default {
             showSideOptions: false,
             rejectQuoteModal: false,
             loading: false,
-            responseOptions: 'Dibujar',
+            responseOptions: 'Dibujar firma',
             imagesUrl: [],
             approvedProducts: !!this.quote.data.quote_acepted ? this.quote.data.approved_products : this.quote.data.products.map(p => p.id),
         };
@@ -402,6 +395,13 @@ export default {
                 });
                 this.loading = false;
                 console.log(err);
+            }
+        },
+        async sendApproval() {
+            if (this.$refs.canvasDraw?.lineas.length > 0) {
+                await this.$refs.canvasDraw.guardarComoObjetoImagen();
+            } else {
+                await this.$refs.InputSignature.saveImageAsSignature();
             }
         },
         openImageInNewTab(url) {

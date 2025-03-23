@@ -1,6 +1,6 @@
 <template>
     <AppLayout title="Lista de diseños">
-        <h1 class="font-bold lg:text-lg mx-2 lg:mx-20 mt-5  motion-preset-blur-left motion-delay-[100ms]">
+        <h1 class="font-bold lg:text-2xl mx-2 lg:mx-20 mt-5  motion-preset-blur-left motion-delay-[100ms] bg-gradient-to-r from-secondary to-error bg-clip-text text-transparent w-fit">
             Lista de diseños
         </h1>
         <el-table :data="designs" @row-click="handleRowClick" max-height="670" style="width: 90%"
