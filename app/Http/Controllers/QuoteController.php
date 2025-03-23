@@ -89,7 +89,7 @@ class QuoteController extends Controller
 
     public function show(Quote $quote)
     {
-        $quote = QuoteResource::make(Quote::with('catalogProducts')->findOrFail($quote->id));
+        $quote = QuoteResource::make(Quote::with(['catalogProducts', 'user'])->findOrFail($quote->id));
 
         return inertia('Quote/SpanishTemplate', compact('quote'));
     }

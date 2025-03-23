@@ -1,7 +1,19 @@
 <template>
   <canvas :class="'w-' + width + ' h-' + height" ref="canvas"></canvas>
-  <button class="text-secondary text-sm" @click="limpiarCanvas"><i
-      class="fa-solid fa-broom mr-1 ml-2"></i>Limpiar</button>
+  <div v-if="lineas.length > 0" class="flex items-center justify-between mt-1">
+    <button class="text-secondary text-xs" @click="limpiarCanvas">
+      <i class="fa-solid fa-broom mr-1 ml-2"></i>
+      Limpiar
+    </button>
+    <button class="flex items-center space-x-1 text-xs text-secondary mr-2" @click="guardarComoImagen">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+        class="size-4">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+      </svg>
+      <span>Descargar como imagen</span>
+    </button>
+  </div>
   <!-- <div class="flex justify-between mt-3">
     <div class="flex space-x-1">
       <SecondaryButton :disabled="!lineas.length > 0" @click="guardarComoImagen">
@@ -162,11 +174,11 @@ export default {
       })
         .then((response) => {
           console.log(response.data);
-          this.$notify({
-            title: 'Éxito',
-            message: 'Se ha agregado tu firma',
-            type: 'success',
-          });
+          // this.$notify({
+          //   title: 'Éxito',
+          //   message: 'Se ha agregado tu firma',
+          //   type: 'success',
+          // });
           location.reload();
         })
         .catch((error) => {
