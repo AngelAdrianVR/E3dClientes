@@ -22,7 +22,7 @@
                     >
                         <el-carousel-item v-for="(group, index) in groupedData" :key="index">
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                                <SuggestedProductCard v-for="item in group" :key="item.id" :catalogProduct="item" />
+                                <SuggestedProductCard v-for="item in group" :key="item.id" :catalogProduct="item" :suggestedProducts="suggestedProducts" />
                             </div>
                         </el-carousel-item>
                     </el-carousel>
