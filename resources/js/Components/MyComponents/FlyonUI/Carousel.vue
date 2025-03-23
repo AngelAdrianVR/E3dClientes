@@ -32,6 +32,7 @@
 
 <script>
 import SuggestedProductCard from '@/Components/MyComponents/SuggestedProductCard.vue';
+import { nextTick } from 'vue';
 
 export default {
 data() {
@@ -44,6 +45,34 @@ SuggestedProductCard
 },
 props:{
     data: Array
+},
+methods: {
+    initCarousel() {
+        const carousel = document.querySelector('[data-carousel]');
+        if (carousel) {
+            carousel.removeAttribute('data-carousel-initialized');
+            setTimeout(() => {
+                carousel.setAttribute('data-carousel', JSON.stringify({
+                    loadingClasses: "opacity-0",
+                    isCentered: false,
+                    isInfiniteLoop: true,
+                    isAutoPlay: true,
+                    slidesQty: { xs: 1, lg: 4, xl: 5 }
+                }));
+            }, 100);
+        }
+    }
+},
+watch: {
+    data: {
+        handler() {
+            nextTick(() => {
+                this.initCarousel();
+            });
+        },
+        deep: true,
+        immediate: true
+    }
 },
 }
 </script>
