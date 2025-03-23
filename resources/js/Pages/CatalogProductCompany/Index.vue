@@ -1,6 +1,6 @@
 <template>
     <AppLayout :title="'Mis Productos'">
-        <main class="p-3 md:p-10">
+        <main class="p-3 lg:pr-24">
             <h1 class="font-bold md:text-2xl motion-preset-blur-left motion-delay-[600ms] bg-gradient-to-r from-secondary to-error bg-clip-text text-transparent w-fit">Mis productos</h1>
             <span class="motion-preset-focus motion-delay-[1200ms]">Productos que adquieres con nosotros</span>
 
@@ -14,7 +14,19 @@
                 <span class="motion-preset-focus motion-delay-[1200ms]">Productos que podrían interesarte</span>
                 <Loading v-if="loadingSuggestedProducts" />
                 <div class="mx-auto w-[90%]" v-else>
-                    <Carousel :data="suggestedProducts" class="mt-5" />
+                    <el-carousel
+                        :interval="3000"
+                        arrow="always"
+                        indicator-position="outside"
+                        loop
+                    >
+                        <el-carousel-item v-for="(group, index) in groupedData" :key="index">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <SuggestedProductCard v-for="item in group" :key="item.id" :catalogProduct="item" :suggestedProducts="suggestedProducts" />
+                            </div>
+                        </el-carousel-item>
+                    </el-carousel>
+                    <!-- <Carousel :data="suggestedProducts" class="mt-5" /> -->
                 </div>
             </section>
         </main>
@@ -25,7 +37,8 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Loading from '@/Components/MyComponents/Loading.vue';
 import CatalogProductCard from '@/Components/MyComponents/CatalogProductCard.vue';
-import Carousel from '@/Components/MyComponents/FlyonUI/Carousel.vue';
+import SuggestedProductCard from '@/Components/MyComponents/SuggestedProductCard.vue';
+// import Carousel from '@/Components/MyComponents/FlyonUI/Carousel.vue';
 import axios from 'axios';
 
 export default {
@@ -35,11 +48,22 @@ data() {
         loadingSuggestedProducts: false
     }
 },
+computed: {
+    groupedData() {
+        const itemsPerSlide = window.innerWidth >= 1024 ? 4 : 1; // 4 en escritorio, 1 en móvil
+        const groups = [];
+        for (let i = 0; i < this.suggestedProducts?.length; i += itemsPerSlide) {
+            groups.push(this.suggestedProducts?.slice(i, i + itemsPerSlide));
+        }
+        return groups;
+    }
+},
 components:{
 Loading,
-Carousel,
+// Carousel,
 AppLayout,
 CatalogProductCard,
+SuggestedProductCard,
 },
 props:{
 catalog_products_company: Array,
@@ -64,3 +88,12 @@ mounted() {
 }
 }
 </script>
+
+<style scoped>
+.el-carousel__item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 320px; /* Ajusta la altura según sea necesario */
+}
+</style>
