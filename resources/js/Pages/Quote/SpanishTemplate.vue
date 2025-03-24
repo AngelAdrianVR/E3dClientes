@@ -139,7 +139,7 @@
                             v-if="quote.data.signature_media?.length && quote.data.quote_acepted">
                             <img :src="procesarUrlImagenLocal(quote.data.signature_media[0].original_url)" :draggable="false" class="select-none">
                         </figure>
-                        <button type="button" v-else-if="approvedProducts.length"
+                        <button type="button" v-show="approvedProducts.length && !quote.data.quote_acepted"
                             class="absolute right-0 -top-12 border border-dashed cursor-pointer border-green-500 text-green-500 rounded-md py-5 px-7"
                             aria-haspopup="dialog" aria-expanded="false" aria-controls="overlay-end-example"
                             data-overlay="#overlay-end-example">Agrega tu firma aquí</button>

@@ -1,6 +1,6 @@
 <template>
     <AppLayout title="Autorización de diseño">
-        <div class="lg:flex">
+        <div class="lg:flex min-h-[94vh]">
             <section class="w-full">
                 <div class="w-full flex justify-between items-center px-10 mt-5">
                     <div class="flex items-center justify-start space-x-1">
@@ -52,14 +52,15 @@
                         <div class="w-96 relative">
                             <p class="text-[#9A9A9A] mt-16">Firma de autorización: _______________________________</p>
                             <figure @click="showSideOptions = false"
-                                class="w-32 absolute right-20 top-1 bg-gray-100 rounded-md"
+                                class="w-32 absolute right-20 top-0 bg-gray-100 rounded-md"
                                 v-if="design_authorization.data.signature_media?.length > 0 && design_authorization.data.design_accepted">
-                                <img
+                                <img class="select-none" :draggable="false"
                                     :src="procesarUrlImagenLocal(design_authorization.data.signature_media[0].original_url)">
                             </figure>
-                            <div @click="showSideOptions = true" v-else
-                                class="absolute right-12 top-3 border border-dashed border-green-500 text-green-500 rounded-md py-5 px-7 cursor-pointer">
-                                Agrega tu firma aquí </div>
+                            <button type="button" v-show="!design_authorization.data.design_accepted"
+                                class="absolute right-12 top-3 border border-dashed cursor-pointer border-green-500 text-green-500 rounded-md py-5 px-7"
+                                aria-haspopup="dialog" aria-expanded="false" aria-controls="overlay-end-example"
+                                data-overlay="#overlay-end-example">Agrega tu firma aquí</button>
                         </div>
                     </div>
                 </div>
@@ -76,52 +77,66 @@
                 </footer>
             </section>
             <!-- Seccion de firma -->
-            <section v-if="showSideOptions" class="lg:w-[30%] py-7 px-2 border-l border-gray-500 bg-gray-100 relative">
-                <button @click="showSideOptions = false;"
-                    class="text-xs text-white bg-primary size-5 rounded-full absolute top-1 -left-[12px]">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-                <p class="text-sm">
-                    Por favor, revisa el documento detenidamente. Si todo esta correcto, firma y da click en 'agregar'.
-                    De lo contrario, puede rechazar y especificar el motivo.</p>
-                <div class="mt-7">
-                    <el-radio-group v-model="responseOptions">
-                        <el-radio-button label="Dibujar" />
-                        <el-radio-button label="Firma guardada" />
-                        <el-radio-button label="Rechazar" />
+            <div id="overlay-end-example" class="overlay overlay-open:translate-x-0 drawer drawer-end hidden"
+                role="dialog" tabindex="-1">
+                <div class="drawer-header">
+                    <h3 class="drawer-title">Firma de aprobación</h3>
+                    <button type="button" class="btn btn-text btn-circle btn-sm absolute end-3 top-3" aria-label="Close"
+                        data-overlay="#overlay-end-example">
+                        <span class="icon-[tabler--x] size-5"></span>
+                    </button>
+                </div>
+                <div class="drawer-body">
+                    <p class="text-sm">
+                        Por favor, revisa el documento detenidamente y si todo esta correcto, aprueba.
+                        De lo contrario, puedes rechazar y especificar el motivo.
+                    </p>
+                    <el-radio-group v-model="responseOptions" class="mt-10">
+                        <el-radio-button label="Dibujar firma" />
+                        <el-radio-button label="Subir imagen" />
                     </el-radio-group>
                     <!-- Dibujar -->
-                    <div v-if="responseOptions === 'Dibujar'" class="mt-4">
-                        <p class="text-gray-400 text-xs ml-2 mb-1">Dibuja tu firma en el siguiente recuadro</p>
-                        <CanvasDraw :saveDrawUrl="'designs-store-signature'" :width="350" :offsetX="7" :offsetY="184"
-                            :itemId="design_authorization.data.id" />
+                    <div v-show="responseOptions === 'Dibujar firma'" class="mt-4">
+                        <CanvasDraw :saveDrawUrl="'designs-store-signature'" :width="328" :height="200" :offsetX="23"
+                            ref="canvasDraw" :offsetY="221" :itemId="design_authorization.data.id" />
                     </div>
                     <!-- Firma guardada -->
-                    <div v-if="responseOptions === 'Firma guardada'" class="mt-4">
+                    <div v-show="responseOptions === 'Subir imagen'" class="mt-4">
                         <InputSignature :saveSignatureUrl="'designs-store-signature'"
-                            :itemId="design_authorization.data.id" />
+                            :itemId="design_authorization.data.id" ref="InputSignature" />
                     </div>
-                    <!-- Rechazar -->
-                    <div v-if="responseOptions === 'Rechazar'" class="mt-4 text-center">
-                        <p class="text-gray-400 text-xs mb-3">Después de haber sido rechazada la cotización puedes
-                            reconsiderar y firmar para aceptarla si así lo deseas</p>
-                        <PrimaryButton @click="rejectDesignModal = true"
-                            v-if="design_authorization.data.status.label !== 'Rechazado'">Rechazar</PrimaryButton>
-                        <div v-else>
-                            <p class="text-primary text-center">Rechazado</p>
-                            <p class="text-center text-sm mt-4">Motivo de rechazo: <strong>{{
-                                design_authorization.data.rejected_razon }}</strong></p>
-                        </div>
+                    <div v-if="design_authorization.data.rejected_razon" class="mt-3">
+                        <p class="text-primary text-center bg-red-100 rounded-md">Rechazado</p>
+                        <p class="text-sm mt-2">
+                            <b>Motivo: &nbsp;</b>
+                            <span> {{ design_authorization.data.rejected_razon }} </span>
+                        </p>
                     </div>
                 </div>
-                <p class="mt-20 text-sm text-gray-400">
-                    Puedes ocultar las opciones de firma haciendo clic en la
-                    "X" de la esquina superior derecha del documento. Una vez ocultas, simplemente presiona Ctrl + P
-                    para imprimir el documento.
-                </p>
-            </section>
+                <div class="drawer-footer">
+                    <button v-if="!design_authorization.data.rejected_razon" @click="rejectDesignModal = true"
+                        type="button" data-overlay="#overlay-end-example"
+                        class="btn btn-soft bg-primary text-white hover:bg-primary">
+                        Rechazar
+                    </button>
+                    <div class="tooltip">
+                        <button @click="sendApproval" type="button"
+                            class="btn btn-soft bg-green-700 text-white hover:bg-green-700"
+                            :disabled="$refs.canvasDraw?.loading || $refs.InputSignature?.loading || (!$refs.canvasDraw?.lineas.length > 0 && !$refs.InputSignature?.signature)">
+                            <span v-if="$refs.canvasDraw?.loading || $refs.InputSignature?.loading"
+                                class="loading loading-spinner"></span>
+                            Aprobar
+                        </button>
+                        <span class="tooltip-content tooltip-shown:opacity-100 tooltip-shown:visible" role="tooltip">
+                            <span class="tooltip-body py-2">
+                                Al hacer clic, se usará la firma registrada para aprobar la cotización.
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <Modal :show="rejectDesignModal" @close="rejectDesignModal = false">
+        <Modal :show="rejectDesignModal" @close="rejectDesignModal = false" max-width="lg">
             <div class="p-5 relative">
                 <h2 class="font-bold">Formulario de rechazo de Diseño</h2>
                 <i @click="rejectDesignModal = false"
@@ -136,11 +151,15 @@
                         <el-input v-model="rejected_razon" :autosize="{ minRows: 3, maxRows: 5 }" type="textarea"
                             :maxlength="200" show-word-limit clearable />
                     </div>
-
-                    <div class="flex justify-end space-x-3 pt-5 pb-1 py-2">
-                        <CancelButton class="!py-1" @click="rejectDesignModal = false; rejected_razon = null">Cancelar
-                        </CancelButton>
-                        <PrimaryButton class="!py-1">Enviar</PrimaryButton>
+                    <div class="flex justify-end space-x-2 pt-5 pb-1 py-2">
+                        <button @click="rejectDesignModal = false; rejected_razon = null" type="button"
+                            class="btn btn-soft btn-secondary" :disabled="loading">
+                            Cancelar
+                        </button>
+                        <button class="btn btn-soft bg-primary text-white hover:bg-primary" :disabled="loading">
+                            <span v-if="loading" class="loading loading-spinner"></span>
+                            Enviar
+                        </button>
                     </div>
                 </form>
             </div>
@@ -168,7 +187,8 @@ export default {
             rejected_razon: null,
             showSideOptions: false,
             rejectDesignModal: false,
-            responseOptions: 'Dibujar',
+            loading: false,
+            responseOptions: 'Dibujar firma',
         };
     },
     components: {
@@ -188,6 +208,7 @@ export default {
     },
     methods: {
         async rejectDesign() {
+            this.loading = true;
             try {
                 const response = await axios.put(route('designs.reject', this.design_authorization.data.id), { rejected_razon: this.rejected_razon });
 
@@ -205,7 +226,15 @@ export default {
                     message: 'El campo "motivo de rechazo" es obligatorio',
                     type: 'error'
                 });
+                this.loading = false;
                 console.log(err);
+            }
+        },
+        async sendApproval() {
+            if (this.$refs.canvasDraw?.lineas.length > 0) {
+                await this.$refs.canvasDraw.guardarComoObjetoImagen();
+            } else {
+                await this.$refs.InputSignature.saveImageAsSignature();
             }
         },
         // Método para procesar la URL de la imagen
