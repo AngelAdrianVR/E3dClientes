@@ -15,7 +15,7 @@
                 <Loading v-if="loadingSuggestedProducts" />
                 <div class="mx-auto w-[90%]" v-else>
                     <el-carousel
-                        :interval="3000"
+                        :interval="4000"
                         arrow="always"
                         indicator-position="outside"
                         loop

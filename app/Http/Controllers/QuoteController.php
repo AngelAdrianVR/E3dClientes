@@ -195,4 +195,13 @@ class QuoteController extends Controller
 
         return response()->json(['items' => $quotes]);
     }
+
+    public function fetchAll()
+    {
+        $quotes = Quote::where('company_branch_id', auth()->id())->whereNotNull('authorized_at')
+            // ->with(['user:id,name,email', 'catalogProducts'])
+            ->count();
+
+        return response()->json(['items' => $quotes]);
+    }
 }
