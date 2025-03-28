@@ -39,6 +39,7 @@ Route::middleware([
 // ---------------------------------------------------------------
 Route::resource('catalog-product-company', CatalogProductCompanyController::class)->except(['create', 'store', 'edit', 'update', 'destroy']);
 Route::get('catalog-product-company-get-suggested', [CatalogProductCompanyController::class, 'getSuggested'])->middleware('auth')->name('catalog-product-company.get-suggested');
+Route::get('catalog-product-company-fetch-all', [CatalogProductCompanyController::class, 'fetchAll'])->name('catalog-product-company.fetch-all')->middleware('auth');
 
 
 // ------------- catalog-product routes -----------------------------------

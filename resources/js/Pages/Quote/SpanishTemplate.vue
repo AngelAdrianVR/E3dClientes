@@ -1,8 +1,7 @@
 <template>
-    <div class="lg:flex">
+    <div>
         <!-- seccion de cotizacione -->
-        <section class="">
-
+        <section>
             <Head :title="quote.data.folio" />
             <!-- logo -->
             <div class="text-center">
@@ -11,16 +10,16 @@
             <div class="text-xs">
                 <!-- header -->
                 <div>
-                    <p class="flex items-center justify-end ml-auto font-bold mr-6 text-xs text-gray-700">
+                    <p class="flex items-center justify-end ml-auto font-bold mr-6 text-xs text-gray-700 dark:text-white">
                         Guadalajara, Jalisco {{ quote.data.created_at }}
                     </p>
-                    <p class="w-11/12 text-lg mx-auto font-bold text-gray-700">
+                    <p class="w-11/12 text-lg mx-auto font-bold text-gray-700 dark:text-white">
                         {{ quote.data.companyBranch?.name }}
                     </p>
-                    <p class="w-11/12 mx-auto font-bold mt-2 text-gray-700">
+                    <p class="w-11/12 mx-auto font-bold mt-2 text-gray-700 dark:text-white">
                         Estimado(a) {{ quote.data.receiver }} - {{ quote.data.department }}
                     </p>
-                    <p class="w-11/12 mx-auto my-2 pb-2 text-gray-700">
+                    <p class="w-11/12 mx-auto my-2 pb-2 text-gray-700 dark:text-white">
                         Por medio de la presente reciba un cordial saludo y a su vez le proporciono la cotización que
                         nos
                         solicitó,
@@ -30,7 +29,7 @@
                 </div>
 
                 <!-- table -->
-                <table class="rounded-t-lg m-2 w-11/12 mx-auto bg-gray-300 text-gray-800" style="font-size: 10.2px;">
+                <table class="rounded-t-lg m-2 w-11/12 mx-auto bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-white" style="font-size: 10.2px;">
                     <thead>
                         <tr class="text-left border-b-2 border-gray-400">
                             <th class="px-2 py-1 w-10">Aprobados</th>
@@ -43,7 +42,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in quote.data.products" :key="index" class="text-gray-700 uppercase"
-                            :class="approvedProducts.includes(item.id) ? 'bg-green-200' : 'bg-gray-200'">
+                            :class="approvedProducts.includes(item.id) ? 'bg-green-200 dark:bg-green-400' : 'bg-gray-200'">
                             <td class="px-2 py-px">
                                 <input type="checkbox" :value="item.id" v-model="approvedProducts"
                                     :disabled="quote.data.quote_acepted"
@@ -108,7 +107,7 @@
                         </div>
                     </template> -->
                     <template v-for="(item, productIndex) in quote.data.products" :key="item.id">
-                        <div v-if="item.pivot.show_image" class="bg-gray-200 rounded-t-xl rounded-b-md border"
+                        <div v-if="item.pivot.show_image" class="bg-gray-200 dark:bg-gray-500 rounded-t-xl rounded-b-md border"
                             style="font-size: 8px;">
                             <img class="rounded-t-xl max-h-52 mx-auto cursor-pointer"
                                 :src="procesarUrlImagen(item.media[currentImages[productIndex]]?.original_url)"
@@ -120,21 +119,21 @@
                                     :class="index == currentImages[productIndex] ? 'text-black' : 'text-white'"
                                     class="fa-solid fa-circle text-[7px] cursor-pointer"></i>
                             </div>
-                            <p class="py-px px-1 uppercase text-gray-600">{{ item.name }}</p>
+                            <p class="py-px px-1 uppercase text-gray-600 dark:text-white">{{ item.name }}</p>
                         </div>
                     </template>
                 </div>
 
                 <div class="flex justify-between items-center mx-10 mt-16">
                     <!-- goodbyes -->
-                    <p class="my-2 pb-2 text-gray-700">
+                    <p class="my-2 pb-2 text-gray-700 dark:text-white">
                         Sin más por el momento y en espera de su preferencia,
                         quedo a sus órdenes para cualquier duda o comentario.
-                        Folio de cotización: <span class="font-bold bg-yellow-100">{{ quote.data.folio }}</span>
+                        Folio de cotización: <span class="font-bold bg-yellow-100 dark:bg-yellow-900">{{ quote.data.folio }}</span>
                     </p>
                     <!-- signature -->
                     <div class="mr-7 relative">
-                        <p class="text-gray-500">Firma de autorización: _________________________________ </p>
+                        <p class="text-gray-500 dark:text-white">Firma de autorización: _________________________________ </p>
                         <figure class="w-32 absolute right-5 -top-[66px] bg-gray-100 rounded-lg"
                             v-if="quote.data.signature_media?.length && quote.data.quote_acepted">
                             <img :src="procesarUrlImagenLocal(quote.data.signature_media[0].original_url)" :draggable="false" class="select-none">
@@ -146,7 +145,7 @@
                     </div>
                 </div>
                 <!-- Notes -->
-                <div class="w-11/12 mx-auto border border-gray-500 px-3 pb-1 mt-1 rounded-xl text-gray-500 leading-normal uppercase"
+                <div class="w-11/12 mx-auto border border-gray-500 px-3 pb-1 mt-1 rounded-xl text-gray-500 dark:text-gray-400 leading-normal uppercase"
                     style="font-size: 10.5px;">
                     <h2 class="text-center font-extrabold">IMPORTANTE <i
                             class="fas fa-exclamation-circle text-amber-500"></i>
@@ -188,7 +187,7 @@
                     </div>
                 </div>
                 <!-- Author -->
-                <div class="mt-1 text-gray-700 flex justify-around" style="font-size: 11px;">
+                <div class="mt-1 text-gray-700 dark:text-white flex justify-around" style="font-size: 11px;">
                     <div>
                         Creado por: {{ quote.data.user?.name }} &nbsp;&nbsp;
                         Tel: {{ quote.data.user?.employee_properties?.phone }} &nbsp;&nbsp;

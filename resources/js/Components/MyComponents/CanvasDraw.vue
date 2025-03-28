@@ -1,11 +1,11 @@
 <template>
   <canvas :class="'w-' + width + ' h-' + height" ref="canvas"></canvas>
   <div v-if="lineas.length > 0" class="flex items-center justify-between mt-1">
-    <button class="text-secondary text-xs" @click="limpiarCanvas">
+    <button class="text-secondary dark:text-blue-400 text-xs" @click="limpiarCanvas">
       <i class="fa-solid fa-broom mr-1 ml-2"></i>
       Limpiar
     </button>
-    <button class="flex items-center space-x-1 text-xs text-secondary mr-2" @click="guardarComoImagen">
+    <button class="flex items-center space-x-1 text-xs text-secondary dark:text-blue-400 mr-2" @click="guardarComoImagen">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
         class="size-4">
         <path stroke-linecap="round" stroke-linejoin="round"
