@@ -1,6 +1,6 @@
 <template>
     <AppLayout title="Inicio">
-        <main class="py-12">
+        <main class="p-3 lg:py-10">
             <Loading v-if="loading" />
             
             <div v-else class="lg:max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -26,7 +26,7 @@
                     <div class="bg-white shadow-md rounded-lg p-6 flex items-center">
                         <div class="flex-1">
                             <h3 class="text-gray-600 text-sm font-semibold">Productos</h3>
-                            <p class="text-2xl font-bold text-gray-900">{{ 7 }}</p>
+                            <p class="text-2xl font-bold text-gray-900">{{ totalProducts }}</p>
                         </div>
                         <div class="bg-red-200 text-gray-500 p-3 rounded-full">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
@@ -36,7 +36,7 @@
                     </div>
                 </section>
 
-                <section class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- <section class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-white shadow-md rounded-lg p-6">
                         <h3 class="text-gray-600 text-sm font-semibold">Ventas Últimos 6 Meses</h3>
                         <apexchart type="area" height="300" :options="areaChartOptions" :series="areaChartData"></apexchart>
@@ -46,7 +46,7 @@
                         <h3 class="text-gray-600 text-sm font-semibold">Distribución de Productos</h3>
                         <apexchart type="donut" height="300" :options="pieChartOptions" :series="pieChartData"></apexchart>
                     </div>
-                </section>
+                </section> -->
             </div>
         </main>
     </AppLayout>
@@ -62,7 +62,7 @@ export default {
     data() {
         return {
             loading: false,
-            pendingProducts: 0,
+            totalProducts: 0,
             quotes: 0,
 
             areaChartOptions: {
@@ -92,15 +92,15 @@ export default {
     props: {
     },
     mounted() {
-        this.fetchPendingProducts();
+        this.fetchTotalProducts();
         this.fetchQuotes();
     },
     methods: {
-        async fetchPendingProducts() {
+        async fetchTotalProducts() {
             try {
                 this.loading = true;
-                const response = await axios.get(route('quotes.fetch-all'));
-                this.pendingProducts = response.data.total;
+                const response = await axios.get(route('catalog-product-company.fetch-all'));
+                this.totalProducts = response.data.items;
             } catch (error) {
                 console.error("Error al obtener productos pendientes", error);
             } finally {
