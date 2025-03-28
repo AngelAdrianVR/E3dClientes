@@ -23,7 +23,9 @@ class CatalogProductController extends Controller
     }
 
     public function show(CatalogProduct $catalog_product)
-    {
+    {   
+        $catalog_product->load('media');
+        
         return inertia('SuggestedProduct/Show', compact('catalog_product'));
     }
 
