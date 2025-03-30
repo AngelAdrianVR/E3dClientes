@@ -187,9 +187,9 @@ const logout = () => {
                     <!-- Responsive Navigation Menu -->
                     <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="lg:hidden">
                         <div class="pt-2 pb-3 space-y-1">
-                            <!-- <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                Inicio
-                            </ResponsiveNavLink> -->
+                            <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                                Panel de inicio
+                            </ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('catalog-product-company.index')" :active="route().current('catalog-product-company.*')">
                                 Productos
                             </ResponsiveNavLink>
