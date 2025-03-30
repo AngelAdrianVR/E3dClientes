@@ -67,7 +67,19 @@ props:{
 catalog_product: Object
 },
 methods:{
-
+    // Método para procesar la URL de la imagen y se muestre correctamente
+    procesarUrlImagen(originalUrl) {
+        // Reemplaza la parte inicial de la URL
+        const nuevaUrl = originalUrl?.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
+        // const nuevaUrl = originalUrl?.replace('http://localhost:8000', 'http://www.intranetemblems3d.dtw.com.mx'); // para hacer pruebas en local
+        return nuevaUrl;
+    },
+    procesarUrlImagenLocal(originalUrl) {
+        // Reemplaza la parte inicial de la URL
+        // const nuevaUrl = originalUrl.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
+        const nuevaUrl = originalUrl?.replace('http://localhost:8000', 'https://clientes-emblems3d.dtw.com.mx'); // para hacer pruebas en local
+        return nuevaUrl;
+    },
 }
 }
 </script>

@@ -152,12 +152,12 @@ const logout = () => {
 
                             <!-- Hamburger -->
                             <div class="-me-2 flex items-center lg:hidden">
-                                <label @click="showingNavigationDropdown = !showingNavigationDropdown" class="btn btn-circle swap swap-rotate">
+                                <!-- <label @click="showingNavigationDropdown = !showingNavigationDropdown" class="btn btn-circle swap swap-rotate">
                                     <span :class="{'icon-[tabler--menu-2] swap-off': !showingNavigationDropdown}"></span>
                                     <span :class="{'icon-[tabler--x] swap-on': showingNavigationDropdown}"></span>
-                                </label>
+                                </label> -->
 
-                                <!-- <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out" @click="showingNavigationDropdown = ! showingNavigationDropdown">
+                                <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out" @click="showingNavigationDropdown = ! showingNavigationDropdown">
                                     <svg
                                         class="h-6 w-6"
                                         stroke="currentColor"
@@ -179,7 +179,7 @@ const logout = () => {
                                             d="M6 18L18 6M6 6l12 12"
                                         />
                                     </svg>
-                                </button> -->
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -188,7 +188,16 @@ const logout = () => {
                     <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="lg:hidden">
                         <div class="pt-2 pb-3 space-y-1">
                             <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                Inicio
+                                Panel de inicio
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('catalog-product-company.index')" :active="route().current('catalog-product-company.*')">
+                                Productos
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('quotes.index')" :active="route().current('quotes.*')">
+                                Cotizaciones
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('designs.index')" :active="route().current('designs.*')">
+                                Diseños
                             </ResponsiveNavLink>
                         </div>
 

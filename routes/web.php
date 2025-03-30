@@ -39,6 +39,7 @@ Route::middleware([
 // ---------------------------------------------------------------
 Route::resource('catalog-product-company', CatalogProductCompanyController::class)->except(['create', 'store', 'edit', 'update', 'destroy']);
 Route::get('catalog-product-company-get-suggested', [CatalogProductCompanyController::class, 'getSuggested'])->middleware('auth')->name('catalog-product-company.get-suggested');
+Route::get('catalog-product-company-fetch-all', [CatalogProductCompanyController::class, 'fetchAll'])->name('catalog-product-company.fetch-all')->middleware('auth');
 
 
 // ------------- catalog-product routes -----------------------------------
@@ -54,6 +55,7 @@ Route::post('quotes-store-signature/{quote}', [QuoteController::class, 'storeSig
 Route::put('quotes-mark-as-acepted/{quote}', [QuoteController::class, 'markAsAcepted'])->middleware('auth')->name('quotes.acepted');
 Route::put('quotes-reject/{quote}', [QuoteController::class, 'rejectQuote'])->middleware('auth')->name('quotes.reject');
 Route::get('quotes-get-by-page/{currentPage}', [QuoteController::class, 'getItemsByPage'])->name('quotes.get-by-page')->middleware('auth');
+Route::get('quotes-fetch-all', [QuoteController::class, 'fetchAll'])->name('quotes.fetch-all')->middleware('auth');
 
 
 // ------------- designs routes -----------------------------------

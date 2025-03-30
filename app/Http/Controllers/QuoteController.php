@@ -40,6 +40,7 @@ class QuoteController extends Controller
         $quote = Quote::create([
             'notes' => $validated['notes'],
             'company_branch_id' => auth()->id(),
+            'created_by_customer' => true,
         ]);
 
         // Adjuntar productos a la relación con datos adicionales en la tabla pivot
@@ -66,7 +67,7 @@ class QuoteController extends Controller
             $url = 'http://localhost:8000/quotes';
         }
 
-        $direction = User::whereIn('id', [2,3,35])->get();
+        $direction = User::whereIn('id', [2,3])->get();
         foreach ($direction as $user) {
             $user->notify(new QuoteRequestNotification($subject, $concept, $folio, $module, $url));
         }
@@ -89,7 +90,7 @@ class QuoteController extends Controller
 
     public function show(Quote $quote)
     {
-        $quote = QuoteResource::make(Quote::with('catalogProducts')->findOrFail($quote->id));
+        $quote = QuoteResource::make(Quote::with(['catalogProducts', 'user'])->findOrFail($quote->id));
 
         return inertia('Quote/SpanishTemplate', compact('quote'));
     }
@@ -192,6 +193,15 @@ class QuoteController extends Controller
             ->with(['user:id,name,email', 'catalogProducts'])->get());
 
         $quotes = $all_quotes->splice($offset)->take(20);
+
+        return response()->json(['items' => $quotes]);
+    }
+
+    public function fetchAll()
+    {
+        $quotes = Quote::where('company_branch_id', auth()->id())->whereNotNull('authorized_at')
+            // ->with(['user:id,name,email', 'catalogProducts'])
+            ->count();
 
         return response()->json(['items' => $quotes]);
     }

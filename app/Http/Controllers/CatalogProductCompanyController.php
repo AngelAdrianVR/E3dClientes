@@ -35,4 +35,12 @@ class CatalogProductCompanyController extends Controller
 
         return response()->json(compact('suggested_products'));
     }
+
+    public function fetchAll()
+    {
+        $totalProducts = CatalogProductCompany::where('company_id', auth()->id())
+            ->count();
+
+        return response()->json(['items' => $totalProducts]);
+    }
 }

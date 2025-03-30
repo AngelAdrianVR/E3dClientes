@@ -1,8 +1,7 @@
 <template>
-    <div class="lg:flex">
+    <div>
         <!-- seccion de cotizacione -->
-        <section class="">
-
+        <section>
             <Head :title="quote.data.folio" />
             <!-- logo -->
             <div class="text-center">
@@ -11,16 +10,16 @@
             <div class="text-xs">
                 <!-- header -->
                 <div>
-                    <p class="flex items-center justify-end ml-auto font-bold mr-6 text-xs text-gray-700">
+                    <p class="flex items-center justify-end ml-auto font-bold mr-6 text-xs text-gray-700 dark:text-white">
                         Guadalajara, Jalisco {{ quote.data.created_at }}
                     </p>
-                    <p class="w-11/12 text-lg mx-auto font-bold text-gray-700">
+                    <p class="w-11/12 text-lg mx-auto font-bold text-gray-700 dark:text-white">
                         {{ quote.data.companyBranch?.name }}
                     </p>
-                    <p class="w-11/12 mx-auto font-bold mt-2 text-gray-700">
+                    <p class="w-11/12 mx-auto font-bold mt-2 text-gray-700 dark:text-white">
                         Estimado(a) {{ quote.data.receiver }} - {{ quote.data.department }}
                     </p>
-                    <p class="w-11/12 mx-auto my-2 pb-2 text-gray-700">
+                    <p class="w-11/12 mx-auto my-2 pb-2 text-gray-700 dark:text-white">
                         Por medio de la presente reciba un cordial saludo y a su vez le proporciono la cotización que
                         nos
                         solicitó,
@@ -30,7 +29,7 @@
                 </div>
 
                 <!-- table -->
-                <table class="rounded-t-lg m-2 w-11/12 mx-auto bg-gray-300 text-gray-800" style="font-size: 10.2px;">
+                <table class="rounded-t-lg m-2 w-11/12 mx-auto bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-white" style="font-size: 10.2px;">
                     <thead>
                         <tr class="text-left border-b-2 border-gray-400">
                             <th class="px-2 py-1 w-10">Aprobados</th>
@@ -43,7 +42,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in quote.data.products" :key="index" class="text-gray-700 uppercase"
-                            :class="approvedProducts.includes(item.id) ? 'bg-green-200' : 'bg-gray-200'">
+                            :class="approvedProducts.includes(item.id) ? 'bg-green-200 dark:bg-green-400' : 'bg-gray-200'">
                             <td class="px-2 py-px">
                                 <input type="checkbox" :value="item.id" v-model="approvedProducts"
                                     :disabled="quote.data.quote_acepted"
@@ -108,7 +107,7 @@
                         </div>
                     </template> -->
                     <template v-for="(item, productIndex) in quote.data.products" :key="item.id">
-                        <div v-if="item.pivot.show_image" class="bg-gray-200 rounded-t-xl rounded-b-md border"
+                        <div v-if="item.pivot.show_image" class="bg-gray-200 dark:bg-gray-500 rounded-t-xl rounded-b-md border"
                             style="font-size: 8px;">
                             <img class="rounded-t-xl max-h-52 mx-auto cursor-pointer"
                                 :src="procesarUrlImagen(item.media[currentImages[productIndex]]?.original_url)"
@@ -120,42 +119,35 @@
                                     :class="index == currentImages[productIndex] ? 'text-black' : 'text-white'"
                                     class="fa-solid fa-circle text-[7px] cursor-pointer"></i>
                             </div>
-                            <p class="py-px px-1 uppercase text-gray-600">{{ item.name }}</p>
+                            <p class="py-px px-1 uppercase text-gray-600 dark:text-white">{{ item.name }}</p>
                         </div>
                     </template>
                 </div>
 
-                <div class="flex justify-between items-center mx-10 mt-9">
+                <div class="flex justify-between items-center mx-10 mt-16">
                     <!-- goodbyes -->
-                    <p class="my-2 pb-2 text-gray-700">
+                    <p class="my-2 pb-2 text-gray-700 dark:text-white">
                         Sin más por el momento y en espera de su preferencia,
                         quedo a sus órdenes para cualquier duda o comentario.
-                        Folio de cotización: <span class="font-bold bg-yellow-100">{{ quote.data.folio }}</span>
+                        Folio de cotización: <span class="font-bold bg-yellow-100 dark:bg-yellow-900">{{ quote.data.folio }}</span>
                     </p>
-
-                    <!-- signature -->
-                    <!-- <div class="mr-7 flex space-x-4 w-1/3">
-                        <p class="text-gray-500">Firma de autorización: </p>
-                        <figure class="w-32" v-if="quote.data.signature_media?.length > 0">
-                            <img class="border-b border-gray-600 pb-3" :src="quote.data.signature_media[0].original_url" alt="">
-                        </figure>
-                    </div> -->
-
                     <!-- signature -->
                     <div class="mr-7 relative">
-                        <p class="text-gray-500">Firma de autorización: _________________________________ </p>
-                        <figure class="w-32 absolute right-5 -top-[63px] bg-gray-100 rounded-lg"
-                            v-if="quote.data.signature_media?.length > 0 && quote.data.quote_acepted">
-                            <img :src="procesarUrlImagenLocal(quote.data.signature_media[0].original_url)" alt="">
+                        <p class="lg:hidden text-gray-500 dark:text-white"> _________________________________ </p>
+                        <p class="hidden lg:block text-gray-500 dark:text-white">Firma de autorización: _________________________________ </p>
+                        <figure class="w-32 absolute right-5 -top-[66px] bg-gray-100 rounded-lg"
+                            v-if="quote.data.signature_media?.length && quote.data.quote_acepted">
+                            <img :src="procesarUrlImagenLocal(quote.data.signature_media[0].original_url)" :draggable="false" class="select-none">
                         </figure>
-                        <div v-else-if="approvedProducts.length" @click="scrollToOptions"
-                            class="absolute right-0 -top-12 border border-dashed cursor-pointer border-green-500 text-green-500 rounded-md py-5 px-7">
-                            Agrega tu firma aquí </div>
+                        <button type="button" v-show="approvedProducts.length && !quote.data.quote_acepted"
+                            @click="drawerVisible = true"
+                            class="absolute right-0 -top-12 border border-dashed cursor-pointer border-green-500 text-green-500 rounded-md py-5 px-7"
+                            aria-haspopup="dialog" aria-expanded="false" aria-controls="overlay-end-example"
+                            data-overlay="#overlay-end-example">Agrega tu firma aquí</button>
                     </div>
                 </div>
-
                 <!-- Notes -->
-                <div class="w-11/12 mx-auto border border-gray-500 px-3 pb-1 mt-1 rounded-xl text-gray-500 leading-normal uppercase"
+                <div class="w-11/12 mx-auto border border-gray-500 px-3 pb-1 mt-1 rounded-xl text-gray-500 dark:text-gray-400 leading-normal uppercase"
                     style="font-size: 10.5px;">
                     <h2 class="text-center font-extrabold">IMPORTANTE <i
                             class="fas fa-exclamation-circle text-amber-500"></i>
@@ -183,7 +175,6 @@
                     NO SE ACEPTAN PAGOS EN EFECTIVO, TODOS LOS CHEQUES DEBEN USAR NOMBRE DE: EMBLEMS 3D USA
                     SA DE CV. Y SELLO PARA ABONO EN CUENTA DEL BENEFICIARIO
                 </div>
-
                 <!-- banks -->
                 <div class="grid grid-cols-2 gap-0 text-xs mt-1 font-semibold" style="font-size: 10px;">
                     <div class="bg-sky-600 text-white p-1 flex justify-between rounded-l-xl">
@@ -197,9 +188,8 @@
                         <span>CLABE: 072 320 011811038560</span>
                     </div>
                 </div>
-
                 <!-- Author -->
-                <div class="mt-1 text-gray-700 flex justify-around" style="font-size: 11px;">
+                <div class="mt-1 text-gray-700 dark:text-white flex justify-around" style="font-size: 11px;">
                     <div>
                         Creado por: {{ quote.data.user?.name }} &nbsp;&nbsp;
                         Tel: {{ quote.data.user?.employee_properties?.phone }} &nbsp;&nbsp;
@@ -220,7 +210,6 @@
 
                     </div>
                 </div>
-
                 <!-- footer -->
                 <footer class="text-gray-400 w-11/12 mx-auto mt-3" style="font-size: 11px;">
                     <div class="grid grid-cols-3 gap-x-4">
@@ -257,84 +246,96 @@
             </div>
         </section>
 
-        <!-- Seccion de firma -->
-        <section ref="sideOptions" v-if="showSideOptions && !quote.data.quote_acepted"
-            class="lg:w-[25%] h-screen py-7 px-2 border-l border-gray-500 bg-gray-100 relative">
-            <button @click="showSideOptions = false;"
-                class="text-xs text-white bg-primary size-5 rounded-full absolute top-1 -left-[12px]">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <p class="text-sm">Por favor, revisa el documento detenidamente. Si todo esta correcto, firma y da click en
-                'agregar'.
-                De lo contrario, puede rechazar y especificar el motivo.</p>
-            <div class="mt-7">
-                <el-radio-group v-model="responseOptions">
-                    <el-radio-button label="Dibujar" />
-                    <el-radio-button label="Firma guardada" />
-                    <el-radio-button label="Rechazar" />
+        <!-- Sección de firma -->
+        <el-drawer
+            v-model="drawerVisible"
+            title="Firma de aprobación"
+            direction="rtl"
+            :size="drawerSize"
+        >
+            <!-- Contenido del drawer -->
+            <div>
+                <p class="text-sm text-gray-600 mt-5">
+                    Por favor, revisa la cotización detenidamente y selecciona el/los productos
+                    que deseas y si todo esta correcto, aprueba.
+                    De lo contrario, puedes rechazar y especificar el motivo.
+                </p>
+                <el-radio-group v-model="responseOptions" class="mt-10">
+                    <el-radio-button label="Dibujar firma" />
+                    <el-radio-button label="Subir imagen" />
                 </el-radio-group>
-
                 <!-- Dibujar -->
-                <div v-if="responseOptions === 'Dibujar'" class="mt-4">
-                    <p class="text-gray-400 text-xs ml-2 mb-1">Dibuja tu firma en el siguiente recuadro</p>
-                    <CanvasDraw :saveDrawUrl="'quotes-store-signature'" :width="350" :height="200" :offsetX="7"
-                        :offsetY="180" :itemId="quote.data.id" :approvedProducts="approvedProducts" />
+                <div v-show="responseOptions === 'Dibujar firma'" class="mt-4">
+                    <CanvasDraw 
+                        :saveDrawUrl="'quotes-store-signature'" 
+                        :width="328" 
+                        :height="200" 
+                        :offsetX="offsetX"
+                        :offsetY="offsetY"
+                        ref="canvasDraw" 
+                        :itemId="quote.data.id" 
+                        :approvedProducts="approvedProducts" 
+                    />
                 </div>
-
                 <!-- Firma guardada -->
-                <div v-if="responseOptions === 'Firma guardada'" class="mt-4">
+                <div v-show="responseOptions === 'Subir imagen'" class="mt-4">
                     <InputSignature :saveSignatureUrl="'quotes-store-signature'" :itemId="quote.data.id"
-                        :approvedProducts="approvedProducts" />
+                        :approvedProducts="approvedProducts" ref="InputSignature" />
                 </div>
-                <!-- Rechazar -->
-                <div v-if="responseOptions === 'Rechazar'" class="mt-4 text-center w-[350px]">
-                    <p class="text-gray-400 text-xs mb-3">Después de haber sido rechazada la cotización puedes
-                        reconsiderar y
-                        firmar para aceptarla si así lo deseas</p>
-                    <PrimaryButton @click="rejectQuoteModal = true" v-if="!quote.data.rejected_razon">
-                        Rechazar
-                    </PrimaryButton>
-                    <div v-else>
-                        <p class="text-primary text-center">Rechazado</p>
-                        <p class="text-center text-sm mt-4">Motivo de rechazo: <strong>{{ quote.data.rejected_razon
-                                }}</strong>
-                        </p>
-                    </div>
+                <div v-if="quote.data.rejected_razon" class="mt-3">
+                    <p class="text-primary text-center bg-red-100 rounded-md">Rechazado</p>
+                    <p class="text-sm mt-2">
+                        <b>Motivo: &nbsp;</b>
+                        <span> {{ quote.data.rejected_razon }} </span>
+                    </p>
                 </div>
-
             </div>
-            <p class="absolute bottom-5 text-sm text-gray-400">Puedes ocultar las opciones de firma haciendo clic en la
-                "X" de
-                la esquina superior derecha del documento. Una vez ocultas, simplemente presiona Ctrl + P para imprimir
-                el
-                documento.</p>
-        </section>
+            <div class="mt-5 space-x-3 justify-end flex">
+                <button v-if="!quote.data.rejected_razon" @click="drawerVisible = false; rejectQuoteModal = true" type="button"
+                    class="btn btn-soft bg-primary text-white hover:bg-primary">
+                    Rechazar
+                </button>
+                <div class="tooltip">
+                    <button @click="sendApproval" type="button"
+                        class="btn btn-soft bg-green-700 text-white hover:bg-green-700"
+                        :disabled="$refs.canvasDraw?.loading || $refs.InputSignature?.loading || (!$refs.canvasDraw?.lineas.length > 0 && !$refs.InputSignature?.signature)">
+                        <span v-if="$refs.canvasDraw?.loading || $refs.InputSignature?.loading" class="loading loading-spinner"></span>
+                        Aprobar
+                    </button>
+                    <span class="tooltip-content tooltip-shown:opacity-100 tooltip-shown:visible" role="tooltip">
+                        <span class="tooltip-body py-2">
+                            Al hacer clic, se usará la firma registrada para aprobar la cotización.
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </el-drawer>
     </div>
 
-    <Modal :show="rejectQuoteModal" @close="rejectQuoteModal = false">
+    <Modal :show="rejectQuoteModal" @close="rejectQuoteModal = false" max-width="lg">
         <div class="p-5 relative">
             <h2 class="font-bold">Formulario de rechazo de la cotización</h2>
             <i @click="rejectQuoteModal = false"
-                class="fa-solid fa-xmark cursor-pointer w-5 h-5 rounded-full border border-black flex items-center justify-center absolute right-3 top-3"></i>
+                class="fa-solid fa-xmark w-5 h-5 rounded-full flex items-center justify-center absolute right-3 top-3 hover:text-red-600"></i>
             <p class="text-sm text-gray-600">Ayúdanos a mejorar nuestro servicio proporcionándonos comentarios sobre por
                 qué
                 estás rechazando la cotización</p>
-
             <form class="mt-5 mb-2" @submit.prevent="rejectQuote">
                 <div class="mt-3">
                     <InputLabel value="Motivo de rechazo*" class="ml-3 mb-1" />
                     <el-input v-model="rejected_razon" :autosize="{ minRows: 3, maxRows: 5 }" type="textarea"
                         :maxlength="300" show-word-limit clearable />
                 </div>
-
-                <div class="flex justify-end space-x-3 pt-5 pb-1 py-2">
-                    <CancelButton class="!py-1" @click="rejectQuoteModal = false; rejected_razon = null">
+                <div class="flex justify-end space-x-2 mt-3">
+                    <button @click="rejectQuoteModal = false; rejected_razon = null" type="button"
+                        class="btn btn-soft btn-secondary" :disabled="loading">
                         Cancelar
-                    </CancelButton>
-                    <PrimaryButton class="!py-1" :disabled="loading">
-                        <i v-if="loading" class="fa-solid fa-circle-notch fa-spin mr-2"></i>
+                    </button>
+                    <button class="btn btn-soft bg-primary text-white hover:bg-primary"
+                        :disabled="loading">
+                        <span v-if="loading" class="loading loading-spinner"></span>
                         Enviar
-                    </PrimaryButton>
+                    </button>
                 </div>
             </form>
         </div>
@@ -361,9 +362,13 @@ export default {
             showSideOptions: false,
             rejectQuoteModal: false,
             loading: false,
-            responseOptions: 'Dibujar',
+            responseOptions: 'Dibujar firma',
             imagesUrl: [],
             approvedProducts: !!this.quote.data.quote_acepted ? this.quote.data.approved_products : this.quote.data.products.map(p => p.id),
+            drawerVisible: false,
+            drawerSize: '50%', // Tamaño inicial del drawer
+            offsetX: 23, // Valores por defecto (xl) de canvadrawer para la firma
+            offsetY: 285, // Valores por defecto (xl) de canvadrawer para la firma
         };
     },
     components: {
@@ -404,6 +409,13 @@ export default {
                 console.log(err);
             }
         },
+        async sendApproval() {
+            if (this.$refs.canvasDraw?.lineas.length > 0) {
+                await this.$refs.canvasDraw.guardarComoObjetoImagen();
+            } else {
+                await this.$refs.InputSignature.saveImageAsSignature();
+            }
+        },
         openImageInNewTab(url) {
             const newUrl = this.procesarUrlImagen(url);
             window.open(newUrl, '_blank');
@@ -432,10 +444,41 @@ export default {
             // const nuevaUrl = originalUrl?.replace('http://localhost:8000', 'https://clientes-emblems3d.dtw.com.mx');  // para hacer pruebas en local
             return nuevaUrl;
         },
+        updateDrawerSize() {
+            const width = window.innerWidth;
+            if (width < 550) {
+                this.drawerSize = "90%"; // sm
+                this.offsetX = 20;
+                this.offsetY = 250;
+            } else if (width < 900) {
+                this.drawerSize = "65%"; // md
+                this.offsetX = 20;
+                this.offsetY = 425;
+            } else if (width < 1280) {
+                this.drawerSize = "40%"; // lg
+                this.offsetX = 23;
+                this.offsetY = 265;
+            } else if (width > 1680) {
+                this.drawerSize = "25%"; // lg
+                this.offsetX = 23;
+                this.offsetY = 265;
+            } else {
+                this.drawerSize = "25%"; // xl
+                this.offsetX = 23;
+                this.offsetY = 280;
+            }
+        },
     },
     mounted() {
+        // Ajustar tamaño del drawer de element-plus
+        this.updateDrawerSize(); // Actualiza tamaño al cargar
+        window.addEventListener("resize", this.updateDrawerSize);
+
         // Initialize currentImages array with default values for each product
         this.currentImages = this.quote.data.products.map(() => 0);
+    },
+    beforeUnmount() {
+        window.removeEventListener("resize", this.updateDrawerSize);
     },
 }
 </script>

@@ -1,21 +1,18 @@
 <template>
   <canvas :class="'w-' + width + ' h-' + height" ref="canvas"></canvas>
-  <div class="flex justify-between mt-3">
-    <button class="text-secondary text-sm" @click="limpiarCanvas"><i
-        class="fa-solid fa-broom mr-1 ml-2"></i>Limpiar</button>
-    <div class="flex space-x-1">
-      <SecondaryButton :disabled="!lineas.length > 0" @click="guardarComoImagen">Guardar</SecondaryButton>
-      <el-popconfirm confirm-button-text="Si" cancel-button-text="No" icon-color="#C30303"
-        title="Al agregar la firma se mandará la aprobación de los productos seleccionados ¿Continuar?"
-        @confirm="guardarComoObjetoImagen">
-        <template #reference>
-          <PrimaryButton :disabled="!lineas.length > 0 || loading">
-            <i v-if="loading" class="fa-solid fa-circle-notch fa-spin mr-2"></i>
-            Agregar
-          </PrimaryButton>
-        </template>
-      </el-popconfirm>
-    </div>
+  <div v-if="lineas.length > 0" class="flex items-center justify-between mt-1">
+    <button class="text-secondary dark:text-blue-400 text-xs" @click="limpiarCanvas">
+      <i class="fa-solid fa-broom mr-1 ml-2"></i>
+      Limpiar
+    </button>
+    <button class="flex items-center space-x-1 text-xs text-secondary dark:text-blue-400 mr-2" @click="guardarComoImagen">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+        class="size-4">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+      </svg>
+      <span>Descargar como imagen</span>
+    </button>
   </div>
 </template>
 
@@ -69,8 +66,11 @@ export default {
     },
   },
   mounted() {
-    this.inicializarCanvas();
-    this.agregarEventos();
+    //retardo de 1 segundo para montar el canvas cuando se muestra en el DOM
+    setTimeout(() => {
+      this.inicializarCanvas();
+      this.agregarEventos();
+    }, 500); // 1000 milisegundos = 1 segundo
   },
   methods: {
     inicializarCanvas() {
@@ -160,11 +160,6 @@ export default {
       })
         .then((response) => {
           console.log(response.data);
-          this.$notify({
-            title: 'Éxito',
-            message: 'Se ha agregado tu firma',
-            type: 'success',
-          });
           location.reload();
         })
         .catch((error) => {
@@ -181,9 +176,10 @@ export default {
       this.miCanvas.addEventListener('mousemove', this.dibujarLinea, false);
       this.miCanvas.addEventListener('mouseup', this.pararDibujar, false);
 
-      this.miCanvas.addEventListener('touchstart', this.empezarDibujo, false);
-      this.miCanvas.addEventListener('touchmove', this.dibujarLinea, false);
-    },
+      this.miCanvas.addEventListener('touchstart', this.empezarDibujo, { passive: false });
+      this.miCanvas.addEventListener('touchmove', this.dibujarLinea, { passive: false });
+      this.miCanvas.addEventListener('touchend', this.pararDibujar, false);
+    }
   },
 };
 </script>
