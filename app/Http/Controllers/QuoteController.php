@@ -40,6 +40,7 @@ class QuoteController extends Controller
         $quote = Quote::create([
             'notes' => $validated['notes'],
             'company_branch_id' => auth()->id(),
+            'created_by_customer' => true,
         ]);
 
         // Adjuntar productos a la relación con datos adicionales en la tabla pivot
@@ -66,7 +67,7 @@ class QuoteController extends Controller
             $url = 'http://localhost:8000/quotes';
         }
 
-        $direction = User::whereIn('id', [2,3,35])->get();
+        $direction = User::whereIn('id', [2,3])->get();
         foreach ($direction as $user) {
             $user->notify(new QuoteRequestNotification($subject, $concept, $folio, $module, $url));
         }

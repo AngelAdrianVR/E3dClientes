@@ -2,7 +2,7 @@
     <AppLayout :title="'Mis Productos'">
         <main class="p-3 lg:p-7">
             <!-- carousel de productos recomendados -->
-            <section class="py-5 mx-3">
+            <section v-if="suggestedProducts?.length" class="py-5 mx-3">
                 <h1 class="font-bold md:text-2xl motion-preset-blur-left motion-delay-[600ms] bg-gradient-to-r from-secondary to-error bg-clip-text text-transparent w-fit">RECOMENDACIONES</h1>
                 <span class="motion-preset-focus motion-delay-[1200ms]">Productos que podrían interesarte</span>
                 <Loading v-if="loadingSuggestedProducts" />

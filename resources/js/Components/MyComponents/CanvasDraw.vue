@@ -14,23 +14,6 @@
       <span>Descargar como imagen</span>
     </button>
   </div>
-  <!-- <div class="flex justify-between mt-3">
-    <div class="flex space-x-1">
-      <SecondaryButton :disabled="!lineas.length > 0" @click="guardarComoImagen">
-        Descargar como imagen
-      </SecondaryButton>
-      <el-popconfirm confirm-button-text="Si" cancel-button-text="No" icon-color="#C30303"
-        title="Al agregar la firma se mandará la aprobación de los productos seleccionados ¿Continuar?"
-        @confirm="guardarComoObjetoImagen">
-        <template #reference>
-          <PrimaryButton :disabled="!lineas.length > 0 || loading">
-            <i v-if="loading" class="fa-solid fa-circle-notch fa-spin mr-2"></i>
-            Agregar
-          </PrimaryButton>
-        </template>
-</el-popconfirm>
-</div>
-</div> -->
 </template>
 
 <script>
@@ -83,8 +66,11 @@ export default {
     },
   },
   mounted() {
-    this.inicializarCanvas();
-    this.agregarEventos();
+    //retardo de 1 segundo para montar el canvas cuando se muestra en el DOM
+    setTimeout(() => {
+      this.inicializarCanvas();
+      this.agregarEventos();
+    }, 500); // 1000 milisegundos = 1 segundo
   },
   methods: {
     inicializarCanvas() {
@@ -174,11 +160,6 @@ export default {
       })
         .then((response) => {
           console.log(response.data);
-          // this.$notify({
-          //   title: 'Éxito',
-          //   message: 'Se ha agregado tu firma',
-          //   type: 'success',
-          // });
           location.reload();
         })
         .catch((error) => {
@@ -195,9 +176,10 @@ export default {
       this.miCanvas.addEventListener('mousemove', this.dibujarLinea, false);
       this.miCanvas.addEventListener('mouseup', this.pararDibujar, false);
 
-      this.miCanvas.addEventListener('touchstart', this.empezarDibujo, false);
-      this.miCanvas.addEventListener('touchmove', this.dibujarLinea, false);
-    },
+      this.miCanvas.addEventListener('touchstart', this.empezarDibujo, { passive: false });
+      this.miCanvas.addEventListener('touchmove', this.dibujarLinea, { passive: false });
+      this.miCanvas.addEventListener('touchend', this.pararDibujar, false);
+    }
   },
 };
 </script>
