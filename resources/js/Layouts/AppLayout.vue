@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import ApplicationMark from '@/Components/ApplicationMark.vue';
 import Banner from '@/Components/Banner.vue';
@@ -8,12 +8,15 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import SideNav from '@/Components/MyComponents/SideNav.vue';
+import ThemeToggleSwitch from "@/Components/MyComponents/ThemeToggleSwitch.vue";
 
 defineProps({
     title: String,
 });
 
 const showingNavigationDropdown = ref(false);
+const isDarkMode = ref(localStorage.getItem('darkMode') === 'true');// Obtener el estado del modo nocturno desde el localStorage
+const darkModeSwitch = ref(localStorage.getItem('darkMode') === 'true');// Obtener el estado del modo nocturno desde el localStorage
 
 const switchToTeam = (team) => {
     router.put(route('current-team.update'), {
@@ -26,6 +29,17 @@ const switchToTeam = (team) => {
 const logout = () => {
     router.post(route('logout'));
 };
+
+const toggleDarkMode = () => {
+    isDarkMode.value = !isDarkMode.value;
+    darkModeSwitch.value = isDarkMode.value;
+    localStorage.setItem('darkMode', isDarkMode.value); // Guardar el estado en localStorage+
+    document.documentElement.classList.toggle('dark', isDarkMode.value);
+};
+
+onMounted(() => {  
+  document.documentElement.classList.toggle('dark', isDarkMode.value);
+});
 </script>
 
 <template>
@@ -34,13 +48,13 @@ const logout = () => {
 
         <Banner />
 
-        <div class="min-h-screen bg-white overflow-hidden lg:flex w-full selection:bg-blue-100 selection:text-black">
+        <div class="min-h-screen bg-white dark:bg-[#151515] overflow-hidden lg:flex w-full selection:bg-blue-100 selection:text-black">
             <!-- sidenav -->
             <aside class="hidden lg:block w-auto">
                 <SideNav />
             </aside>
             <main class="lg:w-full">
-                <nav class="bg-white border-b border-gray-200">
+                <nav class="bg-white dark:bg-[#151515] border-b border-gray-200">
                     <!-- Primary Navigation Menu -->
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div class="flex justify-between h-10">
@@ -126,7 +140,7 @@ const logout = () => {
                                         <template #content>
                                             <!-- Account Management -->
                                             <div class="block px-4 py-2 text-xs text-gray-400">
-                                                Opciondes de uruario
+                                                Opciondes de usuario
                                             </div>
 
                                             <DropdownLink :href="route('profile.show')">
@@ -147,6 +161,11 @@ const logout = () => {
                                             </form>
                                         </template>
                                     </Dropdown>
+                                </div>
+
+                                <!-- Dark mode toggle -->
+                                <div class="ml-7">
+                                    <ThemeToggleSwitch v-model="darkModeSwitch" @update:modelValue="toggleDarkMode" />
                                 </div>
                             </div>
 

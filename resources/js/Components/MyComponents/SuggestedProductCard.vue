@@ -1,6 +1,6 @@
 <template>
-    <main @click="$inertia.get(route('catalog-products.show', catalogProduct.id))" class="border border-[#D9D9D9] rounded-2xl h-72 p-2 transition-all ease-linear duration-200 hover:shadow-2xl shadow-gray-600/50">
-        <figure class="bg-[#F2F2F2] p-2 rounded-2xl h-44 flex justify-center items-center">
+    <main @click="$inertia.get(route('catalog-products.show', catalogProduct.id))" class="border border-[#D9D9D9] dark:border-[#6B6767] rounded-2xl h-72 p-2 transition-all ease-linear duration-200 hover:shadow-2xl shadow-gray-600/50">
+        <figure class="bg-[#F2F2F2] dark:bg-[#202020] p-2 rounded-2xl h-44 flex justify-center items-center">
             <img v-if="catalogProduct.media?.length" 
                 :src="procesarUrlImagen(catalogProduct.media[0]?.original_url)" 
                 :alt="catalogProduct.name" class="object-contain h-full">
