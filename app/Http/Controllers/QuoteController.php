@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\QuoteResource;
+use App\Models\Brand;
+use App\Models\CatalogProduct;
 use App\Models\Quote;
 use App\Models\User;
 use App\Notifications\BasicNotification;
 use App\Notifications\QuoteRequestNotification;
 use App\Notifications\RejectNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class QuoteController extends Controller
 {
@@ -46,6 +49,14 @@ class QuoteController extends Controller
         // Adjuntar productos a la relación con datos adicionales en la tabla pivot
         $productsData = [];
         foreach ($validated['selectedProducts'] as $product) {
+            $cp = CatalogProduct::find($product['id']);
+            $family = explode('-', $cp->part_number)[1];
+            $brand = Brand::firstWhere('name', $cp->brand);
+            // si el producto es llavero
+            if ($family == 'LL' && $brand) {
+                $product['price'] = $brand?->is_luxury ? 75.70 : 52.50;
+            }
+
             $productsData[$product['id']] = [
                 'quantity' => $product['quantity'],
                 'price' => $product['price'] ?? 1,
