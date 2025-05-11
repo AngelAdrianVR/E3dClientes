@@ -1,7 +1,7 @@
 <template>
   <div class="inline">
     <figure @click="triggerImageInput"
-      class="flex flex-col items-center justify-center rounded-lg border border-[#9A9A9A] w-[328px] h-[202px] cursor-pointer relative bg-white">
+      class="flex flex-col items-center justify-center rounded-lg border border-[#9A9A9A] w-[328px] h-[202px] cursor-pointer relative bg-white dark:bg-[#1F1F1F]">
       <i v-if="signature && canDelete" @click.stop="clearImage"
         class="fa-solid fa-xmark absolute p-1 top-1 right-1 z-10 text-sm"></i>
       <div class="flex items-center">

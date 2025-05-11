@@ -10,16 +10,16 @@
             <div class="text-xs">
                 <!-- header -->
                 <div>
-                    <p class="flex items-center justify-end ml-auto font-bold mr-6 text-xs text-gray-700 dark:text-white">
+                    <p class="flex items-center justify-end ml-auto font-bold mr-6 text-xs text-gray-300 dark:text-white">
                         Guadalajara, Jalisco {{ quote.data.created_at }}
                     </p>
-                    <p class="w-11/12 text-lg mx-auto font-bold text-gray-700 dark:text-white">
+                    <p class="w-11/12 text-lg mx-auto font-bold text-gray-300 dark:text-white">
                         {{ quote.data.companyBranch?.name }}
                     </p>
-                    <p class="w-11/12 mx-auto font-bold mt-2 text-gray-700 dark:text-white">
+                    <p class="w-11/12 mx-auto font-bold mt-2 text-gray-300 dark:text-white">
                         Estimado(a) {{ quote.data.receiver }} - {{ quote.data.department }}
                     </p>
-                    <p class="w-11/12 mx-auto my-2 pb-2 text-gray-700 dark:text-white">
+                    <p class="w-11/12 mx-auto my-2 pb-2 text-gray-300 dark:text-white">
                         Por medio de la presente reciba un cordial saludo y a su vez le proporciono la cotización que
                         nos
                         solicitó,
@@ -42,7 +42,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in quote.data.products" :key="index" class="text-gray-700 uppercase"
-                            :class="approvedProducts.includes(item.id) ? 'bg-green-200 dark:bg-green-400' : 'bg-gray-200'">
+                            :class="approvedProducts?.includes(item.id) ? 'bg-green-200 dark:bg-green-400' : 'bg-gray-200'">
                             <td class="px-2 py-px">
                                 <input type="checkbox" :value="item.id" v-model="approvedProducts"
                                     :disabled="quote.data.quote_acepted"
@@ -60,7 +60,7 @@
                             </td>
                         </tr>
                     </tbody>
-                    <tfoot v-if="approvedProducts.length > 0">
+                    <tfoot v-if="approvedProducts?.length > 0">
                         <tr>
                             <td class="text-end pr-2 py-px" colspan="6">
                                 TOTAL PRODUCTOS SIN IVA: {{
@@ -126,10 +126,10 @@
 
                 <div class="flex justify-between items-center mx-10 mt-16">
                     <!-- goodbyes -->
-                    <p class="my-2 pb-2 text-gray-700 dark:text-white">
+                    <p class="my-2 pb-2 text-gray-300 dark:text-white">
                         Sin más por el momento y en espera de su preferencia,
                         quedo a sus órdenes para cualquier duda o comentario.
-                        Folio de cotización: <span class="font-bold bg-yellow-100 dark:bg-yellow-900">{{ quote.data.folio }}</span>
+                        Folio de cotización: <span class="font-bold bg-yellow-100 dark:bg-yellow-900 text-gray-500">{{ quote.data.folio }}</span>
                     </p>
                     <!-- signature -->
                     <div class="mr-7 relative">
@@ -139,7 +139,7 @@
                             v-if="quote.data.signature_media?.length && quote.data.quote_acepted">
                             <img :src="procesarUrlImagenLocal(quote.data.signature_media[0].original_url)" :draggable="false" class="select-none">
                         </figure>
-                        <button type="button" v-show="approvedProducts.length && !quote.data.quote_acepted"
+                        <button type="button" v-show="approvedProducts?.length && !quote.data.quote_acepted"
                             @click="drawerVisible = true"
                             class="absolute right-0 -top-12 border border-dashed cursor-pointer border-green-500 text-green-500 rounded-md py-5 px-7"
                             aria-haspopup="dialog" aria-expanded="false" aria-controls="overlay-end-example"
@@ -422,7 +422,7 @@ export default {
         },
         calculateApprovedTotal() {
             return this.quote.data.products
-                .filter(product => this.approvedProducts.includes(product.id))
+                .filter(product => this.approvedProducts?.includes(product.id))
                 .reduce((total, product) => total + (product.pivot.quantity * product.pivot.price), 0);
         },
         scrollToOptions() {

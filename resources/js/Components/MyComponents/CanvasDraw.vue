@@ -1,6 +1,6 @@
 <template>
-  <canvas :class="'w-' + width + ' h-' + height" ref="canvas"></canvas>
-  <div v-if="lineas.length > 0" class="flex items-center justify-between mt-1">
+  <canvas class="dark:bg-[#1F1F1F]" :class="'w-' + width + ' h-' + height" ref="canvas"></canvas>
+  <div v-if="lineas.length > 0" class="flex items-center justify-between mt-3">
     <button class="text-secondary dark:text-blue-400 text-xs" @click="limpiarCanvas">
       <i class="fa-solid fa-broom mr-1 ml-2"></i>
       Limpiar
@@ -97,7 +97,11 @@ export default {
         let ctx = this.miCanvas.getContext('2d');
         ctx.lineJoin = ctx.lineCap = 'round';
         ctx.lineWidth = 2;
-        ctx.strokeStyle = '#000';
+        // Detectar si está activo el modo oscuro
+        const isDarkMode = document.documentElement.classList.contains('dark');
+
+        // Cambiar el color de la línea según el modo
+        ctx.strokeStyle = isDarkMode ? '#f9fafb' : '#000000';
 
         if (event.changedTouches === undefined) {
           this.nuevaPosicionX = event.layerX - this.offsetX; // 7 offset para dibujar en la coordenada correcta
