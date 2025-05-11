@@ -58,9 +58,10 @@ watch(selectedProducts, (newValue) => {
 
       <!-- Cantidad -->
       <div class="mr-2">
-        <div class="input-group max-w-sm" data-input-number>
+        <div class="input-group max-w-sm relative" data-input-number>
+          <span class="absolute -top-7">Cantidad</span>
           <input
-            class="input"
+            class="input text-black dark:bg-gray-900 dark:text-white"
             type="number"
             :value="selectedProducts.find((p) => p.id === item.id)?.quantity || 0"
             :disabled="!selectedProducts.some((p) => p.id === item.id)"

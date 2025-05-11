@@ -38,7 +38,10 @@
 
             <div class="flex justify-end space-x-3 pt-5 pb-1 py-2">
                 <CancelButton class="!py-1" @click="showQuoteModal = false; form.notes = null; form.selectedProducts = [];">Cancelar</CancelButton>
-                <PrimaryButton :disabled="form.selectedProducts.length === 0" class="!py-1">Enviar solicitud</PrimaryButton>
+                <PrimaryButton :disabled="form.processing || form.selectedProducts.length === 0" class="!py-1">
+                    <i v-if="form.processing" class="fa-sharp fa-solid fa-circle-notch fa-spin mr-2 text-white"></i>
+                    Enviar solicitud
+                </PrimaryButton>
             </div>
             </form>
         </div>
@@ -81,8 +84,13 @@ suggestedProducts: Array,
 methods:{
     StoreQuoteRequest() {
         this.form.post(route("quotes.store"), {
-            preserveScroll: true,
-            onSuccess: () => {
+                preserveScroll: true,
+                onSuccess: () => {
+                    this.$notify({
+                    title: "Éxito",
+                    message: "Solicitud enviada",
+                    type: "success",
+                });
                 // this.$notyf.success('Solicitud enviada correctamente'); configurar toasts de FlyoinUI
                 this.showQuoteModal = false;
                 this.form.reset();

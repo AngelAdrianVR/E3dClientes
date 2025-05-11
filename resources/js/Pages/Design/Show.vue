@@ -57,7 +57,7 @@
                                 <img class="select-none" :draggable="false"
                                     :src="procesarUrlImagenLocal(design_authorization.data.signature_media[0].original_url)">
                             </figure>
-                            <button type="button" v-show="!design_authorization.data.design_accepted"
+                            <button @click="drawerVisible = true" type="button" v-show="!design_authorization.data.design_accepted"
                                 class="absolute right-12 top-3 border border-dashed cursor-pointer border-green-500 text-green-500 rounded-md py-5 px-7"
                                 aria-haspopup="dialog" aria-expanded="false" aria-controls="overlay-end-example"
                                 data-overlay="#overlay-end-example">Agrega tu firma aquí</button>
@@ -77,17 +77,15 @@
                 </footer>
             </section>
             <!-- Seccion de firma -->
-            <div id="overlay-end-example" class="overlay overlay-open:translate-x-0 drawer drawer-end hidden"
-                role="dialog" tabindex="-1">
-                <div class="drawer-header">
-                    <h3 class="drawer-title">Firma de aprobación</h3>
-                    <button type="button" class="btn btn-text btn-circle btn-sm absolute end-3 top-3" aria-label="Close"
-                        data-overlay="#overlay-end-example">
-                        <span class="icon-[tabler--x] size-5"></span>
-                    </button>
-                </div>
-                <div class="drawer-body">
-                    <p class="text-sm">
+            <el-drawer
+                v-model="drawerVisible"
+                title="Firma de aprobación"
+                direction="rtl"
+                :size="drawerSize"
+            >
+                <!-- Contenido del drawer -->
+                <div>
+                    <p class="text-sm text-gray-600 mt-5">
                         Por favor, revisa el documento detenidamente y si todo esta correcto, aprueba.
                         De lo contrario, puedes rechazar y especificar el motivo.
                     </p>
@@ -97,8 +95,15 @@
                     </el-radio-group>
                     <!-- Dibujar -->
                     <div v-show="responseOptions === 'Dibujar firma'" class="mt-4">
-                        <CanvasDraw :saveDrawUrl="'designs-store-signature'" :width="328" :height="200" :offsetX="23"
-                            ref="canvasDraw" :offsetY="221" :itemId="design_authorization.data.id" />
+                        <CanvasDraw 
+                            :saveDrawUrl="'designs-store-signature'" 
+                            :width="328" 
+                            :height="200" 
+                            :offsetX="offsetX"
+                            :offsetY="offsetY"
+                            ref="canvasDraw" 
+                            :itemId="design_authorization.data.id" 
+                        />
                     </div>
                     <!-- Firma guardada -->
                     <div v-show="responseOptions === 'Subir imagen'" class="mt-4">
@@ -113,9 +118,8 @@
                         </p>
                     </div>
                 </div>
-                <div class="drawer-footer">
-                    <button v-if="!design_authorization.data.rejected_razon" @click="rejectDesignModal = true"
-                        type="button" data-overlay="#overlay-end-example"
+                <div class="mt-5 space-x-3 justify-end flex">
+                    <button v-if="!design_authorization.data.rejected_razon" @click="drawerVisible = false; rejectDesignModal = true" type="button"
                         class="btn btn-soft bg-primary text-white hover:bg-primary">
                         Rechazar
                     </button>
@@ -134,7 +138,7 @@
                         </span>
                     </div>
                 </div>
-            </div>
+            </el-drawer>
         </div>
         <Modal :show="rejectDesignModal" @close="rejectDesignModal = false" max-width="lg">
             <div class="p-5 relative">
@@ -189,6 +193,10 @@ export default {
             rejectDesignModal: false,
             loading: false,
             responseOptions: 'Dibujar firma',
+            drawerVisible: false,
+            drawerSize: '50%', // Tamaño inicial del drawer
+            offsetX: 23, // Valores por defecto (xl) de canvadrawer para la firma
+            offsetY: 285, // Valores por defecto (xl) de canvadrawer para la firma
         };
     },
     components: {
@@ -250,10 +258,41 @@ export default {
             const nuevaUrl = originalUrl.replace('http://localhost:8000', 'https://clientes-emblems3d.dtw.com.mx'); //para hacer pruebas en local
             return nuevaUrl;
         },
+        updateDrawerSize() {
+            const width = window.innerWidth;
+            if (width < 550) {
+                this.drawerSize = "90%"; // sm
+                this.offsetX = 20;
+                this.offsetY = 250;
+            } else if (width < 900) {
+                this.drawerSize = "65%"; // md
+                this.offsetX = 20;
+                this.offsetY = 450;
+            } else if (width < 1280) {
+                this.drawerSize = "40%"; // lg
+                this.offsetX = 23;
+                this.offsetY = 265;
+            } else if (width > 1680) {
+                this.drawerSize = "25%"; // lg
+                this.offsetX = 23;
+                this.offsetY = 245;
+            } else {
+                this.drawerSize = "25%"; // xl
+                this.offsetX = 23;
+                this.offsetY = 265;
+            }
+        },
     },
     mounted() {
+        // Ajustar tamaño del drawer de element-plus
+        this.updateDrawerSize(); // Actualiza tamaño al cargar
+        window.addEventListener("resize", this.updateDrawerSize);
+
         //Guardar la informacion del contacto
         this.contact = this.design_authorization.data.company_branch.contacts.find(contact => contact.id === this.design_authorization.data.contact_id);
-    }
+    },
+    beforeUnmount() {
+        window.removeEventListener("resize", this.updateDrawerSize);
+    },
 }
 </script>
