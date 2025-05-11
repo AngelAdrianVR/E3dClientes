@@ -6,6 +6,7 @@ use App\Http\Resources\QuoteResource;
 use App\Models\Brand;
 use App\Models\CatalogProduct;
 use App\Models\Quote;
+use App\Models\Sale;
 use App\Models\User;
 use App\Notifications\BasicNotification;
 use App\Notifications\QuoteRequestNotification;
@@ -215,5 +216,23 @@ class QuoteController extends Controller
             ->count();
 
         return response()->json(['items' => $quotes]);
+    }
+
+    public function fetchInProcessQuotes()
+    {
+        $pre_productions = Sale::with([
+            'user:id,name',
+            'productions' => ['catalogProductCompanySale:id,catalog_product_company_id,sale_id'
+            => ['catalogProductCompany:id,catalog_product_id'
+            => ['catalogProduct:id,name']]],
+            'companyBranch:id,name',
+            'productions.operator:id,name'
+        ])
+            ->whereHas('productions', function ($query) {
+                $query->where('productions.operator_id', auth()->id());
+            })->latest()
+            ->paginate(10, ['id', 'user_id', 'created_at', 'status', 'is_high_priority', 'company_branch_id', 'is_sale_production', 'authorized_at']);
+
+        return response()->json(['items' => $pre_productions]);
     }
 }

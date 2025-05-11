@@ -24,9 +24,10 @@
 
             <h1 class="mt-5 font-bold md:text-2xl motion-preset-blur-left motion-delay-[600ms] bg-gradient-to-r from-secondary to-error bg-clip-text text-transparent w-fit">Mis productos</h1>
             <span class="motion-preset-focus motion-delay-[1200ms]">Productos que adquieres con nosotros</span>
-            <section class="my-5 mx-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+            <section v-if="catalog_products_company.length" class="my-5 mx-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
                 <CatalogProductCard class="motion-scale-in-0 motion-opacity-in-0' motion-blur-in-[5px] motion-ease-spring-spring" v-for="item in catalog_products_company" :key="item.id" :catalogProductCompany="item" />
             </section>
+            <p class="text-gray-500 text-center" v-else>No tienes productos registrados</p>
 
         </main>
     </AppLayout>

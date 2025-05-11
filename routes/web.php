@@ -5,6 +5,7 @@ use App\Http\Controllers\CatalogProductController;
 use App\Http\Controllers\DesignAuthorizationController;
 use App\Http\Controllers\QuoteController;
 use App\Models\Quote;
+use App\Models\Sale;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -28,9 +29,14 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        $totalQuotes = Quote::where('company_branch_id', auth()->id())->whereNotNull('authorized_at')->count();
 
-        return Inertia('Dashboard/Index', compact('totalQuotes'));
+        // $quotes = Quote::where('company_branch_id', auth()->id())->whereNotNull('authorized_at')
+        //     ->with(['user:id,name,email', 'catalogProducts'])->get(); 
+
+        // $quotesInProcess = Sale::where('company_branch_id', auth()->id())->whereNull('authorized_at');
+
+            // return $quotes;
+        return Inertia('Dashboard/Index');
     })->name('dashboard');
 });
 
@@ -56,6 +62,7 @@ Route::put('quotes-mark-as-acepted/{quote}', [QuoteController::class, 'markAsAce
 Route::put('quotes-reject/{quote}', [QuoteController::class, 'rejectQuote'])->middleware('auth')->name('quotes.reject');
 Route::get('quotes-get-by-page/{currentPage}', [QuoteController::class, 'getItemsByPage'])->name('quotes.get-by-page')->middleware('auth');
 Route::get('quotes-fetch-all', [QuoteController::class, 'fetchAll'])->name('quotes.fetch-all')->middleware('auth');
+Route::get('quotes-fetch-in-process', [QuoteController::class, 'fetchInProcessQuotes'])->name('quotes.fetch-in-process')->middleware('auth');
 
 
 // ------------- designs routes -----------------------------------
