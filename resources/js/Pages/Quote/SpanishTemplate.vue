@@ -255,7 +255,7 @@
         >
             <!-- Contenido del drawer -->
             <div>
-                <p class="text-sm text-gray-600 mt-5">
+                <p class="text-sm text-gray-600">
                     Por favor, revisa la cotización detenidamente y selecciona el/los productos
                     que deseas y si todo esta correcto, aprueba.
                     De lo contrario, puedes rechazar y especificar el motivo.
@@ -265,7 +265,7 @@
                     <el-radio-button label="Subir imagen" />
                 </el-radio-group>
                 <!-- Dibujar -->
-                <div v-show="responseOptions === 'Dibujar firma'" class="mt-4">
+                <div v-show="responseOptions === 'Dibujar firma'" class="mt-4 mb-7">
                     <CanvasDraw 
                         :saveDrawUrl="'quotes-store-signature'" 
                         :width="328" 
