@@ -16,7 +16,6 @@ class CatalogProductCompanyController extends Controller
             ->latest()
             ->get(['id', 'new_date', 'new_price', 'new_currency', 'catalog_product_id', 'company_id']);
 
-            // return $catalog_products_company;
         return inertia('CatalogProductCompany/Index', compact('catalog_products_company'));
     }
 

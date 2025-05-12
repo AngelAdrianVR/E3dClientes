@@ -85,7 +85,7 @@
             >
                 <!-- Contenido del drawer -->
                 <div>
-                    <p class="text-sm text-gray-600 mt-5">
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
                         Por favor, revisa el documento detenidamente y si todo esta correcto, aprueba.
                         De lo contrario, puedes rechazar y especificar el motivo.
                     </p>
@@ -110,7 +110,7 @@
                         <InputSignature :saveSignatureUrl="'designs-store-signature'"
                             :itemId="design_authorization.data.id" ref="InputSignature" />
                     </div>
-                    <div v-if="design_authorization.data.rejected_razon" class="mt-3">
+                    <div v-if="design_authorization.data.rejected_razon" class="mt-9">
                         <p class="text-primary text-center bg-red-100 rounded-md">Rechazado</p>
                         <p class="text-sm mt-2">
                             <b>Motivo: &nbsp;</b>
