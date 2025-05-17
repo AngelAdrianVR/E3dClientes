@@ -48,7 +48,7 @@ onMounted(() => {
 
         <Banner />
 
-        <div class="min-h-screen bg-white dark:bg-[#151515] overflow-hidden lg:flex w-full selection:bg-blue-100 selection:text-black">
+        <div class="overflow-hidden h-screen bg-white dark:bg-[#151515] lg:flex w-full selection:bg-blue-100 selection:text-black">
             <!-- sidenav -->
             <aside class="hidden lg:block w-auto">
                 <SideNav />
@@ -296,7 +296,9 @@ onMounted(() => {
                         </div>
                     </div>
                 </nav>
-                <slot />
+                <div class="overflow-y-auto h-[calc(100vh-2.6rem)]">
+                    <slot />
+                </div>
             </main>
         </div>
     </div>

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class CatalogProductCompanyController extends Controller
 {
     public function index()
-    {   
+    {
         $catalog_products_company = CatalogProductCompany::with('catalogProduct.media')
             ->where('company_id', auth()->id())
             ->latest()
@@ -22,7 +22,7 @@ class CatalogProductCompanyController extends Controller
     public function show(CatalogProductCompany $catalog_product_company)
     {
         $catalog_product_company->load('catalogProduct.media');
-        
+
         return inertia('CatalogProductCompany/Show', compact('catalog_product_company'));
     }
 
@@ -30,7 +30,7 @@ class CatalogProductCompanyController extends Controller
     {
         $branch = CompanyBranch::find(auth()->id());
         $suggested_array = $branch->company['suggested_products'];
-        $suggested_products = CatalogProduct::with('media')->whereIn('id', $suggested_array)->get();
+        $suggested_products = CatalogProduct::with('media')->whereIn('id', $suggested_array)->get(['id', 'name', 'brand'])->take(30);
 
         return response()->json(compact('suggested_products'));
     }

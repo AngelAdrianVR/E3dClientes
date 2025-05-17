@@ -11,7 +11,7 @@
                 <Link v-if="small" :href="route('dashboard')">
                 <figure class="px-3">
                     <img class="w-10 mx-auto" src="@/../../public/images/isoLogoEmblems.png" alt="Logo">
-                    <p class="text-secondary font-bold">Clientes</p>
+                    <p class="text-secondary text-sm font-bold">Clientes</p>
                 </figure>
                 </Link>
                 <Link v-else :href="route('dashboard')">
