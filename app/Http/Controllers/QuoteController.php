@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Log;
 
 class QuoteController extends Controller
 {
-
     public function index()
     {
         $quotes = Quote::where('company_branch_id', auth()->id())->whereNotNull('authorized_at')
@@ -25,12 +24,10 @@ class QuoteController extends Controller
         return inertia('Quote/Index', compact('quotes'));
     }
 
-
     public function create()
     {
         //
     }
-
 
     public function store(Request $request)
     {
@@ -39,6 +36,8 @@ class QuoteController extends Controller
             'selectedProducts' => 'required|array|min:1',
             'selectedProducts.*.id' => 'required',
             'selectedProducts.*.quantity' => 'required|integer|min:1',
+        ], [
+            'selectedProducts.*.quantity.min' => 'No dejar ninguna cantidad a cotizar en 0',
         ]);
 
         $quote = Quote::create([
@@ -87,7 +86,6 @@ class QuoteController extends Controller
         return to_route('catalog-product-company.index');
     }
 
-
     public function storeSignature(Request $request, Quote $quote)
     {
         // Elimina la firma que ya esté registrada 
@@ -99,7 +97,6 @@ class QuoteController extends Controller
         $this->markAsAcepted($quote, $request->approvedProducts);
     }
 
-
     public function show(Quote $quote)
     {
         $quote = QuoteResource::make(Quote::with(['catalogProducts', 'user'])->findOrFail($quote->id));
@@ -107,24 +104,20 @@ class QuoteController extends Controller
         return inertia('Quote/SpanishTemplate', compact('quote'));
     }
 
-
     public function edit(Quote $quote)
     {
         //
     }
-
 
     public function update(Request $request, Quote $quote)
     {
         //
     }
 
-
     public function destroy(Quote $quote)
     {
         //
     }
-
 
     public function fetchQuotes()
     {

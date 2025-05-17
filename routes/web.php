@@ -30,14 +30,22 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
+        $sales_in_progress = auth()->user()->sales()->with('productions')
+        ->where('status', '!=', 'Producción terminada')
+        ->whereNotNull('authorized_at')
+        ->get(['id', 'authorized_at', 'status', 'company_branch_id', 'quote_id']);
 
-        // $quotes = Quote::where('company_branch_id', auth()->id())->whereNotNull('authorized_at')
-        //     ->with(['user:id,name,email', 'catalogProducts'])->get(); 
-
-        // $quotesInProcess = Sale::where('company_branch_id', auth()->id())->whereNull('authorized_at');
-
-            // return $quotes;
-        return Inertia('Dashboard/Index');
+        // obtener el porcentaje de progreso revisando el numero total de producciones cuyo finished_at no es null sobre el total de producciones
+        $sales_in_progress->map(function ($sale) {
+            $productions = $sale->productions;
+            $totalProductions = $productions->count();
+            $finishedProductions = $productions->whereNotNull('finished_at')->count();
+            $sale->progress = ($totalProductions > 0) ? round(($finishedProductions / $totalProductions) * 100, 2) : 0;
+            return $sale;
+        });
+        $sales_in_progress = $sales_in_progress->sortByDesc('progress')->take(10);
+       
+        return Inertia('Dashboard/Index', compact('sales_in_progress'));
     })->name('dashboard');
 });
 
