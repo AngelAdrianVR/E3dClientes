@@ -99,8 +99,6 @@
                             :saveDrawUrl="'designs-store-signature'" 
                             :width="328" 
                             :height="200" 
-                            :offsetX="offsetX"
-                            :offsetY="offsetY"
                             ref="canvasDraw" 
                             :itemId="design_authorization.data.id" 
                         />
@@ -125,12 +123,19 @@
                     </button>
                     <div class="tooltip">
                         <button @click="sendApproval" type="button"
+                            class="btn btn-soft bg-green-700 text-white hover:bg-green-700">
+                            <span v-if="$refs.canvasDraw?.loading || $refs.InputSignature?.loading"
+                                class="loading loading-spinner"></span>
+                            Aprobar
+                        </button>
+                        <!-- Boton con condicionales de deshabilitación -->
+                        <!-- <button @click="sendApproval" type="button"
                             class="btn btn-soft bg-green-700 text-white hover:bg-green-700"
                             :disabled="$refs.canvasDraw?.loading || $refs.InputSignature?.loading || (!$refs.canvasDraw?.lineas.length > 0 && !$refs.InputSignature?.signature)">
                             <span v-if="$refs.canvasDraw?.loading || $refs.InputSignature?.loading"
                                 class="loading loading-spinner"></span>
                             Aprobar
-                        </button>
+                        </button> -->
                         <span class="tooltip-content tooltip-shown:opacity-100 tooltip-shown:visible" role="tooltip">
                             <span class="tooltip-body py-2">
                                 Al hacer clic, se usará la firma registrada para aprobar la cotización.
@@ -195,8 +200,8 @@ export default {
             responseOptions: 'Dibujar firma',
             drawerVisible: false,
             drawerSize: '50%', // Tamaño inicial del drawer
-            offsetX: 23, // Valores por defecto (xl) de canvadrawer para la firma
-            offsetY: 285, // Valores por defecto (xl) de canvadrawer para la firma
+            // offsetX: 23, // Valores por defecto (xl) de canvadrawer para la firma
+            // offsetY: 285, // Valores por defecto (xl) de canvadrawer para la firma
         };
     },
     components: {
@@ -262,24 +267,24 @@ export default {
             const width = window.innerWidth;
             if (width < 550) {
                 this.drawerSize = "90%"; // sm
-                this.offsetX = 20;
-                this.offsetY = 250;
+                // this.offsetX = 20;
+                // this.offsetY = 250;
             } else if (width < 900) {
                 this.drawerSize = "65%"; // md
-                this.offsetX = 20;
-                this.offsetY = 450;
+                // this.offsetX = 20;
+                // this.offsetY = 450;
             } else if (width < 1280) {
                 this.drawerSize = "40%"; // lg
-                this.offsetX = 23;
-                this.offsetY = 265;
+                // this.offsetX = 23;
+                // this.offsetY = 265;
             } else if (width > 1680) {
                 this.drawerSize = "25%"; // lg
-                this.offsetX = 23;
-                this.offsetY = 245;
+                // this.offsetX = 23;
+                // this.offsetY = 245;
             } else {
                 this.drawerSize = "25%"; // xl
-                this.offsetX = 23;
-                this.offsetY = 265;
+                // this.offsetX = 23;
+                // this.offsetY = 265;
             }
         },
     },

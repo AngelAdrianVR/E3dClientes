@@ -270,11 +270,9 @@
                         :saveDrawUrl="'quotes-store-signature'" 
                         :width="328" 
                         :height="200" 
-                        :offsetX="offsetX"
-                        :offsetY="offsetY"
                         ref="canvasDraw" 
                         :itemId="quote.data.id" 
-                        :approvedProducts="approvedProducts" 
+                        :approvedProducts="approvedProducts"
                     />
                 </div>
                 <!-- Firma guardada -->
@@ -297,11 +295,17 @@
                 </button>
                 <div class="tooltip">
                     <button @click="sendApproval" type="button"
+                        class="btn btn-soft bg-green-700 text-white hover:bg-green-700">
+                        <span v-if="$refs.canvasDraw?.loading || $refs.InputSignature?.loading" class="loading loading-spinner"></span>
+                        Aprobar
+                    </button>
+                    <!-- Boton con condicionales de deshabilitación -->
+                    <!-- <button @click="sendApproval" type="button"
                         class="btn btn-soft bg-green-700 text-white hover:bg-green-700"
                         :disabled="$refs.canvasDraw?.loading || $refs.InputSignature?.loading || (!$refs.canvasDraw?.lineas.length > 0 && !$refs.InputSignature?.signature)">
                         <span v-if="$refs.canvasDraw?.loading || $refs.InputSignature?.loading" class="loading loading-spinner"></span>
                         Aprobar
-                    </button>
+                    </button> -->
                     <span class="tooltip-content tooltip-shown:opacity-100 tooltip-shown:visible" role="tooltip">
                         <span class="tooltip-body py-2">
                             Al hacer clic, se usará la firma registrada para aprobar la cotización.
@@ -367,8 +371,8 @@ export default {
             approvedProducts: !!this.quote.data.quote_acepted ? this.quote.data.approved_products : this.quote.data.products.map(p => p.id),
             drawerVisible: false,
             drawerSize: '50%', // Tamaño inicial del drawer
-            offsetX: 23, // Valores por defecto (xl) de canvadrawer para la firma
-            offsetY: 285, // Valores por defecto (xl) de canvadrawer para la firma
+            // offsetX: 23, // Valores por defecto (xl) de canvadrawer para la firma
+            // offsetY: 285, // Valores por defecto (xl) de canvadrawer para la firma
         };
     },
     components: {
@@ -440,32 +444,32 @@ export default {
         },
         procesarUrlImagenLocal(originalUrl) {
             // Reemplaza la parte inicial de la URL
-            const nuevaUrl = originalUrl.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
-            // const nuevaUrl = originalUrl?.replace('http://localhost:8000', 'https://clientes-emblems3d.dtw.com.mx');  // para hacer pruebas en local
+            // const nuevaUrl = originalUrl.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
+            const nuevaUrl = originalUrl?.replace('http://localhost:8000', 'https://clientes-emblems3d.dtw.com.mx');  // para hacer pruebas en local
             return nuevaUrl;
         },
         updateDrawerSize() {
             const width = window.innerWidth;
             if (width < 550) {
-                this.drawerSize = "90%"; // sm
-                this.offsetX = 20;
-                this.offsetY = 250;
+                this.drawerSize = "95%"; // sm
+                // this.offsetX = 20;
+                // this.offsetY = 250;
             } else if (width < 900) {
                 this.drawerSize = "65%"; // md
-                this.offsetX = 20;
-                this.offsetY = 425;
+                // this.offsetX = 20;
+                // this.offsetY = 425;
             } else if (width < 1280) {
                 this.drawerSize = "40%"; // lg
-                this.offsetX = 23;
-                this.offsetY = 265;
+                // this.offsetX = 23;
+                // this.offsetY = 265;
             } else if (width > 1680) {
                 this.drawerSize = "25%"; // lg
-                this.offsetX = 23;
-                this.offsetY = 265;
+                // this.offsetX = 23;
+                // this.offsetY = 265;
             } else {
                 this.drawerSize = "25%"; // xl
-                this.offsetX = 23;
-                this.offsetY = 280;
+                // this.offsetX = 23;
+                // this.offsetY = 280;
             }
         },
     },

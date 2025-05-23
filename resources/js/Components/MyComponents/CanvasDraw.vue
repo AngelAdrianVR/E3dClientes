@@ -38,10 +38,10 @@
         <!-- Imagen de firma -->
         <div 
           class="cursor-pointer"
-          @click="UseSignature(procesarUrlImagen('/storage/' + firma.path))"
+          @click="UseSignature(procesarUrlImagen(firma.path))"
         >
           <img 
-            :src="procesarUrlImagen('/storage/' + firma.path)" 
+            :src="procesarUrlImagen(firma.path)" 
             alt="Firma guardada" 
             class="w-32 h-auto"
           />
@@ -49,13 +49,12 @@
       </div>
     </div>
   </div>
-
-
 </template>
 
 <script>
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
+import { ElMessageBox } from 'element-plus';
 
 export default {
   data() {
@@ -109,7 +108,9 @@ export default {
       this.inicializarCanvas();
       this.agregarEventos();
     }, 500); // 1000 milisegundos = 1 segundo
-
+    this.actualizarCorreccion();
+    window.addEventListener('resize', this.actualizarCorreccion);
+    window.addEventListener('scroll', this.actualizarCorreccion);
     this.fetchSignatures();
   },
   methods: {
@@ -121,7 +122,13 @@ export default {
       this.miCanvas.width = this.width;
       this.miCanvas.height = this.height;
     },
+    actualizarCorreccion() {
+      const rect = this.$refs.canvas.getBoundingClientRect();
+      this.correccionX = rect.left + window.scrollX;
+      this.correccionY = rect.top + window.scrollY;
+    },
     empezarDibujo() {
+      this.actualizarCorreccion(); // ⚠️ Calcula la posición actual del canvas
       this.pintarLinea = true;
       this.lineas.push([]);
     },
@@ -137,34 +144,36 @@ export default {
         let ctx = this.miCanvas.getContext('2d');
         ctx.lineJoin = ctx.lineCap = 'round';
         ctx.lineWidth = 2;
-        // Detectar si está activo el modo oscuro
-        const isDarkMode = document.documentElement.classList.contains('dark');
 
-        // Cambiar el color de la línea según el modo
-        ctx.strokeStyle = isDarkMode ? '#f9fafb' : '#000000';
+        const isDarkMode = document.documentElement.classList.contains('dark');
+        ctx.strokeStyle = isDarkMode ? '#000000' : '#000000';
 
         if (event.changedTouches === undefined) {
-          this.nuevaPosicionX = event.layerX - this.offsetX; // 7 offset para dibujar en la coordenada correcta
-          this.nuevaPosicionY = event.layerY - this.offsetY; // 160 offset para dibujar en la coordenada correcta
+          // 🖱 Mouse
+          this.nuevaPosicionX = event.clientX - this.correccionX;
+          this.nuevaPosicionY = event.clientY - this.correccionY;
         } else {
-          this.nuevaPosicionX =
-            event.changedTouches[0].pageX - this.correccionX;
-          this.nuevaPosicionY =
-            event.changedTouches[0].pageY - this.correccionY;
+          // 📱 Touch
+          this.nuevaPosicionX = event.changedTouches[0].clientX - this.correccionX;
+          this.nuevaPosicionY = event.changedTouches[0].clientY - this.correccionY;
         }
 
         this.guardarLinea();
 
+        ctx.clearRect(0, 0, this.miCanvas.width, this.miCanvas.height); // Limpia antes de redibujar
         ctx.beginPath();
         this.lineas.forEach(function (segmento) {
-          ctx.moveTo(segmento[0].x, segmento[0].y);
-          segmento.forEach(function (punto) {
-            ctx.lineTo(punto.x, punto.y);
-          });
+          if (segmento.length > 0) {
+            ctx.moveTo(segmento[0].x, segmento[0].y);
+            segmento.forEach(function (punto) {
+              ctx.lineTo(punto.x, punto.y);
+            });
+          }
         });
         ctx.stroke();
       }
     },
+
     pararDibujar() {
       this.pintarLinea = false;
       this.guardarLinea();
@@ -180,41 +189,41 @@ export default {
       enlace.download = 'dibujo.png';
       enlace.click();
     },
-    // guardarComoObjetoImagen() {
-    //   let canvas = this.miCanvas;
-    //   canvas.toBlob(
-    //     (blob) => {
-    //       this.signature = new File([blob], 'dibujo.png', { type: 'image/png' });
-    //       // mandar el objeto imagen al servidor
-    //       this.enviarImagenAlServidor();
-    //     },
-    //     'image/png'
-    //   );
-    // },
-    // enviarImagenAlServidor() {
-    //   this.loading = true;
-    //   let formData = new FormData();
-    //   formData.append('signature', this.signature);
-    //   formData.append('approvedProducts', this.approvedProducts);
+    guardarComoObjetoImagen() {
+      let canvas = this.miCanvas;
+      canvas.toBlob(
+        (blob) => {
+          this.signature = new File([blob], 'dibujo.png', { type: 'image/png' });
+          // mandar el objeto imagen al servidor
+          this.enviarImagenAlServidor();
+        },
+        'image/png'
+      );
+    },
+    enviarImagenAlServidor() {
+      this.loading = true;
+      let formData = new FormData();
+      formData.append('signature', this.signature);
+      formData.append('approvedProducts', this.approvedProducts);
 
-    //   axios.post(`/${this.saveDrawUrl}/${this.itemId}`, formData, {
-    //     headers: {
-    //       'Content-Type': 'multipart/form-data',
-    //     },
-    //   })
-    //     .then((response) => {
-    //       console.log(response.data);
-    //       location.reload();
-    //     })
-    //     .catch((error) => {
-    //       console.error(error);
-    //       this.$notify({
-    //         title: 'Error',
-    //         message: 'No se pudo guardar tu firma. Refresca la página e intenta de nuevo',
-    //         type: 'error',
-    //       });
-    //     });
-    // },
+      axios.post(`/${this.saveDrawUrl}/${this.itemId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+        .then((response) => {
+          console.log(response.data);
+          location.reload();
+        })
+        .catch((error) => {
+          console.error(error);
+          this.$notify({
+            title: 'Error',
+            message: 'No se pudo guardar tu firma. Refresca la página e intenta de nuevo',
+            type: 'error',
+          });
+        });
+    },
     guardarFirmaServidor() {
       const dataUrl = this.miCanvas.toDataURL('image/png');
       const blob = this.dataURLtoBlob(dataUrl);
@@ -261,11 +270,8 @@ export default {
       this.miCanvas.addEventListener('touchend', this.pararDibujar, false);
     },
     // Método para procesar la URL de la imagen
-    procesarUrlImagen(originalUrl) {
-        // Reemplaza la parte inicial de la URL
-        const nuevaUrl = originalUrl?.replace('https://clientes-emblems3d.dtw.com.mx', 'http://www.intranetemblems3d.dtw.com.mx');
-        // const nuevaUrl = originalUrl?.replace('http://localhost:8000', 'http://www.intranetemblems3d.dtw.com.mx'); // para hacer pruebas en local
-        return nuevaUrl;
+    procesarUrlImagen(url) {
+      return url.replace('public/firmas/', '');
     },
     procesarUrlImagenLocal(originalUrl) {
         // Reemplaza la parte inicial de la URL
@@ -288,17 +294,39 @@ export default {
     },
     // Método para usar una firma guardada
     UseSignature(path) {
-      console.log(path);
-      const canvas = this.miCanvas;
-      const ctx = canvas.getContext('2d');
-      const img = new Image();
+      ElMessageBox.confirm(
+        '¿Estás seguro de utilizar esta firma para aprobar la cotización?',
+        'Confirmar firma',
+        {
+          confirmButtonText: 'Sí, usar firma',
+          cancelButtonText: 'Cancelar',
+          type: 'warning',
+        }
+      )
+      .then(() => {
+        // 1. Dibujar la firma seleccionada en el canvas
+        const canvas = this.miCanvas;
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
 
-      img.onload = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      };
+        img.onload = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-      img.src = path;
+          // 2. Convertir el canvas en objeto imagen y enviarlo
+          this.guardarComoObjetoImagen();
+        };
+
+        img.crossOrigin = "anonymous"; // Si las imágenes están protegidas por CORS
+        img.src = path;
+      })
+      .catch(() => {
+        // El usuario canceló
+        this.$message({
+          type: 'info',
+          message: 'Firma cancelada',
+        });
+      });
     },
     async fetchSignatures() {
       try {
