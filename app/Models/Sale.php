@@ -65,10 +65,10 @@ class Sale extends Model
     //     return $this->hasMany(CatalogProductCompanySale::class);
     // }
 
-    // public function productions()
-    // {
-    //     return $this->hasManyThrough(Production::class, CatalogProductCompanySale::class, 'sale_id', 'catalog_product_company_sale_id');
-    // }
+    public function productions()
+    {
+        return $this->hasManyThrough(Production::class, CatalogProductCompanySale::class, 'sale_id', 'catalog_product_company_sale_id');
+    }
 
     // methods
     // public function getTotalSoldAmount()

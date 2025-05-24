@@ -9,13 +9,15 @@
             <!-- Logo -->
             <div class="flex items-center justify-center mt-7">
                 <Link v-if="small" :href="route('dashboard')">
-                <figure class="px-3 pb-[20px]">
+                <figure class="px-3">
                     <img class="w-10 mx-auto" src="@/../../public/images/isoLogoEmblems.png" alt="Logo">
+                    <p class="text-secondary text-sm font-bold">Clientes</p>
                 </figure>
                 </Link>
                 <Link v-else :href="route('dashboard')">
-                <figure class="px-3 h-[59px]">
+                <figure class="px-3 h-[65px]">
                     <img class="w-56 mx-auto" src="@/../../public/images/logo.png" alt="Logo">
+                    <p class="text-secondary font-bold text-center">Clientes</p>
                 </figure>
                 </Link>
             </div>

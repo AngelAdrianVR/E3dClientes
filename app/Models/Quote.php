@@ -37,6 +37,9 @@ class Quote extends Model implements HasMedia
         'approved_products',
         'quote_acepted',
         'rejected_razon',
+        'early_paid_at',
+        'early_payment_discount',
+        'discount',
     ];
 
     protected $casts = [
