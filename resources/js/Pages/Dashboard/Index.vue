@@ -54,9 +54,14 @@
                                 <div v-for="(sale, index) in sales_in_progress" :key="index">
                                     <div
                                         class="flex items-center justify-between bg-[#E6EBFD] dark:bg-[#2C2C2C] rounded-full pr-1 pl-2">
-                                        <p class="text-[#3C3C3C] dark:text-[#D2D2D2] font-bold">{{
-                                            'COT-' + String(sale.quote_id).padStart(4, '0') }}</p>
-                                        <Link v-if="sale.quote_id" :href="route('quotes.show', sale.quote_id )"
+                                        <p class="text-[#3C3C3C] dark:text-[#D2D2D2] font-bold">
+                                            {{
+                                                sale.quote_id 
+                                                ? 'COT-' + String(sale.quote_id).padStart(4, '0')
+                                                : "Producción sin cotización vinculada"
+                                            }}
+                                        </p>
+                                        <Link v-if="sale.quote_id" :href="route('quotes.show', sale.quote_id)"
                                             class="my-1 flex items-center justify-center size-6 bg-white text-[#1C1B1F] dark:bg-[#151515] dark:text-white rounded-full">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-4">
