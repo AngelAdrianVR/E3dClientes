@@ -40,6 +40,11 @@ class CompanyBranch extends Authenticatable
         return $this->hasMany(Quote::class);
     }
 
+    public function sales():HasMany
+    {
+        return $this->hasMany(Sale::class);
+    }
+
     public function contacts(): MorphMany
     {
         return $this->morphMany(Contact::class, 'contactable');

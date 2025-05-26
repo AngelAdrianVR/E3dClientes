@@ -9,13 +9,15 @@
             <!-- Logo -->
             <div class="flex items-center justify-center mt-7">
                 <Link v-if="small" :href="route('dashboard')">
-                <figure class="px-3 pb-[20px]">
+                <figure class="px-3">
                     <img class="w-10 mx-auto" src="@/../../public/images/isoLogoEmblems.png" alt="Logo">
+                    <p class="text-secondary text-sm font-bold">Clientes</p>
                 </figure>
                 </Link>
                 <Link v-else :href="route('dashboard')">
-                <figure class="px-3 h-[59px]">
+                <figure class="px-3 h-[65px]">
                     <img class="w-56 mx-auto" src="@/../../public/images/logo.png" alt="Logo">
+                    <p class="text-secondary font-bold text-center">Clientes</p>
                 </figure>
                 </Link>
             </div>
@@ -99,6 +101,15 @@ export default {
             routeToGo: null,
             showGoToRouteConfirmation: false,
             menus: [
+                {
+                    label: 'Panel de inicio',
+                    icon: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-7"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z" /></svg>',
+                    route: route('dashboard'),
+                    active: route().current('dashboard'),
+                    options: [],
+                    dropdown: false,
+                    show: true
+                },
                 {
                     label: 'Productos',
                     icon: '<svg width="30" height="26" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.16745 7.92503L6.28317 16.2336M11.9953 13.6372L14.5918 12.5986M1.39551 6.86012L9.81951 3.48946C8.44228 7.07025 12.6054 8.11039 13.5955 5.09594L16.8523 13.1438C17.0657 13.6732 17.1105 13.9116 16.5547 14.1869L5.96632 18.4547C5.52512 18.6325 5.40132 18.5799 5.22351 18.1387L1.07947 7.60294C0.937201 7.24999 0.954307 7.03794 1.39551 6.86012ZM11.4159 1.40001L10.0847 4.35824C9.39447 6.13319 11.7611 7.5137 12.7471 5.54154L14.0783 2.534C14.2262 2.23818 14.2262 2.04097 13.8811 1.84375L12.1555 1.10419C11.7702 0.923147 11.5965 0.951948 11.4159 1.40001ZM12.328 5.14711C12.328 5.71894 11.881 6.18249 11.3296 6.18249C10.7782 6.18249 10.3312 5.71894 10.3312 5.14711C10.3312 4.57529 10.7782 4.11173 11.3296 4.11173C11.881 4.11173 12.328 4.57529 12.328 5.14711Z" stroke="currentColor" stroke-width="0.986078" stroke-linecap="round" stroke-linejoin="round"/></svg>',

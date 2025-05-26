@@ -17,7 +17,7 @@ defineProps({
 const form = useForm({
     id: null,
     password: '',
-    remember: false,
+    // remember: true,
 });
 
 const submit = () => {
@@ -79,7 +79,7 @@ const togglePasswordVisibility = () => {
                 id="id"
                 v-model="form.id"
                 type="number"
-                class="mt-1 block w-full placeholder:text-[#9A9A9A] bg-[#F0F0F0] pl-11"
+                class="mt-1 block w-full placeholder:text-[#9A9A9A] text-gray-800 bg-[#F0F0F0] pl-11"
                 required
                 autofocus
                 placeholder="ID de cliente"
@@ -93,7 +93,7 @@ const togglePasswordVisibility = () => {
                     id="password"
                     v-model="form.password"
                     :type="showPassword ? 'text' : 'password'"
-                    class="mt-1 block w-full placeholder:text-[#9A9A9A] bg-[#F0F0F0] pl-11"
+                    class="mt-1 block w-full placeholder:text-[#9A9A9A] text-gray-800 bg-[#F0F0F0] pl-11"
                     required
                     autocomplete="current-password"
                     placeholder="Contraseña"
@@ -108,12 +108,12 @@ const togglePasswordVisibility = () => {
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
-            <div class="block mt-4 ml-3">
+            <!-- <div class="block mt-4 ml-3">
                 <label class="flex items-center">
                     <Checkbox v-model:checked="form.remember" name="remember" />
                     <span class="ms-2 text-sm text-gray-600">No cerrar sesión</span>
                 </label>
-            </div>
+            </div> -->
             <div class="flex flex-col items-center justify-center mt-4 space-y-4">
                 <Link
                     v-if="canResetPassword"

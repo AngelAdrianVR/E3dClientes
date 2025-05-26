@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import ApplicationMark from '@/Components/ApplicationMark.vue';
 import Banner from '@/Components/Banner.vue';
@@ -8,12 +8,15 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import SideNav from '@/Components/MyComponents/SideNav.vue';
+import ThemeToggleSwitch from "@/Components/MyComponents/ThemeToggleSwitch.vue";
 
 defineProps({
     title: String,
 });
 
 const showingNavigationDropdown = ref(false);
+const isDarkMode = ref(localStorage.getItem('darkMode') === 'true');// Obtener el estado del modo nocturno desde el localStorage
+const darkModeSwitch = ref(localStorage.getItem('darkMode') === 'true');// Obtener el estado del modo nocturno desde el localStorage
 
 const switchToTeam = (team) => {
     router.put(route('current-team.update'), {
@@ -26,6 +29,17 @@ const switchToTeam = (team) => {
 const logout = () => {
     router.post(route('logout'));
 };
+
+const toggleDarkMode = () => {
+    isDarkMode.value = !isDarkMode.value;
+    darkModeSwitch.value = isDarkMode.value;
+    localStorage.setItem('darkMode', isDarkMode.value); // Guardar el estado en localStorage+
+    document.documentElement.classList.toggle('dark', isDarkMode.value);
+};
+
+onMounted(() => {  
+  document.documentElement.classList.toggle('dark', isDarkMode.value);
+});
 </script>
 
 <template>
@@ -34,13 +48,13 @@ const logout = () => {
 
         <Banner />
 
-        <div class="min-h-screen bg-white overflow-hidden lg:flex w-full selection:bg-blue-100 selection:text-black">
+        <div class="overflow-hidden h-screen bg-white dark:bg-[#151515] lg:flex w-full selection:bg-blue-100 selection:text-black">
             <!-- sidenav -->
             <aside class="hidden lg:block w-auto">
                 <SideNav />
             </aside>
             <main class="lg:w-full">
-                <nav class="bg-white border-b border-gray-200">
+                <nav class="bg-white dark:bg-[#151515] border-b border-gray-200">
                     <!-- Primary Navigation Menu -->
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div class="flex justify-between h-10">
@@ -126,7 +140,7 @@ const logout = () => {
                                         <template #content>
                                             <!-- Account Management -->
                                             <div class="block px-4 py-2 text-xs text-gray-400">
-                                                Opciondes de uruario
+                                                Opciondes de usuario
                                             </div>
 
                                             <DropdownLink :href="route('profile.show')">
@@ -148,16 +162,26 @@ const logout = () => {
                                         </template>
                                     </Dropdown>
                                 </div>
+
+                                <!-- Dark mode toggle -->
+                                <div class="ml-7">
+                                    <ThemeToggleSwitch v-model="darkModeSwitch" @update:modelValue="toggleDarkMode" />
+                                </div>
                             </div>
 
                             <!-- Hamburger -->
                             <div class="-me-2 flex items-center lg:hidden">
-                                <label @click="showingNavigationDropdown = !showingNavigationDropdown" class="btn btn-circle swap swap-rotate">
+                                <!-- <label @click="showingNavigationDropdown = !showingNavigationDropdown" class="btn btn-circle swap swap-rotate">
                                     <span :class="{'icon-[tabler--menu-2] swap-off': !showingNavigationDropdown}"></span>
                                     <span :class="{'icon-[tabler--x] swap-on': showingNavigationDropdown}"></span>
-                                </label>
+                                </label> -->
 
-                                <!-- <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out" @click="showingNavigationDropdown = ! showingNavigationDropdown">
+                                <!-- Dark mode toggle -->
+                                <div class="ml-7">
+                                    <ThemeToggleSwitch v-model="darkModeSwitch" @update:modelValue="toggleDarkMode" />
+                                </div>
+                                
+                                <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out" @click="showingNavigationDropdown = ! showingNavigationDropdown">
                                     <svg
                                         class="h-6 w-6"
                                         stroke="currentColor"
@@ -179,7 +203,7 @@ const logout = () => {
                                             d="M6 18L18 6M6 6l12 12"
                                         />
                                     </svg>
-                                </button> -->
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -188,7 +212,16 @@ const logout = () => {
                     <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="lg:hidden">
                         <div class="pt-2 pb-3 space-y-1">
                             <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                Inicio
+                                Panel de inicio
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('catalog-product-company.index')" :active="route().current('catalog-product-company.*')">
+                                Productos
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('quotes.index')" :active="route().current('quotes.*')">
+                                Cotizaciones
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('designs.index')" :active="route().current('designs.*')">
+                                Diseños
                             </ResponsiveNavLink>
                         </div>
 
@@ -268,7 +301,9 @@ const logout = () => {
                         </div>
                     </div>
                 </nav>
-                <slot />
+                <div class="overflow-y-auto h-[calc(100vh-2.6rem)]">
+                    <slot />
+                </div>
             </main>
         </div>
     </div>

@@ -12,7 +12,7 @@ export default {
         './resources/js/**/*.vue',
         "./node_modules/flyonui/dist/js/*.js",
     ],
-
+    darkMode: 'class', // o 'media' si prefieres por sistema
     theme: {
         extend: {
             fontFamily: {
