@@ -24,6 +24,7 @@ class Quote extends Model implements HasMedia
         'freight_option',
         'first_production_days',
         'notes',
+        'status',
         'currency',
         'authorized_user_name',
         'authorized_at',
