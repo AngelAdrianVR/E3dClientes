@@ -135,6 +135,7 @@ class QuoteController extends Controller
             'rejected_razon' => null, // limpia la razon de rechazo en caso de haber sido rechazada
             'responded_at' => now(),
             'quote_acepted' => true,
+            'status' => 'Aceptada',
             'approved_products' => $approved_products_array,
         ]);
 
@@ -169,6 +170,7 @@ class QuoteController extends Controller
             'rejected_razon' => $request->rejected_razon,
             'responded_at' => now(),
             'quote_acepted' => false,
+            'status' => 'Rechazada',
         ]);
 
         //notificar a vendedor y a dirección
